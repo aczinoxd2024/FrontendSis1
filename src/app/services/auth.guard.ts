@@ -11,15 +11,15 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const token = localStorage.getItem('access_token');
+  ): boolean | UrlTree {
+    const token = localStorage.getItem('token'); // Asegúrate de que coincida
 
     if (token && token.trim() !== '') {
-      return true;  // Permite el acceso si el token existe y no está vacío
+      return true;
     } else {
-      // Redirige a login y pasa como queryParam la URL a la que quería ir
-      this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-      return false;
+      return this.router.createUrlTree(['/login'], {
+        queryParams: { returnUrl: state.url },
+      });
     }
   }
 }

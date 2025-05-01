@@ -1,49 +1,50 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service'; // ✅
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-login-page',
-  standalone: true,
+  selector: 'app-login',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css'],
-  imports: [ReactiveFormsModule, CommonModule, RouterModule], // ✅ Correcto aquí adentro
+  standalone: true, // ⬅️ Solo si estás usando Angular standalone
+  imports: [CommonModule, FormsModule]
 })
-export class LoginPageComponent {
-  formLogin: FormGroup;
+export class LoginComponent {
+  correo = '';
+  contrasena = '';
+  rolSeleccionado: string | null = null;
+  errorMessage = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.formLogin = this.fb.group({
-      correo: ['', [Validators.required, Validators.email]],
-      contrasena: ['', Validators.required], // 👈 Aquí corregido
-    });
+  // ✅ Corrige aquí la ruta de los íconos
+  roles = [
+    { nombre: 'Administrador', icono: 'admin.jpg' },
+    { nombre: 'Instructor', icono: 'instructor.jpg' },
+    { nombre: 'Recepcionista', icono: 'recepcionista.jpg' },
+    { nombre: 'Cliente', icono: 'cliente.jpg' }
+  ];
+
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  seleccionarRol(rol: string) {
+    this.rolSeleccionado = rol;
   }
 
-  onSubmit() {
-    if (this.formLogin.invalid) {
-      alert('Por favor, complete todos los campos correctamente.');
-      return;
-    }
-
-    const { correo, contrasena } = this.formLogin.value; // 👈 Aquí corregido
-
-    this.authService.login(correo, contrasena).subscribe({
-      next: (response: any) => {
-        console.log('Login exitoso:', response);
-        localStorage.setItem('access_token', response.access_token); // Guarda el token
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err: any) => {
-        console.error('Error en login:', err);
-        console.error('Detalles del error:', err.error);
-        alert('Credenciales inválidas');
-      }
-    });
+  login() {
+    this.authService
+      .login(this.correo.trim(), this.contrasena, this.rolSeleccionado!)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          alert('Login fallido: ' + err.error.message);
+        },
+      });
   }
 }
+
+
+
