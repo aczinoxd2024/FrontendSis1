@@ -14,7 +14,10 @@
   <select formControlName="tipoMembresia" class="border p-2 w-full">
     <option value="">Seleccione Membresía</option>
     <option *ngFor="let m of membresias" [value]="m.id">{{ m.nombre }}</option>
-
+  </select>
+  <select formControlName="metodoPago" class="border p-2 w-full">
+    <option value="">Seleccione Método de Pago</option>
+    <option *ngFor="let m of metodosPago" [value]="m.id">{{ m.metodoPago }}</option>
   </select>
 
   <button type="submit" class="bg-blue-600 text-white px-4 py-2">Registrar</button>

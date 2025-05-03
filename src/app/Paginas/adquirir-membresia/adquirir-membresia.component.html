@@ -1,0 +1,29 @@
+<h1 class="text-3xl font-bold text-center mb-8 text-green-700">Adquirir Membresía</h1>
+
+<form [formGroup]="adquirirForm" (ngSubmit)="enviarSolicitud()" class="space-y-4 max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
+
+  <input formControlName="ci" placeholder="CI" class="border p-2 w-full rounded" />
+  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full rounded" />
+  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full rounded" />
+  <input type="date" formControlName="fechaNacimiento" class="border p-2 w-full rounded" />
+  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full rounded" />
+  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full rounded" />
+  <input formControlName="observacion" placeholder="Observación" class="border p-2 w-full rounded" />
+  <input formControlName="correo" placeholder="Correo electrónico" class="border p-2 w-full rounded" />
+
+  <select formControlName="metodoPago" class="border p-2 w-full rounded">
+    <option value="">Seleccione Método de Pago</option>
+    <option *ngFor="let metodo of metodoPagos" [value]="metodo.id">{{ metodo.metodoPago }}</option>
+  </select>
+
+  <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
+    Realizar Pago y Adquirir Membresía
+  </button>
+
+</form>
+
+<!-- Mensaje de respuesta -->
+<p *ngIf="mensaje" class="mt-6 text-center text-lg font-semibold"
+  [ngClass]="mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'">
+  {{ mensaje }}
+</p>

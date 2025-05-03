@@ -12,6 +12,7 @@ export class ClienteService {
 
   constructor(private http: HttpClient) {}
 
+  // 👉 Método para registrar cliente (requiere token)
   registrarCliente(cliente: Cliente): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -21,6 +22,7 @@ export class ClienteService {
     return this.http.post(this.apiUrl, cliente, { headers });
   }
 
+  // 👉 Método para obtener clientes (requiere token)
   obtenerClientes(): Observable<Cliente[]> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -28,5 +30,10 @@ export class ClienteService {
     });
 
     return this.http.get<Cliente[]>(this.apiUrl, { headers });
+  }
+
+  // 👉 Método para adquirir membresía (NO requiere token → público)
+  adquirirMembresia(cliente: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/adquirir`, cliente);
   }
 }

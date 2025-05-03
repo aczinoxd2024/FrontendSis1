@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MembresiaService } from '../../../../services/menbresia.service';
+import { MetodoPagoService } from '../../../../metodo-pago/metodo-pago.service';
 
 @Component({
   selector: 'app-registrar-cliente',
@@ -13,13 +14,15 @@ import { MembresiaService } from '../../../../services/menbresia.service';
 export class RegistrarClienteComponent implements OnInit {
 
   clienteForm: FormGroup;
-  membresias: any[] = []; // 📌 Ahora es dinámico, no es fijo
+  membresias: any[] = []; // 📌 Se cargan dinámicamente
+  metodosPago: any[] = []; // 📌 Se cargan dinámicamente
   mensaje: string = '';
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private membresiaService: MembresiaService // 📌 Inyectamos el nuevo servicio
+    private membresiaService: MembresiaService,
+    private metodoPagoService: MetodoPagoService
   ) {
     this.clienteForm = this.fb.group({
       ci: ['', Validators.required],
@@ -31,17 +34,30 @@ export class RegistrarClienteComponent implements OnInit {
       observacion: [''],
       correo: ['', [Validators.required, Validators.email]],
       tipoMembresia: ['', Validators.required],
+      metodoPago: ['', Validators.required], // ✅ Nuevo campo agregado
     });
   }
 
-  // 📌 Se ejecuta cuando carga el componente
   ngOnInit() {
+    // 📌 Cargar membresías
     this.membresiaService.obtenerMembresias().subscribe({
       next: (data) => {
+        console.log('✅ Membresías recibidas:', data);
         this.membresias = data;
       },
       error: (err) => {
-        console.error('Error al obtener membresías:', err);
+        console.error('❌ Error al obtener membresías:', err);
+      }
+    });
+
+    // 📌 Cargar métodos de pago
+    this.metodoPagoService.obtenerMetodosPago().subscribe({
+      next: (data) => {
+        console.log('✅ Métodos de Pago recibidos:', data);
+        this.metodosPago = data;
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener métodos de pago:', err);
       }
     });
   }
@@ -57,24 +73,27 @@ export class RegistrarClienteComponent implements OnInit {
       Authorization: `Bearer ${token}`,
     });
 
-    // 📌 Preparamos el objeto para enviarlo correctamente
+    // 📌 Preparar objeto cliente para enviar
     const cliente = {
       ...this.clienteForm.value,
-      tipoMembresiaId: this.clienteForm.value.tipoMembresia
+      tipoMembresiaId: this.clienteForm.value.tipoMembresia,
+      metodoPagoId: this.clienteForm.value.metodoPago
     };
 
-
-    // Eliminamos tipoMembresia porque solo se usó en el formulario
     delete cliente.tipoMembresia;
+    delete cliente.metodoPago;
+
+    console.log('📤 Cliente que se enviará al backend:', cliente);
 
     this.http.post('http://localhost:3000/clientes', cliente, { headers })
       .subscribe({
         next: (res) => {
+          console.log('✅ Cliente registrado:', res);
           this.mensaje = "Cliente registrado exitosamente!";
           this.clienteForm.reset();
         },
         error: (err) => {
-          console.error(err);
+          console.error('❌ Error al registrar cliente:', err);
           this.mensaje = "Error al registrar cliente. Verifique los datos.";
         }
       });

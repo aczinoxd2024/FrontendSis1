@@ -23,11 +23,18 @@ export const routes: Routes = [
     loadComponent: () => import('./Paginas/dashboard/dashboard-admin/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [AdminGuard]
   },
+
+  // MEMBRESÍAS → Público
   {
     path: 'menbresias',
     loadComponent: () => import('./Paginas/ver-menbresias/menbresias.component').then(m => m.MenbresiasComponent),
   },
 
+  // ADQUIRIR MEMBRESÍA → Público
+  {
+    path: 'adquirir-menbresia/:id',
+    loadComponent: () => import('./Paginas/adquirir-membresia/adquirir-membresia.component').then(m => m.AdquirirMembresiaComponent),
+  },
 
   // BITÁCORA (SOLO ADMINISTRADOR)
   {
@@ -35,6 +42,7 @@ export const routes: Routes = [
     loadComponent: () => import('./Paginas/bitacora/bitacora.component').then(m => m.BitacoraComponent),
     canActivate: [AdminGuard]
   },
+
   // DASHBOARD RECEPCIONISTA (SOLO RECEPCIONISTA)
   {
     path: 'dashboard-recepcionista',
@@ -44,12 +52,9 @@ export const routes: Routes = [
       {
         path: 'registrar-cliente',
         loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/registrar-cliente/registrar-cliente.component').then(m => m.RegistrarClienteComponent)
-
-
       }
     ]
   },
-
 
   // WILDCARD → Redirige cualquier ruta no encontrada al Welcome
   {
