@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-welcome',
   standalone: true,
   templateUrl: './welcome.component.html',
-  imports: [NgIf],
+  imports: [NgIf,RouterModule],
 })
 export class WelcomeComponent implements OnInit {
 

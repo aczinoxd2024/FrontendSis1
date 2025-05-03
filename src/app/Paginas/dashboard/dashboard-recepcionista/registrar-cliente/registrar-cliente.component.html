@@ -1,0 +1,24 @@
+<h1 class="text-2xl font-bold mb-6">Registrar Cliente</h1>
+
+<form [formGroup]="clienteForm" (ngSubmit)="registrarCliente()" class="space-y-4">
+
+  <input formControlName="ci" placeholder="CI" class="border p-2 w-full" />
+  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full" />
+  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full" />
+  <input type="date" formControlName="fechaNacimiento" class="border p-2 w-full" />
+  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full" />
+  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full" />
+  <input formControlName="observacion" placeholder="Observación" class="border p-2 w-full" />
+  <input formControlName="correo" placeholder="Correo" class="border p-2 w-full" />
+
+  <select formControlName="tipoMembresia" class="border p-2 w-full">
+    <option value="">Seleccione Membresía</option>
+    <option *ngFor="let m of membresias" [value]="m.id">{{ m.nombre }}</option>
+
+  </select>
+
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2">Registrar</button>
+
+</form>
+
+<p class="mt-4 text-green-600">{{ mensaje }}</p>

@@ -1,9 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard-recepcionista',
-  imports: [],
+  standalone: true,
+  imports: [RouterModule],
   templateUrl: './dashboard-recepcionista.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardRecepcionistaComponent { }
+export class DashboardRecepcionistaComponent {
+
+  nombreUsuario: string = '';
+
+  constructor(private authService: AuthService, private router: Router) {
+    const user = this.authService.getUser();
+    this.nombreUsuario = user?.nombre ?? 'Recepcionista';
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+}

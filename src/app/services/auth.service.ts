@@ -80,6 +80,21 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+  /**
+ * Obtiene el usuario actual desde localStorage
+ */
+getUser(): any {
+  const userString = localStorage.getItem('user');
+  return userString ? JSON.parse(userString) : null;
+}
+
+/**
+ * Obtiene el rol actual desde localStorage
+ */
+getUserRole(): string | null {
+  return localStorage.getItem('rol');
+}
+
 
   /**
    * Verifica si el usuario está logueado (token presente)
