@@ -14,10 +14,9 @@ import { FormsModule } from '@angular/forms';
 export class LoginComponent {
   correo = '';
   contrasena = '';
-  rolSeleccionado: string | null = null; // ✅ Agregado
+  rolSeleccionado: string | null = null;
   errorMessage = '';
 
-  // Opciones de roles disponibles
   roles = [
     { nombre: 'Administrador', icono: 'admin.jpg' },
     { nombre: 'Instructor', icono: 'instructor.jpg' },
@@ -27,7 +26,7 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  seleccionarRol(rol: string) { // ✅ Agregado
+  seleccionarRol(rol: string) {
     this.rolSeleccionado = rol;
   }
 
@@ -38,6 +37,7 @@ export class LoginComponent {
       return;
     }
 
+    // 🚨 Cambiado aquí → mandamos password en vez de contrasena
     this.authService
       .login(this.correo.trim(), this.contrasena.trim(), this.rolSeleccionado)
       .subscribe({

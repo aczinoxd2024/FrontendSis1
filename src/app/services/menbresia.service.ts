@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class MembresiaService {
 
-  private apiUrl = 'http://localhost:3000/tipos-membresia'; // Cambia esta ruta por tu endpoint real
+  private apiUrl = 'https://web-production-d581.up.railway.app/api/tipos-membresia'; // Cambia esta ruta por tu endpoint real
 
   constructor(private http: HttpClient) {}
 

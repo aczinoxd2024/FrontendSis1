@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class BitacoraService {
 
-  private apiUrl = 'http://localhost:3000/bitacora';
+  private apiUrl = 'https://web-production-d581.up.railway.app/api/bitacora';
 
   constructor(private http: HttpClient) {}
 

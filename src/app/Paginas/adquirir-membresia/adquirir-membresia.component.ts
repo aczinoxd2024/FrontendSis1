@@ -43,7 +43,7 @@ export class AdquirirMembresiaComponent implements OnInit {
     this.tipoMembresiaId = +this.route.snapshot.paramMap.get('id')!;
 
     // ✅ Obtener métodos de pago
-    this.http.get<any[]>('http://localhost:3000/metodos-pago').subscribe({
+    this.http.get<any[]>('https://web-production-d581.up.railway.app/api/metodos-pago').subscribe({
       next: (data) => {
         this.metodoPagos = data;
         console.log('✅ Métodos de pago cargados', data);

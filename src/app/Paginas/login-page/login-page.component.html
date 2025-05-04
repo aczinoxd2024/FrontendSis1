@@ -25,10 +25,6 @@
 <!-- Vista de login -->
 <div *ngIf="rolSeleccionado" class="login-container flex justify-center items-center min-h-screen fixed inset-0 bg-gray-900/90 backdrop-blur-sm z-50">
 
-  <!-- Video de fondo -->
-  <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover -z-10 opacity-30">
-    <source src="/assets/videos/smoke-dark.mp4" type="video/mp4">
-  </video>
 
   <div class="form-card bg-gray-800/95 p-8 rounded-xl shadow-2xl w-80 text-center border border-gray-700 backdrop-blur-sm relative animate-fade-in-down">
     <button class="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors" (click)="rolSeleccionado = null">

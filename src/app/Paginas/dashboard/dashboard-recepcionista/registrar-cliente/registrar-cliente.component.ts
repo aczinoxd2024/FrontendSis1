@@ -85,7 +85,7 @@ export class RegistrarClienteComponent implements OnInit {
 
     console.log('📤 Cliente que se enviará al backend:', cliente);
 
-    this.http.post('http://localhost:3000/clientes', cliente, { headers })
+    this.http.post('https://web-production-d581.up.railway.app/api/clientes', cliente, { headers })
       .subscribe({
         next: (res) => {
           console.log('✅ Cliente registrado:', res);

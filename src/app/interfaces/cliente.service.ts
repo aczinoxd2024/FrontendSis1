@@ -8,7 +8,7 @@ import { Cliente } from '../interfaces/cliente';
 })
 export class ClienteService {
 
-  private apiUrl = 'http://localhost:3000/clientes';
+  private apiUrl = 'https://web-production-d581.up.railway.app/api/clientes';
 
   constructor(private http: HttpClient) {}
 

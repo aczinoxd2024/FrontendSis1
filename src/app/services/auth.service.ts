@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = 'https://web-production-d581.up.railway.app/api/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -15,11 +15,11 @@ export class AuthService {
    * Inicia sesión enviando las credenciales al backend
    * Almacena token, datos del usuario (incluyendo nombre) y rol en localStorage.
    */
-  login(correo: string, contrasena: string, rolSeleccionado: string) {
+  login(correo: string, password: string, rol: string) {
     return this.http.post<any>(`${this.apiUrl}/login`, {
       correo,
-      contrasena,
-      rolSeleccionado
+      password, // ✅ Cambiado de contrasena a password
+      rol       // ✅ Cambiado de rolSeleccionado a rol (más claro y coincide con backend)
     }).pipe(
       tap(response => {
         // Guardar token
@@ -80,21 +80,21 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+
   /**
- * Obtiene el usuario actual desde localStorage
- */
-getUser(): any {
-  const userString = localStorage.getItem('user');
-  return userString ? JSON.parse(userString) : null;
-}
+   * Obtiene el usuario actual desde localStorage
+   */
+  getUser(): any {
+    const userString = localStorage.getItem('user');
+    return userString ? JSON.parse(userString) : null;
+  }
 
-/**
- * Obtiene el rol actual desde localStorage
- */
-getUserRole(): string | null {
-  return localStorage.getItem('rol');
-}
-
+  /**
+   * Obtiene el rol actual desde localStorage
+   */
+  getUserRole(): string | null {
+    return localStorage.getItem('rol');
+  }
 
   /**
    * Verifica si el usuario está logueado (token presente)

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class MetodoPagoService {
 
-  private apiUrl = 'http://localhost:3000/metodos-pago';
+  private apiUrl = 'https://web-production-d581.up.railway.app/api/metodos-pago';
 
   constructor(private http: HttpClient) {}
 
