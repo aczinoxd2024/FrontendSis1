@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterModule] // ✅ Agregado RouterModule aquí
 })
 export class LoginComponent {
   correo = '';
@@ -31,13 +31,11 @@ export class LoginComponent {
   }
 
   login() {
-
     if (!this.correo.trim() || !this.contrasena.trim() || !this.rolSeleccionado) {
       alert('Por favor complete todos los campos y seleccione un rol.');
       return;
     }
 
-    // 🚨 Cambiado aquí → mandamos password en vez de contrasena
     this.authService
       .login(this.correo.trim(), this.contrasena.trim(), this.rolSeleccionado)
       .subscribe({

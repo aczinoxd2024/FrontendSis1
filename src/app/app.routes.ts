@@ -3,6 +3,8 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './services/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { RecepcionistaGuard } from './guards/recepcionista.guard';
+import { ForgotPasswordComponent } from './Paginas/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './Paginas/reset-password/reset-password.component';
 
 export const routes: Routes = [
   // RUTA DE BIENVENIDA (Welcome Page)
@@ -16,6 +18,7 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./Paginas/login-page/login-page.component').then(m => m.LoginComponent)
   },
+
 
   // DASHBOARD ADMIN (SOLO ADMINISTRADOR)
   {
@@ -55,6 +58,16 @@ export const routes: Routes = [
       }
     ]
   },
+
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./Paginas/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./Paginas/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+
 
   // WILDCARD → Redirige cualquier ruta no encontrada al Welcome
   {
