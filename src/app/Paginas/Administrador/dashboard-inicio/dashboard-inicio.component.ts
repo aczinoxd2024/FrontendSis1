@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { BitacoraComponent } from '../../bitacora/bitacora.component';
-// ✅ IMPORTAR BITACORA
+import { BitacoraComponent } from '../bitacora/bitacora.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  templateUrl: './dashboard.component.html',
-  imports: [CommonModule, BitacoraComponent] // ✅ AGREGAR AQUI TAMBIEN
+  templateUrl: './dashboard-inicio.component.html',
+  imports: [CommonModule, RouterModule]
 })
 export class DashboardComponent implements OnInit {
 

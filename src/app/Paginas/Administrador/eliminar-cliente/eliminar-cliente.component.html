@@ -1,0 +1,67 @@
+<h1 class="text-3xl font-bold mb-8 text-gray-800">Eliminar Cliente</h1>
+
+<!-- Buscar cliente por CI -->
+<form (submit)="buscarCliente()" class="space-y-4 mb-8">
+  <input
+    [(ngModel)]="ciBuscar"
+    name="ciBuscar"
+    placeholder="Ingrese CI del Cliente"
+    class="border border-gray-300 p-3 rounded w-full"
+    required
+  />
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
+    Buscar Cliente
+  </button>
+</form>
+
+<!-- Loading -->
+<div *ngIf="cargando" class="text-center text-gray-500 mb-8 animate-pulse">
+  Procesando, por favor espere...
+</div>
+
+<!-- Si ya cargó cliente -->
+<div *ngIf="cliente" class="bg-white shadow rounded p-6 space-y-4 border border-gray-200">
+
+  <h2 class="text-xl font-semibold text-gray-700">Datos del Cliente</h2>
+
+  <!-- ALERTA SI EL CLIENTE ESTÁ INACTIVO -->
+  <div *ngIf="cliente.estado === 'Inactivo'" class="bg-red-100 text-red-700 p-3 rounded border border-red-400">
+    ⚠️ Este cliente se encuentra <strong>INACTIVO</strong>. No se recomienda modificar sus datos.
+  </div>
+
+  <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+  <p><strong>Apellido:</strong> {{ cliente.apellido }}</p>
+  <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+  <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
+
+  <p>
+    <strong>Estado:</strong>
+    <span [ngClass]="{
+      'text-green-600 font-semibold': cliente.estado === 'Activo',
+      'text-red-600 font-semibold': cliente.estado === 'Inactivo'
+    }">
+      {{ cliente.estado }}
+    </span>
+  </p>
+
+  <button
+    (click)="eliminarCliente()"
+    [disabled]="cliente.estado === 'Inactivo' || cargando"
+    class="bg-red-600 text-white px-4 py-2 mt-4 rounded hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
+  >
+    Eliminar Cliente
+  </button>
+
+  <!-- Mensaje final -->
+  <p *ngIf="mensaje" class="mt-4 p-3 rounded"
+    [ngClass]="{
+      'bg-green-100 text-green-700 border border-green-400': mensaje.includes('✅'),
+      'bg-red-100 text-red-700 border border-red-400': mensaje.includes('❌') || mensaje.includes('⚠️')
+    }">
+    {{ mensaje }}
+  </p>
+
+</div>
+
+<!-- Mensaje en caso de no encontrar cliente -->
+<p class="mt-8 text-red-600" *ngIf="!cliente && mensaje">{{ mensaje }}</p>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BitacoraService } from './bitacora.service';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-bitacora',

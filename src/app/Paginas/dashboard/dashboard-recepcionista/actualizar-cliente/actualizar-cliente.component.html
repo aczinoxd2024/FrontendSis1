@@ -1,0 +1,20 @@
+<h1 class="text-2xl font-bold mb-6">Actualizar Cliente</h1>
+
+<!-- Buscar cliente por CI -->
+<form (submit)="buscarCliente()" class="space-y-4 mb-10">
+  <input [(ngModel)]="ciBuscar" name="ciBuscar" placeholder="Ingrese CI del Cliente" class="border p-2 w-full" required />
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Buscar Cliente</button>
+</form>
+
+<!-- Formulario de edición solo si el cliente fue cargado -->
+<form *ngIf="clienteCargado" [formGroup]="clienteForm" (ngSubmit)="actualizarCliente()" class="space-y-4">
+
+  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full" />
+  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full" />
+  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full" />
+  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full" />
+
+  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Actualizar Cliente</button>
+</form>
+
+<p class="mt-4 text-green-600">{{ mensaje }}</p>
