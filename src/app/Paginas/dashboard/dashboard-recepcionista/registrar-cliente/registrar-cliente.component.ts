@@ -14,8 +14,8 @@ import { MetodoPagoService } from '../../../../metodo-pago/metodo-pago.service';
 export class RegistrarClienteComponent implements OnInit {
 
   clienteForm: FormGroup;
-  membresias: any[] = []; // 📌 Se cargan dinámicamente
-  metodosPago: any[] = []; // 📌 Se cargan dinámicamente
+  membresias: any[] = []; // 📌 Membresías dinámicas
+  metodosPago: any[] = []; // 📌 Métodos de pago dinámicos
   mensaje: string = '';
 
   constructor(
@@ -34,7 +34,7 @@ export class RegistrarClienteComponent implements OnInit {
       observacion: [''],
       correo: ['', [Validators.required, Validators.email]],
       tipoMembresia: ['', Validators.required],
-      metodoPago: ['', Validators.required], // ✅ Nuevo campo agregado
+      metodoPago: ['', Validators.required],
     });
   }
 
@@ -73,15 +73,21 @@ export class RegistrarClienteComponent implements OnInit {
       Authorization: `Bearer ${token}`,
     });
 
-    // 📌 Preparar objeto cliente para enviar
-    const cliente = {
-      ...this.clienteForm.value,
-      tipoMembresiaId: this.clienteForm.value.tipoMembresia,
-      metodoPagoId: this.clienteForm.value.metodoPago
-    };
+    const formValue = this.clienteForm.value;
 
-    delete cliente.tipoMembresia;
-    delete cliente.metodoPago;
+    // 📌 Preparar objeto cliente para enviar → CORREGIDO con fecha en formato ISO
+    const cliente = {
+      ci: formValue.ci,
+      nombre: formValue.nombre,
+      apellido: formValue.apellido,
+      fechaNacimiento: new Date(formValue.fechaNacimiento).toISOString(), // 🔥 FORMATO CORRECTO ISO
+      telefono: formValue.telefono,
+      direccion: formValue.direccion,
+      observacion: formValue.observacion,
+      correo: formValue.correo,
+      tipoMembresiaId: Number(formValue.tipoMembresia),
+      metodoPagoId: Number(formValue.metodoPago),
+    };
 
     console.log('📤 Cliente que se enviará al backend:', cliente);
 

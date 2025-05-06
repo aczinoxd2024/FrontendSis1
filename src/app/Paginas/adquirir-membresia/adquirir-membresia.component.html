@@ -16,14 +16,20 @@
     <option *ngFor="let metodo of metodoPagos" [value]="metodo.id">{{ metodo.metodoPago }}</option>
   </select>
 
-  <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
-    Realizar Pago y Adquirir Membresía
+  <button
+    type="submit"
+    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full disabled:bg-gray-400 disabled:cursor-not-allowed"
+    [disabled]="adquirirForm.invalid || enviando">
+    {{ enviando ? 'Procesando...' : 'Realizar Pago y Adquirir Membresía' }}
   </button>
 
 </form>
 
 <!-- Mensaje de respuesta -->
-<p *ngIf="mensaje" class="mt-6 text-center text-lg font-semibold"
-  [ngClass]="mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'">
-  {{ mensaje }}
-</p>
+<div *ngIf="mensaje" class="mt-6 text-center transition-all duration-500 ease-in-out">
+  <p
+    class="text-lg font-semibold p-3 rounded"
+    [ngClass]="mensaje.includes('exitosamente') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+    {{ mensaje }}
+  </p>
+</div>

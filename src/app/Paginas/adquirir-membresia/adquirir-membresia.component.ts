@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 import { HttpClient } from '@angular/common/http';
 import { ClienteService } from '../../interfaces/cliente.service';
 
@@ -16,14 +15,15 @@ export class AdquirirMembresiaComponent implements OnInit {
 
   adquirirForm: FormGroup;
   metodoPagos: any[] = [];
-  tipoMembresiaId!: number; // 📌 ID que viene por URL
+  tipoMembresiaId!: number;
   mensaje: string = '';
+  enviando: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private http: HttpClient,
-    private clienteService: ClienteService // ✅ Usar servicio
+    private clienteService: ClienteService
   ) {
     this.adquirirForm = this.fb.group({
       ci: ['', Validators.required],
@@ -39,43 +39,58 @@ export class AdquirirMembresiaComponent implements OnInit {
   }
 
   ngOnInit() {
-    // ✅ Obtener tipoMembresiaId de la URL
     this.tipoMembresiaId = +this.route.snapshot.paramMap.get('id')!;
 
-    // ✅ Obtener métodos de pago
     this.http.get<any[]>('https://web-production-d581.up.railway.app/api/metodos-pago').subscribe({
       next: (data) => {
         this.metodoPagos = data;
-        console.log('✅ Métodos de pago cargados', data);
       },
-      error: (err) => {
-        console.error('❌ Error al cargar métodos de pago', err);
+      error: () => {
+        this.mensaje = 'Error al cargar métodos de pago. Intente nuevamente.';
       }
     });
   }
 
   enviarSolicitud() {
-    if (this.adquirirForm.invalid) {
+    if (this.adquirirForm.invalid || this.enviando) {
       this.mensaje = 'Por favor complete todos los campos correctamente.';
       return;
     }
 
+    this.enviando = true;
+
+    const formValue = this.adquirirForm.value;
+
     const datosCliente = {
-      ...this.adquirirForm.value,
+      ci: formValue.ci,
+      nombre: formValue.nombre,
+      apellido: formValue.apellido,
+      fechaNacimiento: new Date(formValue.fechaNacimiento).toISOString(),
+      telefono: formValue.telefono,
+      direccion: formValue.direccion,
+      observacion: formValue.observacion,
+      correo: formValue.correo,
       tipoMembresiaId: this.tipoMembresiaId,
-      metodoPagoId: this.adquirirForm.value.metodoPago,
+      metodoPagoId: Number(formValue.metodoPago),
     };
 
-    // ✅ Usar ClienteService para adquirir membresía
     this.clienteService.adquirirMembresia(datosCliente).subscribe({
       next: (res) => {
-        console.log('✅ Registro exitoso', res);
-        this.mensaje = 'Membresía adquirida exitosamente. Se creó tu cuenta con una contraseña temporal.';
+        this.mensaje = `🎉 ${res.mensaje} Por favor revise su correo para cambiar la contraseña temporal.`;
         this.adquirirForm.reset();
+        this.enviando = false;
+
+        setTimeout(() => {
+          this.mensaje = '';
+        }, 5000);
       },
       error: (err) => {
-        console.error('❌ Error al registrar cliente', err);
-        this.mensaje = 'Hubo un problema al adquirir la membresía.';
+        this.mensaje = err?.error?.message || 'Hubo un problema al adquirir la membresía.';
+        this.enviando = false;
+
+        setTimeout(() => {
+          this.mensaje = '';
+        }, 5000);
       }
     });
   }

@@ -1,27 +1,40 @@
-<h1 class="text-2xl font-bold mb-6">Registrar Cliente</h1>
+<h1 class="text-3xl font-bold text-center mb-8 text-green-700">Registrar Cliente</h1>
 
-<form [formGroup]="clienteForm" (ngSubmit)="registrarCliente()" class="space-y-4">
+<form [formGroup]="clienteForm" (ngSubmit)="registrarCliente()" class="space-y-4 max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
 
-  <input formControlName="ci" placeholder="CI" class="border p-2 w-full" />
-  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full" />
-  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full" />
-  <input type="date" formControlName="fechaNacimiento" class="border p-2 w-full" />
-  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full" />
-  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full" />
-  <input formControlName="observacion" placeholder="Observación" class="border p-2 w-full" />
-  <input formControlName="correo" placeholder="Correo" class="border p-2 w-full" />
+  <input formControlName="ci" placeholder="CI" class="border p-2 w-full rounded" />
+  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full rounded" />
+  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full rounded" />
+  <input type="date" formControlName="fechaNacimiento" class="border p-2 w-full rounded" />
+  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full rounded" />
+  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full rounded" />
+  <input formControlName="observacion" placeholder="Observación" class="border p-2 w-full rounded" />
+  <input formControlName="correo" placeholder="Correo electrónico" class="border p-2 w-full rounded" />
 
-  <select formControlName="tipoMembresia" class="border p-2 w-full">
+  <select formControlName="tipoMembresia" class="border p-2 w-full rounded">
     <option value="">Seleccione Membresía</option>
     <option *ngFor="let m of membresias" [value]="m.id">{{ m.nombre }}</option>
   </select>
-  <select formControlName="metodoPago" class="border p-2 w-full">
+
+  <select formControlName="metodoPago" class="border p-2 w-full rounded">
     <option value="">Seleccione Método de Pago</option>
     <option *ngFor="let m of metodosPago" [value]="m.id">{{ m.metodoPago }}</option>
   </select>
 
-  <button type="submit" class="bg-blue-600 text-white px-4 py-2">Registrar</button>
+  <button
+    type="submit"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full disabled:bg-gray-400 disabled:cursor-not-allowed"
+    [disabled]="clienteForm.invalid">
+    Registrar Cliente
+  </button>
 
 </form>
 
-<p class="mt-4 text-green-600">{{ mensaje }}</p>
+<!-- Mensaje de respuesta -->
+<div *ngIf="mensaje" class="mt-6 text-center">
+  <p
+    class="text-lg font-semibold p-3 rounded"
+    [ngClass]="mensaje.includes('exitosamente') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+    {{ mensaje }}
+  </p>
+</div>
