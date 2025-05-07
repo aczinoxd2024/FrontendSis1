@@ -52,4 +52,26 @@ export class ClienteService {
   eliminarCliente(ci: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${ci}`, { headers: this.getHeaders() });
   }
+
+  // 👉 Método para actualizar perfil del cliente autenticado
+  actualizarPerfil(data: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.put(
+      'https://web-production-d581.up.railway.app/api/clientes/perfil/actualizar',
+      data,
+      { headers }
+    );
+  }
+
+  obtenerPerfilCliente(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get('https://web-production-d581.up.railway.app/api/clientes/perfil', { headers });
+  }
+
+
 }

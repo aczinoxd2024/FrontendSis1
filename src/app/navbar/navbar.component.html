@@ -1,0 +1,22 @@
+<nav class="flex justify-between items-center px-6 py-4 bg-gray-900 text-white shadow-md">
+  <div class="text-2xl font-bold">
+    <span class="text-rose-500">Go</span>Fit
+  </div>
+
+  <div class="relative flex items-center gap-2">
+    <span class="text-sm">¡Hola, {{ nombreUsuario }}!</span>
+
+    <button (click)="toggleMenu()">
+      <img src="/assets/flecha-abajo.png" alt="Desplegar" class="w-4 h-4" />
+    </button>
+
+    <div *ngIf="menuAbierto" class="absolute right-0 mt-10 w-40 bg-white text-black rounded-md shadow-lg z-50">
+      <ul class="py-2 text-sm">
+        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="irAPerfil()">Perfil</li>
+        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="iniciarSesion()">Iniciar sesión</li>
+        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="cerrarSesion()">Cerrar sesión</li>
+      </ul>
+    </div>
+  </div>
+</nav>
+

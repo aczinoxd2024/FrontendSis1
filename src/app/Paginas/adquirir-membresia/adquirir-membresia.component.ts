@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -21,10 +21,12 @@ export class AdquirirMembresiaComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private http: HttpClient,
     private clienteService: ClienteService
   ) {
+
     this.adquirirForm = this.fb.group({
       ci: ['', Validators.required],
       nombre: ['', Validators.required],
@@ -62,27 +64,24 @@ export class AdquirirMembresiaComponent implements OnInit {
     const formValue = this.adquirirForm.value;
 
     const datosCliente = {
-      ci: formValue.ci,
-      nombre: formValue.nombre,
-      apellido: formValue.apellido,
-      fechaNacimiento: new Date(formValue.fechaNacimiento).toISOString(),
-      telefono: formValue.telefono,
-      direccion: formValue.direccion,
-      observacion: formValue.observacion,
-      correo: formValue.correo,
+      ci: this.adquirirForm.value.ci,
+      nombre: this.adquirirForm.value.nombre,
+      apellido: this.adquirirForm.value.apellido,
+      fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
+      telefono: this.adquirirForm.value.telefono,
+      direccion: this.adquirirForm.value.direccion,
+      observacion: this.adquirirForm.value.observacion,
+      correo: this.adquirirForm.value.correo,
       tipoMembresiaId: this.tipoMembresiaId,
-      metodoPagoId: Number(formValue.metodoPago),
+      metodoPagoId: +this.adquirirForm.value.metodoPago,
     };
 
     this.clienteService.adquirirMembresia(datosCliente).subscribe({
       next: (res) => {
-        this.mensaje = `🎉 ${res.mensaje} Por favor revise su correo para cambiar la contraseña temporal.`;
-        this.adquirirForm.reset();
-        this.enviando = false;
-
-        setTimeout(() => {
-          this.mensaje = '';
-        }, 5000);
+        console.log('✅ Registro exitoso', res);
+        const contrasenaTemporal = res.usuario?.passwordTemporal || 'Cambiar123';
+        alert(`Registro exitoso.\nCorreo: ${datosCliente.correo}\nContraseña temporal: ${contrasenaTemporal}`);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.mensaje = err?.error?.message || 'Hubo un problema al adquirir la membresía.';
@@ -94,4 +93,7 @@ export class AdquirirMembresiaComponent implements OnInit {
       }
     });
   }
-}
+
+  }
+
+

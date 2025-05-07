@@ -42,9 +42,22 @@ export class LoginComponent {
         next: (respuesta) => {
           localStorage.setItem('token', respuesta.access_token);
 
-          const rolNormalizado = respuesta.user.rol.trim().toLowerCase();
+          const user = respuesta.user;
+          const rolNormalizado = user.rol.trim().toLowerCase();
           localStorage.setItem('rol', rolNormalizado);
 
+          // ✅ Guardar todos los datos del usuario en localStorage
+          localStorage.setItem('user', JSON.stringify({
+            id: user.id,
+            nombre: user.nombre,
+            apellido: user.apellido,
+            correo: user.correo,
+            telefono: user.telefono,
+            direccion: user.direccion,
+            rol: rolNormalizado
+          }));
+
+          // 👉 Redirección según el rol
           switch (rolNormalizado) {
             case 'administrador':
               this.router.navigate(['/dashboard-admin']);
@@ -68,4 +81,6 @@ export class LoginComponent {
         },
       });
   }
-}
+
+  }
+
