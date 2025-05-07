@@ -1,0 +1,61 @@
+<h2 class="text-2xl font-bold mb-4">Lista de Clientes</h2>
+
+<!-- Mensajes de carga -->
+<div *ngIf="cargando" class="text-gray-600">Cargando clientes...</div>
+<div *ngIf="error" class="text-red-500">{{ error }}</div>
+
+<!-- Tabla de clientes -->
+<table *ngIf="!cargando && clientes.length > 0" class="min-w-full bg-white shadow-md rounded-lg overflow-hidden mt-4">
+  <thead class="bg-gray-200">
+    <tr>
+      <th class="px-4 py-2">CI</th>
+      <th class="px-4 py-2">Nombre</th>
+      <th class="px-4 py-2">Apellido</th>
+      <th class="px-4 py-2">Estado</th>
+      <th class="px-4 py-2">Detalles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let cliente of clientes; let i = index">
+      <tr class="hover:bg-gray-100">
+        <td class="border px-4 py-2">{{ cliente.ci }}</td>
+        <td class="border px-4 py-2">{{ cliente.nombre }}</td>
+        <td class="border px-4 py-2">{{ cliente.apellido }}</td>
+        <td class="border px-4 py-2">
+          <span [ngClass]="{
+            'text-green-600 font-bold': getEstadoTexto(cliente.estado) === 'Activo',
+            'text-red-600 font-bold': getEstadoTexto(cliente.estado) === 'Inactivo',
+            'text-yellow-500 font-bold': getEstadoTexto(cliente.estado) === 'Suspendido',
+            'text-blue-600 font-bold': getEstadoTexto(cliente.estado) === 'Pendiente',
+            'text-gray-500 font-bold': getEstadoTexto(cliente.estado) === 'Cancelado'
+          }">
+            {{ getEstadoTexto(cliente.estado) }}
+          </span>
+        </td>
+
+        <td class="border px-4 py-2 text-center">
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
+            (click)="toggleDetalles(i)"
+          >
+            {{ cliente.mostrarDetalles ? 'Ocultar' : 'Ver detalles' }}
+          </button>
+        </td>
+      </tr>
+
+      <!-- Fila desplegable dentro del mismo *ngFor (ahora SI puede acceder a cliente) -->
+      <tr *ngIf="cliente.mostrarDetalles">
+        <td colspan="5" class="bg-gray-100 px-4 py-3">
+          <strong>Teléfono:</strong> {{ cliente.telefono }} <br>
+          <strong>Dirección:</strong> {{ cliente.direccion }} <br>
+          <strong>Observación:</strong> {{ cliente.observacion }}
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+
+<!-- Si no hay clientes -->
+<div *ngIf="!cargando && clientes.length === 0" class="text-gray-600 mt-4">
+  No se encontraron clientes.
+</div>

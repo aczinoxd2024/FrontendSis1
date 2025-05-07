@@ -8,4 +8,5 @@ export interface Cliente {
   observacion?: string;
   correo: string;
   tipoMembresia: string;
+  estado: string;
 }

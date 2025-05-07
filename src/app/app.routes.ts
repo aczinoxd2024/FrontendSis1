@@ -29,6 +29,11 @@ export const routes: Routes = [
       {
         path: 'bitacora',
         loadComponent: () => import('./Paginas/Administrador/bitacora/bitacora.component').then(m => m.BitacoraComponent)
+      },
+      {
+          path: 'clientes',
+      loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
+
       }
     ]
   },
@@ -58,7 +63,11 @@ export const routes: Routes = [
       {
         path: 'actualizar-cliente',
         loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/actualizar-cliente/actualizar-cliente.component').then(m => m.ActualizarClienteComponent)
-      }
+      },
+      {
+        path: 'clientes',
+        loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
+    }
     ]
   },
 

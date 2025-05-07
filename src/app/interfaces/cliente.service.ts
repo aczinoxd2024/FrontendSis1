@@ -14,10 +14,14 @@ export class ClienteService {
   // ✅ Utilidad para generar headers con token
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
+    if (!token) {
+      return new HttpHeaders();
+    }
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-  }
+}
+
 
   // 👉 Registrar cliente
   registrarCliente(cliente: Cliente): Observable<any> {

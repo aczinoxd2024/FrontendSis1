@@ -17,10 +17,11 @@
         ❌ <span>Eliminar Cliente</span>
       </a>
 
-      <!-- Listado de Clientes (Deshabilitado) -->
-      <div class="flex items-center gap-2 px-4 py-2 rounded bg-gray-700 text-gray-400 cursor-not-allowed">
-        🕑 <span>Listado de Clientes (Próximamente)</span>
-      </div>
+      <!-- Listado de Clientes (Activo) -->
+      <a routerLink="/dashboard-admin/clientes" routerLinkActive="bg-gray-700"
+        class="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-700 transition">
+        📄 <span>Listado de Clientes</span>
+      </a>
     </nav>
 
     <button (click)="logout()"
