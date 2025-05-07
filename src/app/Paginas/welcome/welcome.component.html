@@ -1,22 +1,48 @@
-<!-- Fondo animado (igual que el original) -->
+<!-- Fondo animado -->
 <div class="fixed inset-0 -z-10 bg-gray-900 animate-gradient-dark-flow"></div>
 
 <!-- HEADER -->
-<header class="flex flex-wrap items-center justify-between px-6 py-4 shadow-md bg-gray-900/80 backdrop-blur-sm max-w-7xl mx-auto border-b border-gray-700">
+<header class="flex flex-wrap items-center justify-between px-6 py-4 shadow-md bg-gray-900/80 backdrop-blur-sm max-w-7xl mx-auto border-b border-gray-700 relative">
   <div class="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
     <img src="/assets/logo.png" alt="Logo GoFit" class="h-12 w-auto max-w-[120px]" />
     <span class="text-2xl font-extrabold text-rose-500">Go<span class="text-white">Fit</span></span>
   </div>
 
-  <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-end mt-4 md:mt-0">
-    <span *ngIf="logueado" class="text-sm font-medium text-gray-300 hidden md:inline">
-      ¡Hola, {{ usuarioNombre }}!
-    </span>
-    <button *ngIf="logueado"
-      (click)="cerrarSesion()"
-      class="text-sm px-4 py-2 border border-gray-600 text-white rounded-full hover:bg-gray-800 transition">
-      Cerrar sesión
-    </button>
+  <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-end mt-4 md:mt-0 relative">
+    <!-- MENÚ DE USUARIO -->
+    <div class="relative dropdown" *ngIf="logueado">
+      <button
+        (click)="toggleDropdown()"
+        class="flex items-center gap-2 px-4 py-2 text-sm text-white bg-gray-700 rounded-full hover:bg-gray-600 transition"
+      >
+        ¡Hola, {{ usuarioNombre }}!
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      <div
+        *ngIf="mostrarMenu"
+        class="absolute right-0 mt-2 w-40 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50"
+      >
+      <a
+      [routerLink]="['/perfil']"
+      (click)="cerrarMenus()"
+      class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 transition"
+    >
+      Perfil
+    </a>
+
+        <button
+          (click)="cerrarSesion()"
+          class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 transition"
+        >
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+
+    <!-- BOTÓN LOGIN -->
     <button *ngIf="!logueado"
       (click)="irAIniciarSesion()"
       class="text-sm px-4 py-2 border border-gray-600 text-white rounded-full hover:bg-gray-800 transition">
@@ -24,6 +50,25 @@
     </button>
   </div>
 </header>
+
+<!-- PANEL DE PERFIL -->
+<div *ngIf="mostrarPerfil" class="fixed top-24 right-6 w-96 bg-gray-900 border border-gray-700 rounded-xl text-white shadow-xl z-50 p-6 perfil-panel">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-bold border-b border-gray-700 pb-2">Detalles de Usuario</h3>
+    <button (click)="togglePerfil()" class="text-gray-400 hover:text-red-400 text-xl">&times;</button>
+  </div>
+
+  <div class="space-y-3">
+    <p><span class="font-semibold text-gray-300">Nombre:</span> {{ usuarioNombre }}</p>
+    <p><span class="font-semibold text-gray-300">Correo:</span> {{ usuarioCorreo }}</p>
+    <p><span class="font-semibold text-gray-300">Rol:</span> {{ usuarioRol }}</p>
+    <p><span class="font-semibold text-gray-300">Zona horaria:</span> America/La_Paz</p>
+
+    <button class="mt-4 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition">
+      Editar perfil
+    </button>
+  </div>
+</div>
 
 <!-- CONTENIDO PRINCIPAL -->
 <main class="px-6 md:px-12 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-7xl mx-auto bg-gray-800/90 rounded-xl shadow-lg border border-gray-700">
@@ -35,11 +80,9 @@
       Mejora tu salud, transforma tu cuerpo y alcanza tus objetivos fitness con el mejor acompañamiento.
     </p>
 
-    <!-- CAMBIO REALIZADO AQUI 👇 -->
     <button [routerLink]="['/menbresias']" class="px-6 py-3 border border-gray-400 text-white hover:bg-gray-700 hover:text-white rounded-full text-sm transition block md:inline-block">
       Ver Membresías
     </button>
-
   </div>
 
   <div class="flex justify-center">
@@ -50,7 +93,7 @@
 <!-- SECCIÓN TARJETAS DESTACADAS -->
 <section class="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-12 bg-gray-800/90 rounded-xl shadow-lg border border-gray-700">
 
-  <!-- Tarjeta 1 -->
+  <!-- Tarjeta 1: Te Conocemos -->
   <div class="relative overflow-hidden rounded-xl shadow-md transition-all duration-600 group hover:-translate-y-2 bg-gray-700">
     <div class="absolute inset-0 bg-gray-700 group-hover:bg-gradient-to-r group-hover:from-blue-900 group-hover:via-gray-900 group-hover:to-gray-800 transition-all duration-300"></div>
 
@@ -67,7 +110,7 @@
     </div>
   </div>
 
-  <!-- Tarjeta 2 -->
+  <!-- Tarjeta 2: Te Evaluamos -->
   <div class="relative overflow-hidden rounded-xl shadow-md transition-all duration-600 group hover:-translate-y-2 bg-gray-700">
     <div class="absolute inset-0 bg-gray-700 group-hover:bg-gradient-to-r group-hover:from-blue-900 group-hover:via-gray-900 group-hover:to-gray-800 transition-all duration-300"></div>
 
@@ -85,8 +128,9 @@
   </div>
 </section>
 
+
+<!-- ESTILOS -->
 <style>
-/* Animación del gradiente oscuro */
 .animate-gradient-dark-flow {
   background-size: 300% 300%;
   background-image: linear-gradient(

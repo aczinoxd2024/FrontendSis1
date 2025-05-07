@@ -68,6 +68,17 @@ export const routes: Routes = [
     loadComponent: () => import('./Paginas/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
   },
 
+  {
+    path: 'perfil',
+    loadComponent: () => import('./Paginas/perfil/perfil.component').then(m => m.PerfilComponent),
+  },
+
+  {
+    path: 'perfil/editar',
+    loadComponent: () => import('./Paginas/perfil/editar-perfil/editar-perfil.component').then(m => m.EditarPerfilComponent),
+  },
+
+
 
   // WILDCARD → Redirige cualquier ruta no encontrada al Welcome
   {
@@ -75,3 +86,6 @@ export const routes: Routes = [
     redirectTo: '', // 🔴 IMPORTANTE: Welcome es la raíz
   }
 ];
+
+
+

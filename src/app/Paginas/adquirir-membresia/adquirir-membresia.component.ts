@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -21,10 +21,12 @@ export class AdquirirMembresiaComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private http: HttpClient,
-    private clienteService: ClienteService // ✅ Usar servicio
+    private clienteService: ClienteService
   ) {
+
     this.adquirirForm = this.fb.group({
       ci: ['', Validators.required],
       nombre: ['', Validators.required],
@@ -61,17 +63,24 @@ export class AdquirirMembresiaComponent implements OnInit {
     }
 
     const datosCliente = {
-      ...this.adquirirForm.value,
+      ci: this.adquirirForm.value.ci,
+      nombre: this.adquirirForm.value.nombre,
+      apellido: this.adquirirForm.value.apellido,
+      fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
+      telefono: this.adquirirForm.value.telefono,
+      direccion: this.adquirirForm.value.direccion,
+      observacion: this.adquirirForm.value.observacion,
+      correo: this.adquirirForm.value.correo,
       tipoMembresiaId: this.tipoMembresiaId,
-      metodoPagoId: this.adquirirForm.value.metodoPago,
+      metodoPagoId: +this.adquirirForm.value.metodoPago,
     };
 
-    // ✅ Usar ClienteService para adquirir membresía
     this.clienteService.adquirirMembresia(datosCliente).subscribe({
       next: (res) => {
         console.log('✅ Registro exitoso', res);
-        this.mensaje = 'Membresía adquirida exitosamente. Se creó tu cuenta con una contraseña temporal.';
-        this.adquirirForm.reset();
+        const contrasenaTemporal = res.usuario?.passwordTemporal || 'Cambiar123';
+        alert(`Registro exitoso.\nCorreo: ${datosCliente.correo}\nContraseña temporal: ${contrasenaTemporal}`);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         console.error('❌ Error al registrar cliente', err);
@@ -79,4 +88,7 @@ export class AdquirirMembresiaComponent implements OnInit {
       }
     });
   }
-}
+
+  }
+
+

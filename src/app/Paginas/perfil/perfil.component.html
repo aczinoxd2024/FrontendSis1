@@ -1,0 +1,46 @@
+<div class="max-w-xl mx-auto mt-10 p-6 bg-gray-800 text-white rounded-xl shadow-lg space-y-6">
+  <h2 class="text-2xl font-bold border-b border-gray-700 pb-2">Mi Perfil</h2>
+
+  <div class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">Nombre</label>
+      <p class="bg-gray-700 px-4 py-2 rounded">{{ nombre }}</p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">Apellido</label>
+      <p class="bg-gray-700 px-4 py-2 rounded">{{ apellido }}</p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">Correo</label>
+      <p class="bg-gray-700 px-4 py-2 rounded">{{ correo }}</p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">Teléfono</label>
+      <p class="bg-gray-700 px-4 py-2 rounded">{{ telefono }}</p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">Dirección</label>
+      <p class="bg-gray-700 px-4 py-2 rounded">{{ direccion }}</p>
+    </div>
+  </div>
+
+  <div class="flex justify-between pt-4 border-t border-gray-700">
+    <button
+      (click)="volver()"
+      class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded text-sm transition"
+    >
+      ← Volver
+    </button>
+
+    <button
+      (click)="editarPerfil()"
+      class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm transition"
+    >
+      ✏️ Editar Perfil
+    </button>
+  </div>
+</div>

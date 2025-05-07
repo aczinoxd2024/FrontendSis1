@@ -1,56 +1,77 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-welcome',
   standalone: true,
   templateUrl: './welcome.component.html',
-  imports: [NgIf,RouterModule],
+  imports: [CommonModule, RouterModule],
 })
 export class WelcomeComponent implements OnInit {
-
   logueado = false;
-  usuarioNombre: string = '';
+  usuarioNombre = '';
+  usuarioCorreo = '';
+  usuarioRol = '';
+  mostrarMenu = false;
+  mostrarPerfil = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.verificarSesion();
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const token = localStorage.getItem('token');
+    this.logueado = !!token;
+    this.usuarioNombre = user.nombre || '';
+    this.usuarioCorreo = user.correo || '';
+    this.usuarioRol = user.rol || '';
   }
 
-  /**
-   * Verifica si hay un usuario en sesión y carga su nombre
-   */
-  verificarSesion(): void {
-    const userData = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-
-    if (userData && token) {  // ✅ Asegurarse que realmente esté logueado (también con token)
-      const user = JSON.parse(userData);
-      this.usuarioNombre = user.nombre || 'No identificado';
-      this.logueado = true;
-    } else {
-      this.usuarioNombre = '';
-      this.logueado = false;
+  toggleDropdown(): void {
+    this.mostrarMenu = !this.mostrarMenu;
+    if (this.mostrarMenu) {
+      this.mostrarPerfil = false;
     }
   }
 
-  /**
-   * Redirigir a login
-   */
+  togglePerfil(): void {
+    this.mostrarPerfil = !this.mostrarPerfil;
+    if (this.mostrarPerfil) {
+      this.mostrarMenu = false;
+    }
+  }
+
   irAIniciarSesion(): void {
     this.router.navigate(['/login']);
   }
 
-  /**
-   * Cerrar sesión → backend + limpiar local + volver al welcome
-   */
   cerrarSesion(): void {
     this.authService.logout();
+  }
+
+  // Cierra menús si haces clic fuera
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const insideDropdown = target.closest('.dropdown');
+    const insidePerfilPanel = target.closest('.perfil-panel');
+    if (!insideDropdown && !insidePerfilPanel) {
+      this.mostrarMenu = false;
+      this.mostrarPerfil = false;
+    }
+  }
+
+  cerrarMenus(): void {
+    this.mostrarMenu = false;
+    this.mostrarPerfil = false;
+  }
+
+  // Cierra menús al hacer scroll
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.mostrarMenu = false;
+    this.mostrarPerfil = false;
   }
 }
