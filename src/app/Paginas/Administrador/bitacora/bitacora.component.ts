@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BitacoraService } from './bitacora.service';
 import { CommonModule } from '@angular/common';
+import { BitacoraService } from './bitacora.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -14,10 +14,9 @@ export class BitacoraComponent implements OnInit {
   bitacoras: any[] = [];
   usuarioNombre: string = '';
 
-  // ✅ Inyectamos AuthService
   constructor(
     private bitacoraService: BitacoraService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +56,7 @@ export class BitacoraComponent implements OnInit {
    * Cerrar sesión del usuario (usando AuthService)
    */
   logout(): void {
-    this.authService.logout(); // ✅ Ya se encarga de registrar y redirigir
+    this.authService.logout(); // ✅ Redirige y registra en el backend
   }
 
   /**

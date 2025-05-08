@@ -1,54 +1,93 @@
-<h2 class="text-2xl font-bold mb-4">Lista de Clientes</h2>
+<!-- Fondo animado -->
+<div class="background-animated"></div>
 
-<!-- Mensajes de carga -->
-<div *ngIf="cargando" class="text-gray-600">Cargando clientes...</div>
-<div *ngIf="error" class="text-red-500">{{ error }}</div>
+<!-- Contenedor principal -->
+<div class="max-w-7xl mx-auto px-4 py-10 text-white">
+  <h2 class="text-2xl font-bold mb-6 text-rose-500 text-center">Lista de Clientes</h2>
 
-<!-- Tabla de clientes -->
-<table *ngIf="!cargando && clientes.length > 0" class="min-w-full bg-white shadow-md rounded-lg overflow-hidden mt-4">
-  <thead class="bg-gray-200">
-    <tr>
-      <th class="px-4 py-2">CI</th>
-      <th class="px-4 py-2">Nombre</th>
-      <th class="px-4 py-2">Apellido</th>
-      <th class="px-4 py-2">Estado</th>
-      <th class="px-4 py-2">Detalles</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container *ngFor="let cliente of clientes; let i = index">
-      <tr class="hover:bg-gray-100">
-        <td class="border px-4 py-2">{{ cliente.ci }}</td>
-        <td class="border px-4 py-2">{{ cliente.nombre }}</td>
-        <td class="border px-4 py-2">{{ cliente.apellido }}</td>
-        <td class="border px-4 py-2">
-          <span [ngClass]="getEstadoClase(cliente.estado)">
-            {{ cliente.estado }}
-          </span>
-        </td>
-        <td class="border px-4 py-2 text-center">
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
-            (click)="toggleDetalles(i)"
-          >
-            {{ cliente.mostrarDetalles ? 'Ocultar' : 'Ver detalles' }}
-          </button>
-        </td>
-      </tr>
+  <!-- Mensajes de carga -->
+  <div *ngIf="cargando" class="text-gray-400 text-center">Cargando clientes...</div>
+  <div *ngIf="error" class="text-red-400 text-center">{{ error }}</div>
 
-      <!-- Fila desplegable dentro del mismo *ngFor -->
-      <tr *ngIf="cliente.mostrarDetalles">
-        <td colspan="5" class="bg-gray-100 px-4 py-3">
-          <strong>Teléfono:</strong> {{ cliente.telefono }} <br>
-          <strong>Dirección:</strong> {{ cliente.direccion }} <br>
-          <strong>Observación:</strong> {{ cliente.observacion }}
-        </td>
-      </tr>
-    </ng-container>
-  </tbody>
-</table>
+  <!-- Tabla de clientes -->
+  <div *ngIf="!cargando && clientes.length > 0" class="overflow-x-auto mt-6 rounded-lg shadow-lg border border-gray-700">
+    <table class="min-w-full divide-y divide-gray-700 bg-gray-800 text-sm text-white">
+      <thead class="bg-gray-700">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">CI</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Nombre</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Apellido</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Estado</th>
+          <th class="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase">Detalles</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-700">
+        <ng-container *ngFor="let cliente of clientes; let i = index">
+          <tr class="hover:bg-gray-700 transition">
+            <td class="px-4 py-3">{{ cliente.ci }}</td>
+            <td class="px-4 py-3">{{ cliente.nombre }}</td>
+            <td class="px-4 py-3">{{ cliente.apellido }}</td>
+            <td class="px-4 py-3">
+              <span [ngClass]="getEstadoClase(cliente.estado)" class="font-semibold">
+                {{ cliente.estado }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <button
+                class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-1 px-3 rounded transition-all"
+                (click)="toggleDetalles(i)">
+                {{ cliente.mostrarDetalles ? 'Ocultar' : 'Ver detalles' }}
+              </button>
+            </td>
+          </tr>
 
-<!-- Si no hay clientes -->
-<div *ngIf="!cargando && clientes.length === 0" class="text-gray-600 mt-4">
-  No se encontraron clientes.
+          <!-- Detalles -->
+          <tr *ngIf="cliente.mostrarDetalles">
+            <td colspan="5" class="bg-gray-900/70 px-6 py-4 text-sm text-gray-300">
+              <p><strong class="text-gray-400">Teléfono:</strong> {{ cliente.telefono }}</p>
+              <p><strong class="text-gray-400">Dirección:</strong> {{ cliente.direccion }}</p>
+              <p><strong class="text-gray-400">Observación:</strong> {{ cliente.observacion }}</p>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Sin clientes -->
+  <div *ngIf="!cargando && clientes.length === 0" class="text-gray-400 text-center mt-6">
+    No se encontraron clientes.
+  </div>
 </div>
+
+<!-- Estilos -->
+<style>
+  .background-animated {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: 300% 300%;
+    background-image: linear-gradient(45deg, #0a0e17, #13182b, #1a223f, #13182b, #0a0e17);
+    animation: gradientFlow 15s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @media (max-width: 640px) {
+    table {
+      font-size: 13px;
+    }
+    .px-4 {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    .py-3 {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+  }
+</style>

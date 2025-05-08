@@ -1,40 +1,104 @@
-<h1 class="text-3xl font-bold text-center mb-8 text-green-700">Registrar Cliente</h1>
+<!-- Fondo animado -->
+<div class="background-animated"></div>
 
-<form [formGroup]="clienteForm" (ngSubmit)="registrarCliente()" class="space-y-4 max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
+<!-- Contenedor principal -->
+<div class="min-h-screen flex items-center justify-center px-4 py-10 text-white">
+  <div class="w-full max-w-xl bg-gray-800/95 p-8 rounded-xl shadow-xl border border-gray-700 backdrop-blur-sm">
+    <h1 class="text-3xl font-bold text-center mb-6 text-rose-500">Registrar Cliente</h1>
 
-  <input formControlName="ci" placeholder="CI" class="border p-2 w-full rounded" />
-  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full rounded" />
-  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full rounded" />
-  <input type="date" formControlName="fechaNacimiento" class="border p-2 w-full rounded" />
-  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full rounded" />
-  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full rounded" />
-  <input formControlName="observacion" placeholder="Observación" class="border p-2 w-full rounded" />
-  <input formControlName="correo" placeholder="Correo electrónico" class="border p-2 w-full rounded" />
+    <!-- Formulario -->
+    <form [formGroup]="clienteForm" (ngSubmit)="registrarCliente()" class="space-y-4">
+      <input formControlName="ci" placeholder="CI" class="form-control" />
+      <input formControlName="nombre" placeholder="Nombre" class="form-control" />
+      <input formControlName="apellido" placeholder="Apellido" class="form-control" />
+      <input type="date" formControlName="fechaNacimiento" class="form-control" />
+      <input formControlName="telefono" placeholder="Teléfono" class="form-control" />
+      <input formControlName="direccion" placeholder="Dirección" class="form-control" />
+      <input formControlName="observacion" placeholder="Observación" class="form-control" />
+      <input formControlName="correo" placeholder="Correo electrónico" class="form-control" />
 
-  <select formControlName="tipoMembresia" class="border p-2 w-full rounded">
-    <option value="">Seleccione Membresía</option>
-    <option *ngFor="let m of membresias" [value]="m.id">{{ m.nombre }}</option>
-  </select>
+      <select formControlName="tipoMembresia" class="form-control">
+        <option value="">Seleccione Membresía</option>
+        <option *ngFor="let m of membresias" [value]="m.id">{{ m.nombre }}</option>
+      </select>
 
-  <select formControlName="metodoPago" class="border p-2 w-full rounded">
-    <option value="">Seleccione Método de Pago</option>
-    <option *ngFor="let m of metodosPago" [value]="m.id">{{ m.metodoPago }}</option>
-  </select>
+      <select formControlName="metodoPago" class="form-control">
+        <option value="">Seleccione Método de Pago</option>
+        <option *ngFor="let m of metodosPago" [value]="m.id">{{ m.metodoPago }}</option>
+      </select>
 
-  <button
-    type="submit"
-    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full disabled:bg-gray-400 disabled:cursor-not-allowed"
-    [disabled]="clienteForm.invalid">
-    Registrar Cliente
-  </button>
+      <button
+        type="submit"
+        class="btn-accion w-full"
+        [disabled]="clienteForm.invalid">
+        Registrar Cliente
+      </button>
+    </form>
 
-</form>
-
-<!-- Mensaje de respuesta -->
-<div *ngIf="mensaje" class="mt-6 text-center">
-  <p
-    class="text-lg font-semibold p-3 rounded"
-    [ngClass]="mensaje.includes('exitosamente') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
-    {{ mensaje }}
-  </p>
+    <!-- Mensaje -->
+    <div *ngIf="mensaje" class="mt-6 text-center">
+      <p
+        class="text-sm font-medium p-3 rounded transition-all duration-300 ease-in-out"
+        [ngClass]="mensaje.includes('exitosamente') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+        {{ mensaje }}
+      </p>
+    </div>
+  </div>
 </div>
+
+<!-- Estilos -->
+<style>
+  .background-animated {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: 300% 300%;
+    background-image: linear-gradient(45deg, #0a0e17, #13182b, #1a223f, #13182b, #0a0e17);
+    animation: gradientFlow 15s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    background-color: #1f2937;
+    border: 1px solid #4b5563;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #ef4444;
+  }
+
+  .btn-accion {
+    background-color: #ef4444;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    color: white;
+  }
+
+  .btn-accion:hover {
+    background-color: #dc2626;
+  }
+
+  @media (max-width: 640px) {
+    .form-control {
+      font-size: 14px;
+    }
+
+    .btn-accion {
+      font-size: 14px;
+    }
+  }
+</style>

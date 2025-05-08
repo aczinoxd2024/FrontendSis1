@@ -1,34 +1,157 @@
-<h1 class="text-3xl font-bold text-center mb-8 text-green-700">Adquirir Membresía</h1>
+<!-- Fondo animado -->
+<div class="background-animated"></div>
 
-<form [formGroup]="adquirirForm" (ngSubmit)="enviarSolicitud()" class="space-y-4 max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
+<!-- Título -->
+<h1 class="titulo">Adquirir Membresía</h1>
 
-  <input formControlName="ci" placeholder="CI" class="border p-2 w-full rounded" />
-  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full rounded" />
-  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full rounded" />
-  <input type="date" formControlName="fechaNacimiento" class="border p-2 w-full rounded" />
-  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full rounded" />
-  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full rounded" />
-  <input formControlName="correo" placeholder="Correo electrónico" class="border p-2 w-full rounded" />
+<!-- Formulario -->
+<form
+  [formGroup]="adquirirForm"
+  (ngSubmit)="enviarSolicitud()"
+  [class.enviando]="enviando"
+  class="form-wrapper"
+>
+  <input formControlName="ci" placeholder="CI" class="form-control" />
+  <input formControlName="nombre" placeholder="Nombre" class="form-control" />
+  <input formControlName="apellido" placeholder="Apellido" class="form-control" />
+  <input type="date" formControlName="fechaNacimiento" class="form-control" />
+  <input formControlName="telefono" placeholder="Teléfono" class="form-control" />
+  <input formControlName="direccion" placeholder="Dirección" class="form-control" />
+  <input formControlName="correo" placeholder="Correo electrónico" class="form-control" />
 
-  <select formControlName="metodoPago" class="border p-2 w-full rounded">
+  <select formControlName="metodoPago" class="form-control">
     <option value="">Seleccione Método de Pago</option>
     <option *ngFor="let metodo of metodoPagos" [value]="metodo.id">{{ metodo.metodoPago }}</option>
   </select>
 
   <button
     type="submit"
-    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full disabled:bg-gray-400 disabled:cursor-not-allowed"
+    class="btn-submit"
     [disabled]="adquirirForm.invalid || enviando">
     {{ enviando ? 'Procesando...' : 'Realizar Pago y Adquirir Membresía' }}
   </button>
-
 </form>
 
 <!-- Mensaje de respuesta -->
-<div *ngIf="mensaje" class="mt-6 text-center transition-all duration-500 ease-in-out">
-  <p
-    class="text-lg font-semibold p-3 rounded"
-    [ngClass]="mensaje.includes('exitosamente') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
-    {{ mensaje }}
-  </p>
+<div *ngIf="mensaje" class="respuesta" [ngClass]="mensaje.includes('exitosamente') ? 'ok' : 'error'">
+  {{ mensaje }}
 </div>
+
+<!-- Estilos embebidos -->
+<style>
+  .background-animated {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: 300% 300%;
+    background-image: linear-gradient(45deg, #0a0e17, #13182b, #1a223f, #13182b, #0a0e17);
+    animation: flow 15s ease infinite;
+  }
+
+  @keyframes flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .titulo {
+    text-align: center;
+    font-size: 2rem;
+    margin: 2rem 0 1.5rem;
+    color: #ef4444;
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    font-weight: bold;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: rgba(31, 41, 55, 0.95);
+    border-radius: 12px;
+    border: 1px solid #374151;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+    color: #fff;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    background: #1f2937;
+    border: 1px solid #4b5563;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #ef4444;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+
+  .btn-submit:hover {
+    background-color: #dc2626;
+  }
+
+  .btn-submit:disabled {
+    background-color: #6b7280;
+    cursor: not-allowed;
+  }
+
+  .respuesta {
+    max-width: 600px;
+    margin: 24px auto 0;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .respuesta.ok {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+    border: 1px solid #f87171;
+  }
+
+  .respuesta.error {
+    background-color: #7f1d1d;
+    color: #f87171;
+    border: 1px solid #ef4444;
+  }
+
+  form.enviando {
+    opacity: 0.6;
+    filter: blur(1px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 600px) {
+    .form-wrapper {
+      margin: 20px;
+      padding: 20px;
+    }
+
+    .titulo {
+      font-size: 1.5rem;
+    }
+  }
+</style>

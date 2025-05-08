@@ -1,20 +1,117 @@
-<h1 class="text-2xl font-bold mb-6">Actualizar Cliente</h1>
+<!-- Fondo animado -->
+<div class="background-animated"></div>
 
-<!-- Buscar cliente por CI -->
-<form (submit)="buscarCliente()" class="space-y-4 mb-10">
-  <input [(ngModel)]="ciBuscar" name="ciBuscar" placeholder="Ingrese CI del Cliente" class="border p-2 w-full" required />
-  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Buscar Cliente</button>
-</form>
+<!-- Contenedor -->
+<div class="max-w-xl mx-auto px-4 py-10 text-white">
+  <h1 class="text-2xl font-bold mb-6 text-center text-rose-500">Actualizar Cliente</h1>
 
-<!-- Formulario de edición solo si el cliente fue cargado -->
-<form *ngIf="clienteCargado" [formGroup]="clienteForm" (ngSubmit)="actualizarCliente()" class="space-y-4">
+  <!-- Buscar cliente -->
+  <form (submit)="buscarCliente()" class="space-y-4 mb-10 bg-gray-800/90 p-6 rounded-xl shadow-md border border-gray-700 backdrop-blur-sm">
+    <input
+      [(ngModel)]="ciBuscar"
+      name="ciBuscar"
+      placeholder="Ingrese CI del Cliente"
+      required
+      class="form-control"
+    />
+    <button
+      type="submit"
+      class="btn-accion w-full">
+      Buscar Cliente
+    </button>
+  </form>
 
-  <input formControlName="nombre" placeholder="Nombre" class="border p-2 w-full" />
-  <input formControlName="apellido" placeholder="Apellido" class="border p-2 w-full" />
-  <input formControlName="telefono" placeholder="Teléfono" class="border p-2 w-full" />
-  <input formControlName="direccion" placeholder="Dirección" class="border p-2 w-full" />
+  <!-- Formulario de actualización -->
+  <form
+    *ngIf="clienteCargado"
+    [formGroup]="clienteForm"
+    (ngSubmit)="actualizarCliente()"
+    class="space-y-4 bg-gray-800/90 p-6 rounded-xl shadow-md border border-gray-700 backdrop-blur-sm"
+  >
+    <input formControlName="nombre" placeholder="Nombre" class="form-control" />
+    <input formControlName="apellido" placeholder="Apellido" class="form-control" />
+    <input formControlName="telefono" placeholder="Teléfono" class="form-control" />
+    <input formControlName="direccion" placeholder="Dirección" class="form-control" />
 
-  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Actualizar Cliente</button>
-</form>
+    <button type="submit" class="btn-guardar w-full">
+      Actualizar Cliente
+    </button>
+  </form>
 
-<p class="mt-4 text-green-600">{{ mensaje }}</p>
+  <!-- Mensaje -->
+  <p *ngIf="mensaje" class="text-center mt-6 font-medium text-rose-400">{{ mensaje }}</p>
+</div>
+
+<!-- Estilos -->
+<style>
+  .background-animated {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: 300% 300%;
+    background-image: linear-gradient(45deg, #0a0e17, #13182b, #1a223f, #13182b, #0a0e17);
+    animation: gradientFlow 15s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    background-color: #1f2937;
+    border: 1px solid #4b5563;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #ef4444;
+  }
+
+  .btn-accion {
+    background-color: #f59e0b;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    color: white;
+  }
+
+  .btn-accion:hover {
+    background-color: #d97706;
+  }
+
+  .btn-guardar {
+    background-color: #ef4444;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    color: white;
+  }
+
+  .btn-guardar:hover {
+    background-color: #dc2626;
+  }
+
+  @media (max-width: 640px) {
+    .max-w-xl {
+      padding: 1rem;
+    }
+
+    .form-control {
+      font-size: 14px;
+    }
+
+    .btn-accion, .btn-guardar {
+      font-size: 14px;
+    }
+  }
+</style>

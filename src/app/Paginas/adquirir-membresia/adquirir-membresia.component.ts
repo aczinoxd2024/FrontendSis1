@@ -26,7 +26,6 @@ export class AdquirirMembresiaComponent implements OnInit {
     private http: HttpClient,
     private clienteService: ClienteService
   ) {
-
     this.adquirirForm = this.fb.group({
       ci: ['', Validators.required],
       nombre: ['', Validators.required],
@@ -34,7 +33,6 @@ export class AdquirirMembresiaComponent implements OnInit {
       fechaNacimiento: ['', Validators.required],
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
-      // 👇 Observación predeterminada (no se editará)
       observacion: ['Registrado por Web'],
       correo: ['', [Validators.required, Validators.email]],
       metodoPago: ['', Validators.required],
@@ -46,14 +44,10 @@ export class AdquirirMembresiaComponent implements OnInit {
 
     this.http.get<any[]>('https://web-production-d581.up.railway.app/api/metodos-pago').subscribe({
       next: (data) => {
-        // 👇 Filtrar métodos de pago válidos y ordenar
         const permitidos = ['Tarjeta', 'Transferencia', 'Pago en línea'];
-
         this.metodoPagos = data
           .filter(metodo => permitidos.includes(metodo.metodoPago))
-          .sort((a, b) => {
-            return permitidos.indexOf(a.metodoPago) - permitidos.indexOf(b.metodoPago);
-          });
+          .sort((a, b) => permitidos.indexOf(a.metodoPago) - permitidos.indexOf(b.metodoPago));
       },
       error: () => {
         this.mensaje = 'Error al cargar métodos de pago. Intente nuevamente.';
@@ -76,7 +70,7 @@ export class AdquirirMembresiaComponent implements OnInit {
       fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
       telefono: this.adquirirForm.value.telefono,
       direccion: this.adquirirForm.value.direccion,
-      observacion: this.adquirirForm.value.observacion, // ✅ Siempre enviará "Registrado por Web"
+      observacion: this.adquirirForm.value.observacion,
       correo: this.adquirirForm.value.correo,
       tipoMembresiaId: this.tipoMembresiaId,
       metodoPagoId: +this.adquirirForm.value.metodoPago,
@@ -87,6 +81,9 @@ export class AdquirirMembresiaComponent implements OnInit {
         console.log('✅ Registro exitoso', res);
         const contrasenaTemporal = res.usuario?.passwordTemporal || 'Cambiar123';
         alert(`Registro exitoso.\nCorreo: ${datosCliente.correo}\nContraseña temporal: ${contrasenaTemporal}`);
+
+        this.enviando = false; // ✅ liberar
+        this.adquirirForm.reset(); // opcional
         this.router.navigate(['/login']);
       },
       error: (err) => {

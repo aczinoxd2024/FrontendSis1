@@ -1,38 +1,45 @@
-<div class="flex h-screen">
+<!-- Fondo oscuro y responsive -->
+<div class="min-h-screen flex flex-col md:flex-row bg-gray-900 text-white">
 
-  <!-- Sidebar -->
-  <aside class="w-64 bg-gray-900 text-white p-6 space-y-8">
-    <h2 class="text-2xl font-bold mb-4">Panel Admin</h2>
+  <!-- Sidebar fijo -->
+  <aside class="w-full md:w-64 bg-gray-900 text-white p-6 space-y-8 border-r border-gray-800 shadow-xl">
+    <h2 class="text-2xl font-bold text-rose-500 neon-text mb-4">Panel Admin</h2>
 
     <nav class="space-y-4">
       <!-- Bitácora -->
-      <a routerLink="/dashboard-admin/bitacora" routerLinkActive="bg-gray-700"
-        class="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-700 transition">
+      <a routerLink="/dashboard-admin/bitacora" routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
         📋 <span>Bitácora</span>
       </a>
 
-      <!-- Eliminar Cliente -->
-      <a routerLink="/dashboard-admin/eliminar-cliente" routerLinkActive="bg-gray-700"
-        class="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-700 transition">
-        ❌ <span>deshabilitar Cliente</span>
+      <!-- Deshabilitar Cliente -->
+      <a routerLink="/dashboard-admin/eliminar-cliente" routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+        ❌ <span>Deshabilitar Cliente</span>
       </a>
 
-      <!-- Listado de Clientes (Activo) -->
-      <a routerLink="/dashboard-admin/clientes" routerLinkActive="bg-gray-700"
-        class="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-700 transition">
+      <!-- Listado de Clientes -->
+      <a routerLink="/dashboard-admin/clientes" routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
         📄 <span>Listado de Clientes</span>
       </a>
     </nav>
 
     <button (click)="logout()"
-      class="w-full mt-10 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition">
+      class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-xl transition-all shadow hover:scale-105">
       Cerrar Sesión
     </button>
   </aside>
 
-  <!-- Contenido dinámico -->
-  <main class="flex-1 p-10 overflow-y-auto bg-gray-100">
+  <!-- Contenido principal -->
+  <main class="flex-1 p-6 md:p-10 overflow-y-auto bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white">
     <router-outlet></router-outlet>
   </main>
-
 </div>
+
+<style>
+  .neon-text {
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.7),
+                 0 0 20px rgba(239, 68, 68, 0.4);
+  }
+</style>

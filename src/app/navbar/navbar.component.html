@@ -1,22 +1,26 @@
-<nav class="flex justify-between items-center px-6 py-4 bg-gray-900 text-white shadow-md">
-  <div class="text-2xl font-bold">
-    <span class="text-rose-500">Go</span>Fit
+<nav class="flex justify-between items-center px-6 py-4 bg-gray-900 text-white shadow-md border-b border-gray-700">
+  <!-- Logo -->
+  <div class="text-2xl font-extrabold">
+    <span class="text-rose-500">Go</span><span class="text-white">Fit</span>
   </div>
 
+  <!-- Menú desplegable -->
   <div class="relative flex items-center gap-2">
-    <span class="text-sm">¡Hola, {{ nombreUsuario }}!</span>
+    <span class="text-sm text-gray-300">¡Hola, {{ nombreUsuario }}!</span>
 
-    <button (click)="toggleMenu()">
-      <img src="/assets/flecha-abajo.png" alt="Desplegar" class="w-4 h-4" />
+    <button (click)="toggleMenu()" class="hover:scale-105 transition-transform">
+      <img src="/assets/flecha-abajo.png" alt="Desplegar menú" class="w-4 h-4" />
     </button>
 
-    <div *ngIf="menuAbierto" class="absolute right-0 mt-10 w-40 bg-white text-black rounded-md shadow-lg z-50">
-      <ul class="py-2 text-sm">
-        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="irAPerfil()">Perfil</li>
-        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="iniciarSesion()">Iniciar sesión</li>
-        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="cerrarSesion()">Cerrar sesión</li>
+    <!-- Menú -->
+    <div *ngIf="menuAbierto" class="absolute right-0 mt-12 w-44 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 text-sm backdrop-blur-md">
+      <ul class="py-2 text-white">
+        <li class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition" (click)="irAPerfil()">👤 Perfil</li>
+        <li class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition" (click)="iniciarSesion()">🔑 Iniciar sesión</li>
+        <li class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition" (click)="cerrarSesion()">🚪 Cerrar sesión</li>
       </ul>
     </div>
   </div>
 </nav>
+
 

@@ -1,67 +1,82 @@
-<h1 class="text-3xl font-bold mb-8 text-gray-800">Eliminar Cliente</h1>
+<div class="min-h-screen bg-gray-900 text-white p-6">
 
-<!-- Buscar cliente por CI -->
-<form (submit)="buscarCliente()" class="space-y-4 mb-8">
-  <input
-    [(ngModel)]="ciBuscar"
-    name="ciBuscar"
-    placeholder="Ingrese CI del Cliente"
-    class="border border-gray-300 p-3 rounded w-full"
-    required
-  />
-  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
-    Buscar Cliente
-  </button>
-</form>
+  <!-- Título -->
+  <h1 class="text-3xl font-bold mb-8 text-rose-500 neon-text">Eliminar Cliente</h1>
 
-<!-- Loading -->
-<div *ngIf="cargando" class="text-center text-gray-500 mb-8 animate-pulse">
-  Procesando, por favor espere...
-</div>
+  <!-- Buscar por CI -->
+  <form (submit)="buscarCliente()" class="space-y-4 mb-10 max-w-xl mx-auto">
+    <input
+      [(ngModel)]="ciBuscar"
+      name="ciBuscar"
+      placeholder="Ingrese CI del Cliente"
+      class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-rose-500"
+      required
+    />
+    <button
+      type="submit"
+      class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg"
+    >
+      Buscar Cliente
+    </button>
+  </form>
 
-<!-- Si ya cargó cliente -->
-<div *ngIf="cliente" class="bg-white shadow rounded p-6 space-y-4 border border-gray-200">
-
-  <h2 class="text-xl font-semibold text-gray-700">Datos del Cliente</h2>
-
-  <!-- ALERTA SI EL CLIENTE ESTÁ INACTIVO -->
-  <div *ngIf="cliente.estado === 'Inactivo'" class="bg-red-100 text-red-700 p-3 rounded border border-red-400">
-    ⚠️ Este cliente se encuentra <strong>INACTIVO</strong>. No se recomienda modificar sus datos.
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="text-center text-gray-400 mb-8 animate-pulse">
+    Procesando, por favor espere...
   </div>
 
-  <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
-  <p><strong>Apellido:</strong> {{ cliente.apellido }}</p>
-  <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
-  <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
+  <!-- Resultado -->
+  <div *ngIf="cliente" class="bg-gray-800/90 rounded-xl p-6 border border-gray-700 shadow-lg space-y-4 max-w-xl mx-auto backdrop-blur-sm">
 
-  <p>
-    <strong>Estado:</strong>
-    <span [ngClass]="{
-      'text-green-600 font-semibold': cliente.estado === 'Activo',
-      'text-red-600 font-semibold': cliente.estado === 'Inactivo'
-    }">
-      {{ cliente.estado }}
-    </span>
-  </p>
+    <h2 class="text-xl font-semibold text-white">Datos del Cliente</h2>
 
-  <button
-    (click)="eliminarCliente()"
-    [disabled]="cliente.estado === 'Inactivo' || cargando"
-    class="bg-red-600 text-white px-4 py-2 mt-4 rounded hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
-  >
-    Eliminar Cliente
-  </button>
+    <!-- Alerta si inactivo -->
+    <div *ngIf="cliente.estado === 'Inactivo'" class="bg-red-100/10 text-red-400 p-3 rounded border border-red-500">
+      ⚠️ Este cliente se encuentra <strong>INACTIVO</strong>. No se recomienda modificar sus datos.
+    </div>
 
-  <!-- Mensaje final -->
-  <p *ngIf="mensaje" class="mt-4 p-3 rounded"
-    [ngClass]="{
-      'bg-green-100 text-green-700 border border-green-400': mensaje.includes('✅'),
-      'bg-red-100 text-red-700 border border-red-400': mensaje.includes('❌') || mensaje.includes('⚠️')
-    }">
+    <p><strong class="text-gray-300">Nombre:</strong> {{ cliente.nombre }}</p>
+    <p><strong class="text-gray-300">Apellido:</strong> {{ cliente.apellido }}</p>
+    <p><strong class="text-gray-300">Teléfono:</strong> {{ cliente.telefono }}</p>
+    <p><strong class="text-gray-300">Dirección:</strong> {{ cliente.direccion }}</p>
+
+    <p>
+      <strong class="text-gray-300">Estado:</strong>
+      <span [ngClass]="{
+        'text-green-400 font-semibold': cliente.estado === 'Activo',
+        'text-red-500 font-semibold': cliente.estado === 'Inactivo'
+      }">
+        {{ cliente.estado }}
+      </span>
+    </p>
+
+    <button
+      (click)="eliminarCliente()"
+      [disabled]="cliente.estado === 'Inactivo' || cargando"
+      class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow disabled:bg-gray-500 disabled:cursor-not-allowed transition-all"
+    >
+      Eliminar Cliente
+    </button>
+
+    <!-- Mensaje final -->
+    <p *ngIf="mensaje" class="mt-4 p-3 rounded text-sm text-center"
+      [ngClass]="{
+        'bg-green-100/10 text-green-400 border border-green-500': mensaje.includes('✅'),
+        'bg-red-100/10 text-red-400 border border-red-500': mensaje.includes('❌') || mensaje.includes('⚠️')
+      }">
+      {{ mensaje }}
+    </p>
+  </div>
+
+  <!-- Si no hay cliente pero sí mensaje -->
+  <p *ngIf="!cliente && mensaje" class="mt-6 text-center text-red-500 font-medium">
     {{ mensaje }}
   </p>
-
 </div>
 
-<!-- Mensaje en caso de no encontrar cliente -->
-<p class="mt-8 text-red-600" *ngIf="!cliente && mensaje">{{ mensaje }}</p>
+<style>
+  .neon-text {
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.7),
+                 0 0 20px rgba(239, 68, 68, 0.4);
+  }
+</style>

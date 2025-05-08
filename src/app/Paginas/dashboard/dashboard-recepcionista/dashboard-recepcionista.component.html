@@ -1,37 +1,80 @@
-<!-- Encabezado con botón de cerrar sesión y nombre -->
-<div class="flex justify-between items-center p-4 bg-gray-800 text-white">
-  <h1 class="text-xl font-bold">Dashboard Recepcionista</h1>
+<!-- Fondo animado -->
+<div class="background-animated"></div>
 
-  <div class="flex items-center space-x-4">
-    <span class="text-white">👤 {{ nombreUsuario }}</span>
-    <button (click)="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+<!-- Encabezado -->
+<header class="flex justify-between items-center px-6 py-4 bg-gray-900 text-white shadow-md z-10 relative">
+  <h1 class="text-xl font-bold text-rose-500">Recepcionista - Go<span class="text-white">Fit</span></h1>
+
+  <div class="flex items-center gap-4">
+    <span class="text-sm">👤 {{ nombreUsuario }}</span>
+    <button
+      (click)="logout()"
+      class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded transition-all transform hover:scale-105 shadow">
       Cerrar Sesión
     </button>
   </div>
-</div>
+</header>
 
 <!-- Contenedor principal -->
-<div class="flex h-screen">
+<div class="flex min-h-screen">
   <!-- Sidebar -->
-  <aside class="w-64 bg-gray-800 text-white p-5 space-y-4">
-    <h2 class="text-lg font-semibold mb-4">Menú</h2>
-    <nav class="space-y-2">
-      <a routerLink="registrar-cliente" routerLinkActive="font-bold underline" class="block hover:bg-gray-700 p-2 rounded">
-        Registrar Cliente
-      </a>
-
-      <a routerLink="actualizar-cliente" routerLinkActive="font-bold underline" class="block hover:bg-gray-700 p-2 rounded">
-        Actualizar Cliente
-      </a>
-
-      <a routerLink="clientes" routerLinkActive="font-bold underline" class="block hover:bg-gray-700 p-2 rounded">
-        Listado de Clientes
-      </a>
+  <aside class="w-64 bg-gray-800/95 text-white p-6 space-y-6 border-r border-gray-700 hidden sm:block">
+    <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-600 pb-2">Menú Principal</h2>
+    <nav class="space-y-2 text-sm">
+      <a routerLink="registrar-cliente" routerLinkActive="active-link" class="nav-link">➕ Registrar Cliente</a>
+      <a routerLink="actualizar-cliente" routerLinkActive="active-link" class="nav-link">✏️ Actualizar Cliente</a>
+      <a routerLink="clientes" routerLinkActive="active-link" class="nav-link">📋 Listado de Clientes</a>
     </nav>
   </aside>
 
-  <!-- Main content -->
-  <main class="flex-1 p-10 bg-gray-100 overflow-y-auto">
+  <!-- Contenido dinámico -->
+  <main class="flex-1 p-6 bg-gray-900 text-white overflow-y-auto">
     <router-outlet></router-outlet>
   </main>
 </div>
+
+<!-- Estilos -->
+<style>
+  .background-animated {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: 300% 300%;
+    background-image: linear-gradient(45deg, #0a0e17, #13182b, #1a223f, #13182b, #0a0e17);
+    animation: gradientFlow 15s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .nav-link {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #f3f4f6;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background-color: #374151;
+  }
+
+  .active-link {
+    background-color: #ef4444;
+    color: white;
+    font-weight: bold;
+  }
+
+  @media (max-width: 640px) {
+    aside {
+      display: none;
+    }
+    main {
+      padding: 1rem;
+    }
+  }
+</style>
