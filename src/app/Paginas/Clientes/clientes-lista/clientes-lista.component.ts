@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <-- 🔑 IMPORTANTE
+import { CommonModule } from '@angular/common';
 import { ClienteService } from '../../../interfaces/cliente.service';
 import { Cliente } from '../../../interfaces/cliente';
 
@@ -9,8 +9,8 @@ interface ClienteConDetalles extends Cliente {
 
 @Component({
   selector: 'app-clientes-lista',
-  standalone: true, // <-- 🔑 Esto ya lo debes tener por loadComponent
-  imports: [CommonModule], // <-- 🔑 AQUÍ IMPORTAS CommonModule
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './clientes-lista.component.html',
 })
 export class ClientesListaComponent implements OnInit {
@@ -45,23 +45,22 @@ export class ClientesListaComponent implements OnInit {
   toggleDetalles(index: number): void {
     this.clientes[index].mostrarDetalles = !this.clientes[index].mostrarDetalles;
   }
-  getEstadoTexto(estado: any): string {
-    switch (+estado) {
-      case 1:
-        return 'Activo';
-      case 2:
-        return 'Inactivo';
-      case 3:
-        return 'Suspendido';
-      case 4:
-        return 'Pendiente';
-      case 5:
-        return 'Cancelado';
+  getEstadoClase(estado: string): string {
+    switch (estado) {
+      case 'Activo':
+        return 'text-green-600 font-bold';
+      case 'Inactivo':
+        return 'text-red-600 font-bold';
+      case 'Suspendido':
+        return 'text-yellow-500 font-bold';
+      case 'Pendiente':
+        return 'text-blue-600 font-bold';
+      case 'Cancelado':
+        return 'text-gray-500 font-bold';
       default:
-        return 'Desconocido';
+        return 'text-gray-400';
     }
   }
 
-
-
 }
+  // ✅ Nuevo método para retornar la clase (color) según el estado

@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClienteService } from '../../../interfaces/cliente.service';
-import { HttpClient } from '@angular/common/http';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -13,16 +12,17 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './editar-perfil.component.html',
 })
 export class EditarPerfilComponent implements OnInit {
+
   nombre: string = '';
   apellido: string = '';
   correo: string = '';
   rol: string = '';
   telefono: string = '';
   direccion: string = '';
-  passwordActual: string = '';
-nuevaContrasena: string = '';
-confirmarContrasena: string = '';
 
+  passwordActual: string = '';
+  nuevaContrasena: string = '';
+  confirmarContrasena: string = '';
 
   constructor(
     private router: Router,
@@ -31,13 +31,21 @@ confirmarContrasena: string = '';
   ) {}
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.nombre = user.nombre || '';
-    this.apellido = user.apellido || '';
-    this.correo = user.correo || '';
-    this.rol = user.rol || '';
-    this.telefono = user.telefono || '';
-    this.direccion = user.direccion || '';
+    // ✅ Obtener perfil desde el servicio
+    this.clienteService.obtenerPerfilCliente().subscribe({
+      next: (data: any) => {
+        this.nombre = data.nombre || 'Sin datos';
+        this.apellido = data.apellido || 'Sin datos';
+        this.correo = data.correo || 'Sin datos';
+        this.telefono = data.telefono || 'Sin datos';
+        this.direccion = data.direccion || 'Sin datos';
+        this.rol = data.rol || '';
+      },
+      error: (err) => {
+        console.error('Error al cargar el perfil:', err);
+        alert('Error al cargar el perfil. Intenta más tarde.');
+      }
+    });
   }
 
   guardarCambios(): void {
@@ -50,18 +58,19 @@ confirmarContrasena: string = '';
 
     this.clienteService.actualizarPerfil(datos).subscribe({
       next: () => {
-        // ✅ Actualizar localStorage con los nuevos datos
+        // ✅ Actualizar localStorage con todos los datos
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         user.nombre = this.nombre;
+        user.apellido = this.apellido;
         user.telefono = this.telefono;
         user.direccion = this.direccion;
-        user.apellido = this.apellido;
+        user.correo = this.correo; // 🔑 Importante para cuando vuelva a entrar
         localStorage.setItem('user', JSON.stringify(user));
 
         alert('Perfil actualizado correctamente.');
         this.router.navigate(['/perfil']);
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Error al actualizar perfil:', err);
         alert('Hubo un error al actualizar el perfil.');
       }
@@ -82,6 +91,7 @@ confirmarContrasena: string = '';
     };
 
     const token = localStorage.getItem('token');
+
     this.http.post('https://web-production-d581.up.railway.app/api/auth/cambiar-password', body, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -89,18 +99,19 @@ confirmarContrasena: string = '';
     }).subscribe({
       next: () => {
         alert('Contraseña actualizada correctamente.');
-        this.passwordActual = '';
-        this.nuevaContrasena = '';
-        this.confirmarContrasena = '';
+
+        // 🔐 Limpiar sesión
+        localStorage.removeItem('token');
+        localStorage.removeItem('rol');
+        localStorage.removeItem('user');
+
+        // 🔄 Redirigir al login
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         console.error(err);
-        const msg = err?.error?.message;
-
-        if (msg === 'La contraseña actual es incorrecta.') {
+        if (err.error?.message === 'La contraseña actual es incorrecta.') {
           alert('La contraseña actual es incorrecta.');
-        } else if (msg === 'Las nuevas contraseñas no coinciden.') {
-          alert('Las nuevas contraseñas no coinciden.');
         } else {
           alert('Error al cambiar la contraseña.');
         }
@@ -108,10 +119,7 @@ confirmarContrasena: string = '';
     });
   }
 
-
   cancelar(): void {
     this.router.navigate(['/perfil']);
   }
 }
-
-

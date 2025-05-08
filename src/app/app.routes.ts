@@ -81,9 +81,6 @@ export const routes: Routes = [
     loadComponent: () => import('./Paginas/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
   },
 
-<<<<<<< HEAD
-  // WILDCARD (CUALQUIER RUTA → Welcome)
-=======
   {
     path: 'perfil',
     loadComponent: () => import('./Paginas/perfil/perfil.component').then(m => m.PerfilComponent),
@@ -97,9 +94,11 @@ export const routes: Routes = [
 
 
   // WILDCARD → Redirige cualquier ruta no encontrada al Welcome
->>>>>>> perfil/editar
   {
     path: '**',
     redirectTo: '',
   }
 ];
+
+
+

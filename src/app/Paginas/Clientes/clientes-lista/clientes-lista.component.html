@@ -22,17 +22,10 @@
         <td class="border px-4 py-2">{{ cliente.nombre }}</td>
         <td class="border px-4 py-2">{{ cliente.apellido }}</td>
         <td class="border px-4 py-2">
-          <span [ngClass]="{
-            'text-green-600 font-bold': getEstadoTexto(cliente.estado) === 'Activo',
-            'text-red-600 font-bold': getEstadoTexto(cliente.estado) === 'Inactivo',
-            'text-yellow-500 font-bold': getEstadoTexto(cliente.estado) === 'Suspendido',
-            'text-blue-600 font-bold': getEstadoTexto(cliente.estado) === 'Pendiente',
-            'text-gray-500 font-bold': getEstadoTexto(cliente.estado) === 'Cancelado'
-          }">
-            {{ getEstadoTexto(cliente.estado) }}
+          <span [ngClass]="getEstadoClase(cliente.estado)">
+            {{ cliente.estado }}
           </span>
         </td>
-
         <td class="border px-4 py-2 text-center">
           <button
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
@@ -43,7 +36,7 @@
         </td>
       </tr>
 
-      <!-- Fila desplegable dentro del mismo *ngFor (ahora SI puede acceder a cliente) -->
+      <!-- Fila desplegable dentro del mismo *ngFor -->
       <tr *ngIf="cliente.mostrarDetalles">
         <td colspan="5" class="bg-gray-100 px-4 py-3">
           <strong>Teléfono:</strong> {{ cliente.telefono }} <br>

@@ -1,13 +1,10 @@
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClienteService } from '../../interfaces/cliente.service';
 
-
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
   nombre = '';
@@ -21,15 +18,16 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.correo = user.correo || '';
-    this.rol = user.rol || '';
+    this.rol = user.rol || ''; // Solo rol se mantiene local
 
+    // 🔑 Ahora tomamos TODO desde backend (incluyendo correo)
     this.clienteService.obtenerPerfilCliente().subscribe({
       next: (data) => {
-        this.nombre = data.nombre;
-        this.apellido = data.apellido;
-        this.telefono = data.telefono;
-        this.direccion = data.direccion;
+        this.nombre = data.nombre ?? '';
+        this.apellido = data.apellido ?? '';
+        this.correo = data.correo ?? ''; // 👈 Correo desde backend
+        this.telefono = data.telefono ?? '';
+        this.direccion = data.direccion ?? '';
       },
       error: (err) => {
         console.error('Error al cargar el perfil:', err);

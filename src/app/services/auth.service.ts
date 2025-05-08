@@ -8,27 +8,22 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
 
   private apiUrl = 'https://web-production-d581.up.railway.app/api/auth';
+  private isLoggingOut = false; // ✅ NUEVO: Control para evitar múltiples logout
 
   constructor(private http: HttpClient) {}
 
   /**
    * Inicia sesión enviando las credenciales al backend
-   * Almacena token, datos del usuario (incluyendo nombre) y rol en localStorage.
    */
   login(correo: string, password: string, rol: string) {
     return this.http.post<any>(`${this.apiUrl}/login`, {
       correo,
-      password, // ✅ Cambiado de contrasena a password
-      rol       // ✅ Cambiado de rolSeleccionado a rol (más claro y coincide con backend)
+      password,
+      rol
     }).pipe(
       tap(response => {
-        // Guardar token
         localStorage.setItem('token', response.access_token);
-
-        // Guardar usuario completo (id, correo, nombre, rol)
         localStorage.setItem('user', JSON.stringify(response.user));
-
-        // Guardar rol (opcional porque ya está en user)
         localStorage.setItem('rol', response.user.rol);
       })
     );
@@ -36,13 +31,16 @@ export class AuthService {
 
   /**
    * Cierra la sesión llamando al backend para registrar en bitácora
-   * Luego limpia la sesión local y redirige al Welcome.
    */
   logout(): void {
+    if (this.isLoggingOut) return; // ✅ Evitar que entre dos veces
+    this.isLoggingOut = true; // ✅ Marcar que se está cerrando sesión
+
     const token = localStorage.getItem('token');
 
     if (!token) {
-      this.clearSession();
+      this.clearSession(false);
+      this.isLoggingOut = false;
       return;
     }
 
@@ -53,11 +51,11 @@ export class AuthService {
     this.http.post(`${this.apiUrl}/logout`, {}, { headers }).subscribe({
       next: () => {
         console.log('✅ Logout registrado en backend');
-        this.clearSession();
+        this.clearSession(true);
       },
       error: (err) => {
         console.error('❌ Error al registrar logout:', err);
-        this.clearSession();
+        this.clearSession(true);
       }
     });
   }
@@ -65,13 +63,16 @@ export class AuthService {
   /**
    * Limpia los datos locales y redirige al Welcome
    */
-  private clearSession(): void {
+  private clearSession(redirect: boolean): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('rol');
 
-    // Redirigir al Welcome (inicio)
-    window.location.href = '/';
+    this.isLoggingOut = false; // ✅ Volver a permitir futuros logouts
+
+    if (redirect) {
+      window.location.assign('/');
+    }
   }
 
   /**
@@ -110,5 +111,4 @@ export class AuthService {
   resetPassword(token: string, newPassword: string) {
     return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
   }
-
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Cliente } from '../interfaces/cliente';
 
 @Injectable({
@@ -14,14 +14,10 @@ export class ClienteService {
   // ✅ Utilidad para generar headers con token
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    if (!token) {
-      return new HttpHeaders();
-    }
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : '',
     });
-}
-
+  }
 
   // 👉 Registrar cliente
   registrarCliente(cliente: Cliente): Observable<any> {
@@ -53,25 +49,23 @@ export class ClienteService {
     return this.http.delete(`${this.apiUrl}/${ci}`, { headers: this.getHeaders() });
   }
 
-  // 👉 Método para actualizar perfil del cliente autenticado
+  // 👉 Actualizar perfil del cliente autenticado
   actualizarPerfil(data: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
     return this.http.put(
-      'https://web-production-d581.up.railway.app/api/clientes/perfil/actualizar',
+      `${this.apiUrl}/perfil/actualizar`,
       data,
-      { headers }
+      { headers: this.getHeaders() }
     );
   }
 
+  // 👉 Obtener perfil del cliente autenticado
   obtenerPerfilCliente(): Observable<any> {
     const token = localStorage.getItem('token');
+    if (!token) {
+      return throwError(() => new Error('No hay token disponible.'));
+    }
+
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get('https://web-production-d581.up.railway.app/api/clientes/perfil', { headers });
+    return this.http.get(`${this.apiUrl}/perfil`, { headers });
   }
-
-
 }
