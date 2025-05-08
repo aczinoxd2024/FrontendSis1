@@ -34,7 +34,8 @@ export class AdquirirMembresiaComponent implements OnInit {
       fechaNacimiento: ['', Validators.required],
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
-      observacion: [''],
+      // 👇 Observación predeterminada (no se editará)
+      observacion: ['Registrado por Web'],
       correo: ['', [Validators.required, Validators.email]],
       metodoPago: ['', Validators.required],
     });
@@ -45,7 +46,14 @@ export class AdquirirMembresiaComponent implements OnInit {
 
     this.http.get<any[]>('https://web-production-d581.up.railway.app/api/metodos-pago').subscribe({
       next: (data) => {
-        this.metodoPagos = data;
+        // 👇 Filtrar métodos de pago válidos y ordenar
+        const permitidos = ['Tarjeta', 'Transferencia', 'Pago en línea'];
+
+        this.metodoPagos = data
+          .filter(metodo => permitidos.includes(metodo.metodoPago))
+          .sort((a, b) => {
+            return permitidos.indexOf(a.metodoPago) - permitidos.indexOf(b.metodoPago);
+          });
       },
       error: () => {
         this.mensaje = 'Error al cargar métodos de pago. Intente nuevamente.';
@@ -61,8 +69,6 @@ export class AdquirirMembresiaComponent implements OnInit {
 
     this.enviando = true;
 
-    const formValue = this.adquirirForm.value;
-
     const datosCliente = {
       ci: this.adquirirForm.value.ci,
       nombre: this.adquirirForm.value.nombre,
@@ -70,7 +76,7 @@ export class AdquirirMembresiaComponent implements OnInit {
       fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
       telefono: this.adquirirForm.value.telefono,
       direccion: this.adquirirForm.value.direccion,
-      observacion: this.adquirirForm.value.observacion,
+      observacion: this.adquirirForm.value.observacion, // ✅ Siempre enviará "Registrado por Web"
       correo: this.adquirirForm.value.correo,
       tipoMembresiaId: this.tipoMembresiaId,
       metodoPagoId: +this.adquirirForm.value.metodoPago,
@@ -93,7 +99,4 @@ export class AdquirirMembresiaComponent implements OnInit {
       }
     });
   }
-
-  }
-
-
+}
