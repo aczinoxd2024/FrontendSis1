@@ -1,0 +1,68 @@
+<!-- FONDO OSCURO Y PADDING -->
+<div class="min-h-screen bg-gray-900 text-white py-12 px-4 sm:px-8">
+  <div class="max-w-6xl mx-auto bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6 space-y-6">
+
+    <h1 class="text-3xl font-bold text-rose-500 text-center md:text-left">Historial de Reservas</h1>
+
+    <!-- FILTROS -->
+    <div class="flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center sm:justify-start">
+      <input type="date" [(ngModel)]="fechaInicio"
+             class="bg-gray-900 text-white p-2 rounded border border-gray-600"
+             placeholder="Desde" />
+      <input type="date" [(ngModel)]="fechaFin"
+             class="bg-gray-900 text-white p-2 rounded border border-gray-600"
+             placeholder="Hasta" />
+
+      <!-- SELECT DE ESTADO -->
+      <select [(ngModel)]="estadoSeleccionado"
+              class="bg-gray-900 text-white p-2 rounded border border-gray-600">
+        <option value="">Todos los estados</option>
+        <option value="Confirmada">Confirmada</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Cancelada">Cancelada</option>
+        <option value="Asistió">Asistió</option>
+        <option value="No asistió">No asistió</option>
+      </select>
+
+      <button (click)="cargarReservas()"
+              class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded transition w-full sm:w-auto">
+        Buscar
+      </button>
+
+      <button (click)="limpiarFiltros()"
+              class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition w-full sm:w-auto">
+        Limpiar filtros
+      </button>
+    </div>
+
+    <!-- MENSAJE SI NO HAY RESULTADOS -->
+    <div *ngIf="reservas?.length === 0" class="mt-6 text-center text-gray-400 text-sm italic">
+      No se encontraron reservas en el rango de fechas o estado seleccionado.
+    </div>
+
+    <!-- TABLA DE RESULTADOS -->
+    <div *ngIf="reservas?.length > 0" class="overflow-x-auto mt-6 rounded-lg border border-gray-700">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-700 text-white">
+          <tr>
+            <th class="px-4 py-2 text-left">Clase</th>
+            <th class="px-4 py-2 text-left">Horario</th>
+            <th class="px-4 py-2 text-left">Fecha</th>
+            <th class="px-4 py-2 text-left">Estado</th>
+            <th class="px-4 py-2 text-left">Asistencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reserva of reservas" class="border-t border-gray-600 hover:bg-gray-700 transition">
+            <td class="px-4 py-2">{{ reserva.clase?.Nombre }}</td>
+            <td class="px-4 py-2">{{ reserva.horario?.HoraIni }} - {{ reserva.horario?.HoraFin }}</td>
+            <td class="px-4 py-2">{{ reserva.FechaReserva }}</td>
+            <td class="px-4 py-2">{{ reserva.estado?.Estado }}</td>
+            <td class="px-4 py-2">{{ reserva.estadoAsistencia || 'No registrado' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

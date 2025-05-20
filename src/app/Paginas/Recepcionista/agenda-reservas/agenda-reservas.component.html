@@ -1,0 +1,101 @@
+<!-- Fondo animado (si lo usás como en otros componentes GoFit) -->
+<div class="background-animated fixed inset-0 z-[-1]"></div>
+
+<div class="min-h-screen p-6 bg-gray-900 text-white">
+  <h1 class="text-3xl font-bold mb-6 text-rose-500">Agenda de Reservas</h1>
+
+  <!-- Filtros -->
+  <div class="flex flex-wrap gap-4 mb-6">
+    <input [(ngModel)]="ciCliente" placeholder="CI del Cliente"
+           class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-60" />
+
+    <select [(ngModel)]="estadoFiltro" class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-48">
+      <option value="">Todos los Estados</option>
+      <option value="Confirmada">Confirmada</option>
+      <option value="Cancelada">Cancelada</option>
+      <option value="Pendiente">Pendiente</option>
+    </select>
+
+    <input type="date" [(ngModel)]="fechaInicio"
+           class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-52" />
+
+    <input type="date" [(ngModel)]="fechaFin"
+           class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-52" />
+
+    <button (click)="buscarReservas()"
+            class="bg-rose-600 hover:bg-rose-700 text-white px-6 py-2 rounded transition">
+      Buscar
+    </button>
+
+    <button (click)="limpiarFiltros()"
+            class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded transition">
+      Limpiar Filtros
+    </button>
+
+    <button (click)="exportarPDF()"
+            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition">
+      Exportar PDF
+    </button>
+  </div>
+
+  <!-- Tabla agrupada por clase -->
+  <ng-container *ngFor="let grupo of reservasAgrupadas">
+    <h2 class="text-lg font-semibold text-rose-400 mt-6 mb-2">{{ grupo.clase }}</h2>
+
+    <table class="min-w-full text-sm text-white mb-6 bg-gray-800 rounded shadow">
+      <thead class="bg-gray-700 text-gray-300">
+        <tr>
+          <th class="px-4 py-2 text-left">CI Cliente</th>
+          <th class="px-4 py-2 text-left">Horario</th>
+          <th class="px-4 py-2 text-left">Estado</th>
+          <th class="px-4 py-2 text-left">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of grupo.items
+                     | slice: ((paginasPorClase[grupo.clase] - 1) * itemsPorPagina)
+                             : (paginasPorClase[grupo.clase] * itemsPorPagina)"
+            [ngClass]="{
+              'bg-gray-700/30 text-gray-400 italic': r.estado?.Estado === 'Cancelada'
+            }"
+            class="border-b border-gray-600 hover:bg-gray-700/30">
+          <td class="px-4 py-2">{{ r.cliente?.CI }}</td>
+          <td class="px-4 py-2">{{ r.horario?.HoraIni }} - {{ r.horario?.HoraFin }}</td>
+          <td class="px-4 py-2">
+            <span [ngClass]="{
+              'text-green-400 font-semibold': r.estado?.Estado === 'Confirmada',
+              'text-red-400 font-semibold': r.estado?.Estado === 'Cancelada',
+              'text-yellow-400 font-semibold': r.estado?.Estado === 'Pendiente'
+            }">
+              {{ r.estado?.Estado }}
+            </span>
+          </td>
+          <td class="px-4 py-2">
+            <button (click)="cancelarReserva(r.IDReserva)"
+                    *ngIf="r.estado?.Estado !== 'Cancelada'"
+                    class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-1 rounded text-xs">
+              Cancelar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <div class="flex items-center justify-end gap-4 text-sm text-gray-300 mt-2">
+      <button (click)="anteriorPagina(grupo.clase)"
+              [disabled]="paginasPorClase[grupo.clase] === 1"
+              class="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50">
+        ← Anterior
+      </button>
+
+      <span>Página {{ paginasPorClase[grupo.clase] }}</span>
+
+      <button (click)="siguientePagina(grupo.clase, grupo.items.length)"
+              [disabled]="grupo.items.length <= paginasPorClase[grupo.clase] * itemsPorPagina"
+              class="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50">
+        Siguiente →
+      </button>
+    </div>
+  </ng-container>
+</div>

@@ -4,11 +4,15 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { routes } from './app/app.routes';
 import { importProvidersFrom } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './app/services/auth.interceptor';
+
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptorsFromDi()) // <-- Soporte para interceptores
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } // ✅ ESTA LÍNEA
   ]
 }).catch(err => console.error(err));
 

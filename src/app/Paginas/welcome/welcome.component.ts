@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ClasesService } from '../../services/clases.service';
+
 
 @Component({
   selector: 'app-welcome',
@@ -18,7 +20,13 @@ export class WelcomeComponent implements OnInit {
   mostrarMenu = false;
   mostrarPerfil = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  clases: any[] = []; // ✅ NUEVO: lista de clases públicas
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private clasesService: ClasesService // ✅ NUEVO: inyección del servicio
+  ) {}
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -27,8 +35,13 @@ export class WelcomeComponent implements OnInit {
     this.usuarioNombre = user.nombre || '';
     this.usuarioCorreo = user.correo || '';
     this.usuarioRol = user.rol || '';
-  }
 
+    // ✅ NUEVO: cargar clases públicas
+      this.clasesService.getClasesDisponibles().subscribe({
+      next: (data: any[]) => (this.clases = data),
+      error: (err: any) => console.error('Error al cargar clases', err),
+    });
+  }
   toggleDropdown(): void {
     this.mostrarMenu = !this.mostrarMenu;
     if (this.mostrarMenu) {
@@ -51,7 +64,6 @@ export class WelcomeComponent implements OnInit {
     this.authService.logout();
   }
 
-  // Cierra menús si haces clic fuera
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
@@ -68,10 +80,16 @@ export class WelcomeComponent implements OnInit {
     this.mostrarPerfil = false;
   }
 
-  // Cierra menús al hacer scroll
   @HostListener('window:scroll')
   onScroll(): void {
     this.mostrarMenu = false;
     this.mostrarPerfil = false;
   }
+  scrollToClases(): void {
+  const seccion = document.getElementById('seccion-clases');
+  if (seccion) {
+    seccion.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 }

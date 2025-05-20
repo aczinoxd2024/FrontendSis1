@@ -13,10 +13,16 @@ import { AuthService } from '../services/auth.service';
 export class NavbarComponent {
   menuAbierto = false;
   nombreUsuario: string = '';
+  rolUsuario: string = ''; // 👈 rol normalizado
 
   constructor(private router: Router, private authService: AuthService) {
     const user = this.authService.getUser();
+    console.log('Usuario navbar:', user); // 👈
     this.nombreUsuario = user?.nombre || 'Usuario';
+
+    // ✅ Normalizamos el rol a minúsculas para que *ngIf="rolUsuario === 'cliente'" funcione
+    this.rolUsuario = user?.rol?.toLowerCase() || '';
+      console.log('Rol detectado:', this.rolUsuario); // 👈
   }
 
   toggleMenu() {
@@ -28,12 +34,18 @@ export class NavbarComponent {
   }
 
   irAPerfil() {
-    // Lógica para ir al perfil (ajustar si tienes ruta real)
     this.router.navigate(['/perfil']);
   }
 
   iniciarSesion() {
     this.router.navigate(['/login']);
   }
-}
 
+  irAAgenda() {
+    this.router.navigate(['/recepcionista/agenda']);
+  }
+
+  irAHistoricoReservas() {
+    this.router.navigate(['/reservas/historico']);
+  }
+}

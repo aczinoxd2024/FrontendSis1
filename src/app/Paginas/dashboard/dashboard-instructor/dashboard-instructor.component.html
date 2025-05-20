@@ -1,1 +1,15 @@
-<p>dashboard-instructor works!</p>,
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-6">
+  <header class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">Panel del Instructor</h1>
+
+    <a
+      routerLink="mis-clases"
+      class="bg-ef4444 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+    >
+      Ver Mis Clases
+    </a>
+  </header>
+
+  <!-- Rutas hijas como 'mis-clases' se mostrarán aquí -->
+  <router-outlet></router-outlet>
+</div>

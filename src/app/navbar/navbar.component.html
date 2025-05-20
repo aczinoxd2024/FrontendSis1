@@ -15,6 +15,22 @@
     <!-- Menú -->
     <div *ngIf="menuAbierto" class="absolute right-0 mt-12 w-44 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 text-sm backdrop-blur-md">
       <ul class="py-2 text-white">
+
+        <!-- 👇 OPCIÓN VISIBLE SOLO PARA RECEPCIONISTA -->
+        <li *ngIf="rolUsuario === 'recepcionista'"
+            class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition"
+            (click)="irAAgenda()">
+          📋 Agenda de Reservas
+        </li>
+
+        <!-- ✅ NUEVA OPCIÓN: SOLO CLIENTE VE SU HISTORIAL DE RESERVAS -->
+        <li *ngIf="rolUsuario === 'cliente'"
+            class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition"
+            (click)="irAHistoricoReservas()">
+          📅 Mis Reservas
+        </li>
+        <!-- ☝️ FIN de bloque agregado -->
+
         <li class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition" (click)="irAPerfil()">👤 Perfil</li>
         <li class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition" (click)="iniciarSesion()">🔑 Iniciar sesión</li>
         <li class="px-4 py-2 hover:bg-rose-600/30 cursor-pointer transition" (click)="cerrarSesion()">🚪 Cerrar sesión</li>
@@ -22,5 +38,3 @@
     </div>
   </div>
 </nav>
-
-
