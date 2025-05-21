@@ -121,6 +121,14 @@ export const routes: Routes = [
     loadComponent: () => import('./Paginas/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
   },
   {
+  path: 'pagos/success',
+  loadComponent: () => import('./pagos/pago-exitoso.component').then(m => m.PagoExitosoComponent)
+},
+{
+  path: 'pagos/cancel',
+  loadComponent: () => import('./pagos/pago-cancelado.component').then(m => m.PagoCanceladoComponent)
+},
+  {
     path: 'reset-password',
     loadComponent: () => import('./Paginas/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
   },
