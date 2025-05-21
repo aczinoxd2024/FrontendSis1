@@ -69,6 +69,11 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'clases',
+    loadComponent: () => import('./Paginas/welcome/clases-disponibles/clases-disponibles.component').then(m => m.ClasesDisponiblesComponent)
+  },
+
 
   // INSTRUCTOR
   {

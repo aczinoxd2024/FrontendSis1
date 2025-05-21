@@ -1,0 +1,31 @@
+<!-- SECCIÓN DE CLASES DISPONIBLES -->
+<section
+  id="seccion-clases"
+  class="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-12 mt-8 bg-gray-800/90 rounded-xl shadow-lg border border-gray-700"
+>
+  <h2 class="text-3xl font-bold text-white text-center mb-8">Nuestras Clases</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+      *ngFor="let clase of clases"
+      class="bg-white text-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition transform hover:-translate-y-1"
+    >
+      <h3 class="text-xl font-semibold text-red-600 mb-2">{{ clase.Nombre }}</h3>
+      <p class="text-sm mb-1"><strong>Inscritos:</strong> {{ clase.NumInscritos }}</p>
+
+      <div class="text-sm mb-2">
+        <strong>Horarios:</strong>
+        <ul class="list-disc list-inside text-sm text-gray-700 mt-1">
+          <li *ngFor="let h of clase.Horarios">{{ h }}</li>
+        </ul>
+      </div>
+
+      <button
+        (click)="irAIniciarSesion()"
+        class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-sm"
+      >
+        Me interesa
+      </button>
+    </div>
+  </div>
+</section>

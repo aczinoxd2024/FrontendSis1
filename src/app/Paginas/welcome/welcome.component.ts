@@ -37,10 +37,11 @@ export class WelcomeComponent implements OnInit {
     this.usuarioRol = user.rol || '';
 
     // ✅ NUEVO: cargar clases públicas
-      this.clasesService.getClasesDisponibles().subscribe({
-      next: (data: any[]) => (this.clases = data),
-      error: (err: any) => console.error('Error al cargar clases', err),
+    this.clasesService.obtenerClasesPublicas().subscribe({
+      next: (data) => (this.clases = data),
+      error: (err) => console.error('Error al cargar clases públicas', err),
     });
+
   }
   toggleDropdown(): void {
     this.mostrarMenu = !this.mostrarMenu;
