@@ -89,7 +89,12 @@ export const routes: Routes = [
   canActivate: [AuthGuard], // si usas protección
 },
 
-
+// ✅ ASISTENCIA
+  {
+    path: 'asistencia',
+    loadComponent: () => import('./Paginas/asistencia/asistencia.component').then(m => m.AsistenciaComponent),
+    canActivate: [AuthGuard],
+  },
   // MEMBRESÍAS
   {
     path: 'menbresias',
