@@ -136,6 +136,12 @@ export const routes: Routes = [
       loadComponent: () =>
         import('./Paginas/reservas-cliente/nueva-reserva/nueva-reserva.component')
           .then(m => m.NuevaReservaComponent)
+    },
+     {
+      path: 'mis-reservas', // ✅ NUEVA RUTA
+      loadComponent: () =>
+        import('./Paginas/Clientes/mis-reservas/mis-reservas-cliente.component')
+          .then(m => m.MisReservasClienteComponent)
     }
   ]
 },

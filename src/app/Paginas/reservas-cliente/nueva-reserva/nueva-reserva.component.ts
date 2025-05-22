@@ -42,7 +42,10 @@ export class NuevaReservaComponent implements OnInit {
       return;
     }
 
-    this.reservaService.crearReserva(this.IDClase).subscribe({
+    // 🛠️ Asegura que es un número antes de enviar
+    const claseID = Number(this.IDClase);
+
+    this.reservaService.crearReserva(claseID).subscribe({
       next: (res: any) => {
         this.toastr.success('✅ Reserva confirmada');
         if (res.claseActivada) {
