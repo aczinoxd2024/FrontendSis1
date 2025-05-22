@@ -9,9 +9,10 @@ export class ReservaService {
 
   constructor(private http: HttpClient) {}
 
-  crearReserva(idClase: number, ciCliente: string) {
-    return this.http.post(`${this.apiUrl}`, { idClase, ciCliente });
-  }
+crearReserva(IDClase: number) {
+  return this.http.post(`${this.apiUrl}`, { IDClase });
+}
+
 
   cancelarReserva(idReserva: number) {
     return this.http.patch(`${this.apiUrl}/${idReserva}/cancelar`, {});

@@ -2,15 +2,13 @@
 
 <div class="bg-gray-800 p-6 rounded shadow-lg space-y-4 max-w-md text-white">
   <div>
-    <label class="block mb-1 text-sm">ID de Clase</label>
-    <input [(ngModel)]="idClase" type="number"
-           class="w-full p-3 rounded bg-gray-700 border border-gray-600" />
-  </div>
-
-  <div>
-    <label class="block mb-1 text-sm">CI del Cliente</label>
-    <input [(ngModel)]="ciCliente" type="text"
-           class="w-full p-3 rounded bg-gray-700 border border-gray-600" />
+    <label class="block mb-1 text-sm">Clase</label>
+    <select [(ngModel)]="IDClase" class="w-full p-3 rounded bg-gray-700 border border-gray-600">
+      <option [ngValue]="null">-- Selecciona una clase --</option>
+      <option *ngFor="let clase of clases" [value]="clase.IDClase">
+        {{ clase.Nombre }} ({{ clase.Estado }})
+      </option>
+    </select>
   </div>
 
   <button (click)="reservar()"
