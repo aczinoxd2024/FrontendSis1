@@ -1,0 +1,20 @@
+<h1 class="text-2xl font-bold text-rose-500 mb-4">📅 Reservar Clase</h1>
+
+<div class="bg-gray-800 p-6 rounded-lg shadow-lg space-y-4 max-w-md text-white">
+  <div>
+    <label class="block mb-1 text-sm">ID de Clase</label>
+    <input [(ngModel)]="idClase" type="number"
+           class="w-full p-3 rounded bg-gray-700 border border-gray-600" />
+  </div>
+
+  <div>
+    <label class="block mb-1 text-sm">CI del Cliente</label>
+    <input [(ngModel)]="ciCliente" type="text"
+           class="w-full p-3 rounded bg-gray-700 border border-gray-600" />
+  </div>
+
+  <button (click)="reservar()"
+          class="w-full bg-rose-600 hover:bg-rose-700 transition rounded py-3 font-semibold">
+    Confirmar Reserva
+  </button>
+</div>

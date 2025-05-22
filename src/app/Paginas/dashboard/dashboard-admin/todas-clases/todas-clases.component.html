@@ -1,0 +1,31 @@
+<h1 class="text-3xl font-bold mb-6 text-rose-500">Todas las Clases</h1>
+
+<!-- Contenedor scrollable para pantallas pequeñas -->
+<div class="overflow-x-auto rounded shadow-lg bg-gray-900 border border-gray-700">
+  <table class="min-w-full text-sm text-left text-white">
+    <thead class="bg-rose-600 text-white uppercase">
+      <tr>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap">ID</th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap">Nombre</th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap">Estado</th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap">Sala</th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap">Inscritos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let clase of clases" class="border-b border-gray-700 hover:bg-gray-800 transition">
+        <td class="px-6 py-4">{{ clase.IDClase }}</td>
+        <td class="px-6 py-4">{{ clase.Nombre }}</td>
+        <td class="px-6 py-4">
+          <span [ngClass]="{
+              'text-green-400': clase.Estado === 'Activo',
+              'text-yellow-400': clase.Estado === 'Suspendido',
+              'text-red-400': clase.Estado === 'Inactivo'
+            }">{{ clase.Estado }}</span>
+        </td>
+        <td class="px-6 py-4">Sala #{{ clase.IDSalaa }}</td>
+        <td class="px-6 py-4">{{ clase.NumInscritos }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

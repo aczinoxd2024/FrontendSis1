@@ -35,6 +35,10 @@ export const routes: Routes = [
     canActivate: [AdminGuard],
     children: [
       {
+        path: 'todas-clases',
+        loadComponent: () => import('./Paginas/dashboard/dashboard-admin/todas-clases/todas-clases.component').then(m => m.TodasClasesComponent)
+      },
+      {
         path: 'eliminar-cliente',
         loadComponent: () => import('./Paginas/Administrador/eliminar-cliente/eliminar-cliente.component').then(m => m.EliminarClienteComponent)
       },
@@ -45,9 +49,20 @@ export const routes: Routes = [
       {
         path: 'clientes',
         loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
-      }
+      },
+      {
+  path: 'crear-clase',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then(
+      (m) => m.CrearClaseComponent
+    )
+}
+
+      
     ]
   },
+
+
 
   // RECEPCIONISTA DASHBOARD
   {
@@ -93,7 +108,17 @@ export const routes: Routes = [
   component: ReservasHistoricoComponent,
   canActivate: [AuthGuard], // si usas protección
 },
+//RESERVAS CLIENTES
+{
+  path: 'cliente/reservar',
+  loadComponent: () => import('./Paginas/reservar-clase/reservar-clase.component').then(m => m.ReservarClaseComponent)
+},
 
+{
+  path: 'cliente/reservas',
+  loadComponent: () =>
+    import('./Paginas/reservas-cliente/reservas-cliente/reservas-cliente.component').then(m => m.ReservasClienteComponent)
+},
 
   // MEMBRESÍAS
   {

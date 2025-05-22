@@ -18,4 +18,15 @@ export class ClasesService {
    obtenerInstructoresPorClase(idClase: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${idClase}/instructores`);
   }
+  obtenerTodasLasClases(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}`);
+}
+crearClase(clase: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}`, clase);
+}
+obtenerInstructoresDisponibles(): Observable<any[]> {
+  return this.http.get<any[]>('https://web-production-d581.up.railway.app/api/instructores');
+}
+
+
 }
