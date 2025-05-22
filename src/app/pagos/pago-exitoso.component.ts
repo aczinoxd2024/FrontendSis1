@@ -1,21 +1,41 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-pago-exitoso',
-  standalone: true,
-  imports: [CommonModule,RouterModule],
-  template: `
-    <div class="min-h-screen flex items-center justify-center bg-green-100 p-6">
-      <div class="bg-white shadow-xl rounded-xl p-10 text-center max-w-md">
-        <h1 class="text-2xl font-bold text-green-700 mb-4">¡Pago realizado con éxito!</h1>
-        <p class="text-gray-700 mb-6">Gracias por adquirir tu membresía. Ya puedes iniciar sesión y disfrutar de nuestros servicios.</p>
-        <a routerLink="/login" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full">
-          Iniciar sesión
-        </a>
-      </div>
-    </div>
-  `,
+  templateUrl: './pago-exitoso.component.html',
 })
-export class PagoExitosoComponent {}
+export class PagoExitosoComponent implements OnInit {
+  correo: string = '';
+  contrasena: string = 'Cambiar123';
+  mostrarInfo: boolean = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    const sessionId = this.route.snapshot.queryParamMap.get('session_id');
+    if (sessionId) {
+      this.http
+        .get<any>(`https://web-production-d581.up.railway.app/api/stripe/success-info?session_id=${sessionId}`)
+        .subscribe({
+          next: (data) => {
+            console.log('Respuesta del backend:', data); // 👈 para confirmar
+            this.correo = data.correo;
+            this.mostrarInfo = true;
+          },
+          error: (err) => {
+            console.error('Error al obtener info post-pago', err);
+          },
+        });
+    }
+  }
+
+  irAlLogin() {
+    this.router.navigate(['/login']);
+  }
+}

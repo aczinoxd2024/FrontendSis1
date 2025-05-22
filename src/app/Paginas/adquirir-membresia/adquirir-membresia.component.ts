@@ -84,7 +84,7 @@ export class AdquirirMembresiaComponent implements OnInit {
         console.log('✅ Registro exitoso', res);
 
         const contrasenaTemporal = res.usuario?.passwordTemporal || 'Cambiar123';
-        alert(`Registro exitoso.\nCorreo: ${datosCliente.correo}\nContraseña temporal: ${contrasenaTemporal}`);
+       // alert(`Registro exitoso.\nCorreo: ${datosCliente.correo}\nContraseña temporal: ${contrasenaTemporal}`);
 
         const amount = this.tipoMembresiaId === 1 ? 100 : 200;
         const description = this.tipoMembresiaId === 1 ? 'Básica' : 'Gold';
