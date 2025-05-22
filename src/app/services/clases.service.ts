@@ -9,8 +9,8 @@ export class ClasesService {
    private apiUrl = 'https://web-production-d581.up.railway.app/api/clases'; // Ajusta si estás en producción
   constructor(private http: HttpClient) {}
 
-  getClasesDisponibles() {
-    return this.http.get<any[]>('https://web-production-d581.up.railway.app/api/clases/disponibles');
+  obtenerClasesPublicas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/publicas`);
   }
    obtenerMisClases(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/mis-clases`);
@@ -18,4 +18,15 @@ export class ClasesService {
    obtenerInstructoresPorClase(idClase: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${idClase}/instructores`);
   }
+  obtenerTodasLasClases(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}`);
+}
+crearClase(clase: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}`, clase);
+}
+obtenerInstructoresDisponibles(): Observable<any[]> {
+  return this.http.get<any[]>('https://web-production-d581.up.railway.app/api/instructores');
+}
+
+
 }

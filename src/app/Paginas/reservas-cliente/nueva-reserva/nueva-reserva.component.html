@@ -1,0 +1,20 @@
+<h1 class="text-2xl font-bold text-rose-500 mb-4">➕ Nueva Reserva</h1>
+
+<div class="bg-gray-800 p-6 rounded shadow-lg space-y-4 max-w-md text-white">
+  <div>
+    <label class="block mb-1 text-sm">Clase</label>
+    <select [(ngModel)]="IDClase"
+            [ngModelOptions]="{ standalone: true }"
+            class="w-full p-3 rounded bg-gray-700 border border-gray-600">
+      <option [ngValue]="null">-- Selecciona una clase --</option>
+      <option *ngFor="let clase of clases" [ngValue]="clase.IDClase">
+        {{ clase.Nombre }} ({{ clase.Estado }})
+      </option>
+    </select>
+  </div>
+
+  <button (click)="reservar()"
+          class="w-full bg-rose-600 hover:bg-rose-700 transition rounded py-3 font-semibold">
+    Confirmar Reserva
+  </button>
+</div>

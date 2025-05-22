@@ -1,0 +1,54 @@
+<h1 class="text-2xl font-bold text-rose-500 mb-4">Historial de Reservas</h1>
+
+<div class="bg-gray-800 p-4 rounded shadow-md space-y-4">
+  <!-- Filtros -->
+  <div class="flex flex-wrap gap-2 items-center">
+    <input [(ngModel)]="fechaInicio" type="date" class="bg-gray-700 p-2 rounded text-white" />
+    <input [(ngModel)]="fechaFin" type="date" class="bg-gray-700 p-2 rounded text-white" />
+    <select [(ngModel)]="estado" class="bg-gray-700 p-2 rounded text-white">
+      <option value="">Todos los estados</option>
+      <option value="Confirmada">Confirmada</option>
+      <option value="Cancelada">Cancelada</option>
+    </select>
+    <button (click)="cargarReservas()" class="bg-rose-600 px-4 py-2 rounded text-white">Buscar</button>
+    <button (click)="limpiarFiltros()" class="bg-gray-600 px-4 py-2 rounded text-white">Limpiar filtros</button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="overflow-x-auto">
+    <table class="table-auto w-full mt-4 text-white">
+      <thead>
+        <tr class="bg-gray-700">
+          <th class="p-2">Clase</th>
+          <th class="p-2">Horario</th>
+          <th class="p-2">Fecha</th>
+          <th class="p-2">Estado</th>
+          <th class="p-2">Asistencia</th>
+          <th class="p-2">Estado Clase</th> <!-- NUEVO -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas" class="border-t border-gray-600 hover:bg-gray-700">
+          <td class="p-2">{{ reserva.clase?.Nombre }}</td>
+          <td class="p-2">{{ reserva.horario?.HoraIni }} - {{ reserva.horario?.HoraFin }}</td>
+          <td class="p-2">{{ reserva.FechaReserva }}</td>
+          <td class="p-2">{{ reserva.estado?.Estado }}</td>
+          <td class="p-2">{{ reserva.estadoAsistencia || 'Sin registro' }}</td>
+
+          <!-- Estado visual de la clase -->
+          <td class="p-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-semibold"
+              [ngClass]="{
+                'bg-yellow-500 text-black': reserva.clase?.Estado === 'Pendiente',
+                'bg-green-600 text-white': reserva.clase?.Estado === 'Activo'
+              }"
+            >
+              {{ reserva.clase?.Estado || 'Desconocido' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="bg-gray-900 text-white p-6 rounded-lg max-w-5xl mx-auto mt-8 shadow-lg">
+  <!-- Pestañas -->
+  <div class="flex space-x-4 mb-6 border-b border-gray-700 pb-2">
+    <button (click)="setTab('historial')"
+            [class.bg-rose-600]="tab === 'historial'"
+            class="px-4 py-2 rounded hover:bg-rose-500 transition">
+      🗓️ Historial de Reservas
+    </button>
+    <button (click)="setTab('nueva')"
+            [class.bg-rose-600]="tab === 'nueva'"
+            class="px-4 py-2 rounded hover:bg-rose-500 transition">
+      ➕ Nueva Reserva
+    </button>
+  </div>
+
+  <div *ngIf="tab === 'historial'">
+  <app-historial-reservas />
+</div>
+<div *ngIf="tab === 'nueva'">
+  <app-nueva-reserva />
+</div>
+
+  <!-- Contenido dinámico -->
+  <div *ngIf="tab === 'historial'">
+    <app-historial-reservas />
+  </div>
+  <div *ngIf="tab === 'nueva'">
+    <app-nueva-reserva />
+  </div>
+</div>

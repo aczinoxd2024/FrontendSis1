@@ -20,4 +20,9 @@ export class MenbresiasComponent {
 
     this.router.navigate(['/adquirir-menbresia', id]);
   }
+  verDisciplinas(): void {
+  this.router.navigate(['/clases']);
+}
+
+
 }

@@ -21,7 +21,7 @@ export class NavbarComponent {
     this.nombreUsuario = user?.nombre || 'Usuario';
 
     // ✅ Normalizamos el rol a minúsculas para que *ngIf="rolUsuario === 'cliente'" funcione
-    this.rolUsuario = user?.rol?.toLowerCase() || '';
+    this.rolUsuario = this.authService.getUserRole()?.toLowerCase() || '';
       console.log('Rol detectado:', this.rolUsuario); // 👈
   }
 
@@ -48,8 +48,4 @@ export class NavbarComponent {
   irAHistoricoReservas() {
     this.router.navigate(['/reservas/historico']);
   }
-
-  irAAsistencia() {
-  this.router.navigate(['/asistencia']);
-}
 }

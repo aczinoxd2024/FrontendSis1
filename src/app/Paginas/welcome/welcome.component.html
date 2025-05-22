@@ -16,18 +16,17 @@
   </button>
 </div>
   <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-end mt-4 md:mt-0 relative">
-  <!-- MENÚ DE USUARIO -->
-<div class="relative dropdown" *ngIf="logueado">
-  <!-- Botón que despliega el menú -->
-  <button
-    (click)="toggleDropdown()"
-    class="flex items-center gap-2 px-4 py-2 text-sm text-white bg-gray-700 rounded-full hover:bg-gray-600 transition"
-  >
-    ¡Hola, {{ usuarioNombre }}!
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </button>
+    <!-- MENÚ DE USUARIO -->
+    <div class="relative dropdown" *ngIf="logueado">
+      <button
+        (click)="toggleDropdown()"
+        class="flex items-center gap-2 px-4 py-2 text-sm text-white bg-gray-700 rounded-full hover:bg-gray-600 transition"
+      >
+        ¡Hola, {{ usuarioNombre }}!
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
 
   <!-- Dropdown con opciones -->
   <div
@@ -52,16 +51,6 @@
     >
       📅 Mis Reservas
     </a>
-
-    <!-- ✅ NUEVO: opción "Asistencia" solo para clientes -->
-   <a
-      *ngIf="usuarioRol?.toLowerCase() === 'cliente'"
-      [routerLink]="['/asistencia']"
-      (click)="cerrarMenus()"
-      class="block w-full px-4 py-2 text-sm text-white hover:bg-rose-600/40 transition"
-    >
-  📍 Asistencia
-   </a>
     <!-- ☝️ Fin de bloque insertado -->
 
     <!-- Opción: Cerrar sesión -->
@@ -75,9 +64,11 @@
 </div>
 
     <!-- BOTÓN LOGIN -->
-    <button *ngIf="!logueado"
+    <button
+      *ngIf="!logueado"
       (click)="irAIniciarSesion()"
-      class="text-sm px-4 py-2 border border-gray-600 text-white rounded-full hover:bg-gray-800 transition">
+      class="text-sm px-4 py-2 border border-gray-600 text-white rounded-full hover:bg-gray-800 transition"
+    >
       Iniciar sesión
     </button>
   </div>
@@ -122,40 +113,10 @@
   </div>
 </main>
 
-<!-- SECCIÓN TARJETAS DESTACADAS -->
+<!-- SECCIÓN DESTACADA -->
 <section class="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-12 bg-gray-800/90 rounded-xl shadow-lg border border-gray-700">
-  <!-- SECCIÓN DE CLASES DISPONIBLES -->
-<section class="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-12 mt-8 bg-gray-800/90 rounded-xl shadow-lg border border-gray-700">
-  <h2 class="text-3xl font-bold text-white text-center mb-8">Nuestras Clases</h2>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    <div
-      *ngFor="let clase of clases"
-      class="bg-white text-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition transform hover:-translate-y-1"
-    >
-      <h3 class="text-xl font-semibold text-red-600 mb-2">{{ clase.Nombre }}</h3>
-      <p class="text-sm mb-1"><strong>Inscritos:</strong> {{ clase.NumInscritos }}</p>
-      <div class="text-sm mb-2">
-  <strong>Horarios:</strong>
-  <ul class="list-disc list-inside text-sm text-gray-700 mt-1">
-    <li *ngFor="let h of clase.Horarios">{{ h }}</li>
-  </ul>
-</div>
-
-      <button
-        (click)="irAIniciarSesion()"
-        class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-sm"
-      >
-        Me interesa
-      </button>
-    </div>
-  </div>
-</section>
-
-  <!-- Tarjeta 1: Te Conocemos -->
   <div class="relative overflow-hidden rounded-xl shadow-md transition-all duration-600 group hover:-translate-y-2 bg-gray-700">
     <div class="absolute inset-0 bg-gray-700 group-hover:bg-gradient-to-r group-hover:from-blue-900 group-hover:via-gray-900 group-hover:to-gray-800 transition-all duration-300"></div>
-
     <div class="relative grid grid-cols-1 md:grid-cols-[auto_1fr] items-center text-white p-8">
       <div class="p-6 flex justify-center items-center">
         <img src="/assets/teconocemos.png" alt="Te Conocemos" class="h-[220px] w-auto rounded-xl object-cover" />
@@ -169,10 +130,8 @@
     </div>
   </div>
 
-  <!-- Tarjeta 2: Te Evaluamos -->
   <div class="relative overflow-hidden rounded-xl shadow-md transition-all duration-600 group hover:-translate-y-2 bg-gray-700">
     <div class="absolute inset-0 bg-gray-700 group-hover:bg-gradient-to-r group-hover:from-blue-900 group-hover:via-gray-900 group-hover:to-gray-800 transition-all duration-300"></div>
-
     <div class="relative grid grid-cols-1 md:grid-cols-[auto_1fr] items-center text-white p-8">
       <div class="p-6 flex justify-center items-center">
         <img src="/assets/teEvaluamos.png" alt="Te Evaluamos" class="h-[220px] w-auto rounded-xl object-cover" />
@@ -186,7 +145,6 @@
     </div>
   </div>
 </section>
-
 
 <!-- ESTILOS -->
 <style>
@@ -204,9 +162,15 @@
 }
 
 @keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .animate-fade-in-down {

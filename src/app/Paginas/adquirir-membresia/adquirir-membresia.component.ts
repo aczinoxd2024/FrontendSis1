@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ClienteService } from '../../interfaces/cliente.service';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_51RR6tw4YytpeVr09IUybzpCVQhIDrIriY483kbdeocLqoYfmrRyNizyyEBovayLAHuDXROSJwmbFpQjYjuIJInMm00ZhT8LYcB');
 
 @Component({
   selector: 'app-adquirir-membresia',
@@ -79,12 +82,31 @@ export class AdquirirMembresiaComponent implements OnInit {
     this.clienteService.adquirirMembresia(datosCliente).subscribe({
       next: (res) => {
         console.log('✅ Registro exitoso', res);
-        const contrasenaTemporal = res.usuario?.passwordTemporal || 'Cambiar123';
-        alert(`Registro exitoso.\nCorreo: ${datosCliente.correo}\nContraseña temporal: ${contrasenaTemporal}`);
 
-        this.enviando = false; // ✅ liberar
-        this.adquirirForm.reset(); // opcional
-        this.router.navigate(['/login']);
+        const contrasenaTemporal = res.usuario?.passwordTemporal || 'Cambiar123';
+       // alert(`Registro exitoso.\nCorreo: ${datosCliente.correo}\nContraseña temporal: ${contrasenaTemporal}`);
+
+        const amount = this.tipoMembresiaId === 1 ? 100 : 200;
+        const description = this.tipoMembresiaId === 1 ? 'Básica' : 'Gold';
+
+        this.http.post<{ url: string }>(
+          'https://web-production-d581.up.railway.app/api/stripe/checkout',
+          {
+            amount,
+            description,
+            email: datosCliente.correo,
+          }
+        ).subscribe({
+          next: (resp) => {
+            window.location.href = resp.url;
+            this.enviando = false; // ✅ solo liberar después del redireccionamiento
+          },
+          error: (err) => {
+            console.error('❌ Error al redirigir a Stripe:', err);
+            this.mensaje = 'Hubo un problema al conectar con el sistema de pago.';
+            this.enviando = false;
+          }
+        });
       },
       error: (err) => {
         this.mensaje = err?.error?.message || 'Hubo un problema al adquirir la membresía.';

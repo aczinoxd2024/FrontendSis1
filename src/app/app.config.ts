@@ -11,7 +11,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     importProvidersFrom(
       BrowserAnimationsModule,
-      ToastrModule.forRoot()
+      ToastrModule.forRoot({
+        timeOut: 3000,
+        positionClass: 'toast-tailwind-bottom-center',
+        preventDuplicates: true
+      })
     ),
     provideHttpClient(
       withInterceptorsFromDi() // ✅ Usa interceptores desde el sistema de inyección de dependencias

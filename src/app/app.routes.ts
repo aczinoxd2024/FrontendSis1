@@ -34,6 +34,10 @@ export const routes: Routes = [
     canActivate: [AdminGuard],
     children: [
       {
+        path: 'todas-clases',
+        loadComponent: () => import('./Paginas/dashboard/dashboard-admin/todas-clases/todas-clases.component').then(m => m.TodasClasesComponent)
+      },
+      {
         path: 'eliminar-cliente',
         loadComponent: () => import('./Paginas/Administrador/eliminar-cliente/eliminar-cliente.component').then(m => m.EliminarClienteComponent)
       },
@@ -44,9 +48,20 @@ export const routes: Routes = [
       {
         path: 'clientes',
         loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
-      }
+      },
+      {
+  path: 'crear-clase',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then(
+      (m) => m.CrearClaseComponent
+    )
+}
+
+
     ]
   },
+
+
 
   // RECEPCIONISTA DASHBOARD
   {
@@ -71,7 +86,7 @@ export const routes: Routes = [
       loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
     },
     ]
-  }, // ✅ COMA AGREGADA AQUÍ
+  },
 
   // INSTRUCTOR
   {
@@ -91,6 +106,44 @@ export const routes: Routes = [
   component: ReservasHistoricoComponent,
   canActivate: [AuthGuard], // si usas protección
 },
+//RESERVAS CLIENTES
+{
+  path: 'cliente/reservar',
+  loadComponent: () => import('./Paginas/reservar-clase/reservar-clase.component').then(m => m.ReservarClaseComponent)
+},
+
+{
+  path: 'cliente/reservas',
+  loadComponent: () =>
+    import('./Paginas/reservas-cliente/reservas-cliente/reservas-cliente.component').then(m => m.ReservasClienteComponent)
+},
+{
+  path: 'dashboard-cliente',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-cliente/dashboard-cliente/dashboard-cliente.component')
+      .then(m => m.DashboardClienteComponent),
+  children: [
+    {
+      path: 'historial',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/historial/historial.component')
+          .then(m => m.HistorialReservasComponent)
+    },
+    {
+      path: 'nueva',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/nueva-reserva/nueva-reserva.component')
+          .then(m => m.NuevaReservaComponent)
+    },
+     {
+      path: 'mis-reservas', // ✅ NUEVA RUTA
+      loadComponent: () =>
+        import('./Paginas/Clientes/mis-reservas/mis-reservas-cliente.component')
+          .then(m => m.MisReservasClienteComponent)
+    }
+  ]
+},
+
 
 // ✅ ASISTENCIA
   {
@@ -123,6 +176,14 @@ export const routes: Routes = [
     path: 'forgot-password',
     loadComponent: () => import('./Paginas/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
   },
+  {
+  path: 'pagos/success',
+  loadComponent: () => import('./pagos/pago-exitoso.component').then(m => m.PagoExitosoComponent)
+},
+{
+  path: 'pagos/cancel',
+  loadComponent: () => import('./pagos/pago-cancelado.component').then(m => m.PagoCanceladoComponent)
+},
   {
     path: 'reset-password',
     loadComponent: () => import('./Paginas/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
