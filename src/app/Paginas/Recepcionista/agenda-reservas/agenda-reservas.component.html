@@ -1,4 +1,4 @@
-<!-- Fondo animado (si lo usás como en otros componentes GoFit) -->
+<!-- Fondo animado (GoFit style) -->
 <div class="background-animated fixed inset-0 z-[-1]"></div>
 
 <div class="min-h-screen p-6 bg-gray-900 text-white">
@@ -9,7 +9,8 @@
     <input [(ngModel)]="ciCliente" placeholder="CI del Cliente"
            class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-60" />
 
-    <select [(ngModel)]="estadoFiltro" class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-48">
+    <select [(ngModel)]="estadoFiltro"
+            class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-48">
       <option value="">Todos los Estados</option>
       <option value="Confirmada">Confirmada</option>
       <option value="Cancelada">Cancelada</option>
@@ -18,7 +19,6 @@
 
     <input type="date" [(ngModel)]="fechaInicio"
            class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-52" />
-
     <input type="date" [(ngModel)]="fechaFin"
            class="p-3 rounded bg-gray-800 text-white border border-gray-600 w-52" />
 

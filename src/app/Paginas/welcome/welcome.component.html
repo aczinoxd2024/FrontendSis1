@@ -40,16 +40,6 @@
         >
           👤 Perfil
         </a>
-
-        <a
-          *ngIf="usuarioRol?.toLowerCase() === 'cliente'"
-          [routerLink]="['/reservas/historico']"
-          (click)="cerrarMenus()"
-          class="block w-full px-4 py-2 text-sm text-white hover:bg-rose-600/40 transition"
-        >
-          📅 Mis Reservas
-        </a>
-
         <button
           (click)="cerrarSesion()"
           class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-red-600/50 transition"

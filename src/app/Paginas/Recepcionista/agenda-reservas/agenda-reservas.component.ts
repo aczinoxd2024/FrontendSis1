@@ -1,129 +1,49 @@
-import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ReservaService } from '../../../services/reserva.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'; // 👈 importación correcta
 
 @Component({
   selector: 'app-agenda-reservas',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  providers: [ReservaService],
   templateUrl: './agenda-reservas.component.html'
 })
-export class AgendaReservasComponent {
+export class AgendaReservasComponent implements OnInit {
   reservas: any[] = [];
-  reservasAgrupadas: { clase: string, items: any[] }[] = [];
+  reservasAgrupadas: any[] = [];
   ciCliente: string = '';
   estadoFiltro: string = '';
-  fechaInicio: string = '';
-  fechaFin: string = '';
+  fechaInicio?: string;
+  fechaFin?: string;
+
   paginasPorClase: { [clase: string]: number } = {};
-  itemsPorPagina: number = 5;
+  itemsPorPagina = 5;
 
+  constructor(private reservaService: ReservaService) {}
 
-  baseUrl: string = 'https://web-production-d581.up.railway.app/api/reservas';
-
-  constructor(private http: HttpClient) {}
-
-  buscarReservas() {
-    let url = this.baseUrl;
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      alert('Token no encontrado. Inicie sesión nuevamente.');
-      return;
-    }
-
-    if (this.ciCliente) {
-      url += `/cliente/${this.ciCliente}`;
-      const params: string[] = [];
-
-      if (this.estadoFiltro) {
-        params.push(`estado=${encodeURIComponent(this.estadoFiltro)}`);
-      }
-      if (this.fechaInicio) {
-        params.push(`fechaInicio=${this.fechaInicio}`);
-      }
-      if (this.fechaFin) {
-        params.push(`fechaFin=${this.fechaFin}`);
-      }
-
-      if (params.length > 0) {
-        url += `?${params.join('&')}`;
-      }
-    }
-
-    console.log('🔗 URL usada:', url);
-
-    this.http.get<any[]>(url, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
-    }).subscribe({
-      next: res => {
-        console.log('✅ Reservas obtenidas:', res);
-        this.reservas = res;
-        this.agruparPorClase();
-      },
-      error: err => {
-        console.error('❌ Error en la petición:', err);
-        alert('Error al obtener reservas');
-      }
-    });
+  ngOnInit(): void {
+    this.buscarReservas();
   }
 
-  agruparPorClase() {
-    const agrupadas: { [clase: string]: any[] } = {};
-
-    this.reservas.forEach(r => {
-      const nombre = r.clase?.Nombre || 'Sin clase';
-      if (!agrupadas[nombre]) {
-        agrupadas[nombre] = [];
-      }
-      agrupadas[nombre].push(r);
-    });
-
-    this.reservasAgrupadas = Object.entries(agrupadas).map(([clase, items]) => ({ clase, items }));
-    this.paginasPorClase = {};
-    this.reservasAgrupadas.forEach(grupo => {
-    this.paginasPorClase[grupo.clase] = 1;
-  });
-
-  }
-  anteriorPagina(clase: string) {
-  this.paginasPorClase[clase] = Math.max(1, this.paginasPorClase[clase] - 1);
-}
-
-siguientePagina(clase: string, totalItems: number) {
-  const totalPaginas = Math.ceil(totalItems / this.itemsPorPagina);
-  this.paginasPorClase[clase] = Math.min(totalPaginas, this.paginasPorClase[clase] + 1);
-}
-
-
-  cancelarReserva(id: number) {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      alert('Token no encontrado. Inicie sesión nuevamente.');
-      return;
-    }
-
-    if (!confirm('¿Cancelar esta reserva?')) return;
-
-    this.http.patch(`${this.baseUrl}/${id}/cancelar`, {}, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
-    }).subscribe({
-      next: () => {
-        alert('✅ Reserva cancelada correctamente');
-        this.buscarReservas(); // Recarga la tabla
-      },
-      error: err => {
-        console.error('❌ Error al cancelar:', err);
-        alert('No se pudo cancelar la reserva');
-      }
-    });
+  buscarReservas(): void {
+    this.reservaService
+      .getReservasFiltradas(this.ciCliente, this.estadoFiltro, this.fechaInicio, this.fechaFin)
+      .subscribe({
+        next: (res: any[]) => {
+          this.reservas = res;
+          this.agruparReservasPorClase();
+        },
+        error: (err: any) => {
+          console.error('Error al obtener reservas', err);
+        }
+      });
   }
 
-  limpiarFiltros() {
+  limpiarFiltros(): void {
     this.ciCliente = '';
     this.estadoFiltro = '';
     this.fechaInicio = '';
@@ -131,26 +51,73 @@ siguientePagina(clase: string, totalItems: number) {
     this.buscarReservas();
   }
 
-  exportarPDF() {
+  exportarPDF(): void {
     const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text('Agenda de Reservas - GoFit Gym', 14, 20);
-    doc.setFontSize(11);
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 30);
+    doc.setFontSize(18);
+    doc.text('Agenda de Reservas', 14, 20);
 
-    const data = this.reservas.map(r => [
-      r.cliente?.CI || '',
-      r.clase?.Nombre || '',
-      `${r.horario?.HoraIni} - ${r.horario?.HoraFin}`,
-      r.estado?.Estado || ''
-    ]);
+    let finalY = 30;
 
-    autoTable(doc, {
-      startY: 40,
-      head: [['CI Cliente', 'Clase', 'Horario', 'Estado']],
-      body: data
+    this.reservasAgrupadas.forEach((grupo) => {
+      doc.setFontSize(14);
+      doc.text(`Clase: ${grupo.clase}`, 14, finalY);
+
+      const tableResult: any = autoTable(doc, {
+        startY: finalY + 5,
+        head: [['CI Cliente', 'Horario', 'Estado']],
+        body: grupo.items.map((r: any) => [
+          r.cliente?.CI || '',
+          `${r.horario?.HoraIni || '-'} - ${r.horario?.HoraFin || '-'}`,
+          r.estado?.Estado || '',
+        ]),
+        theme: 'grid',
+        styles: {
+          fontSize: 10,
+        },
+      });
+
+      finalY = tableResult?.finalY ? tableResult.finalY + 10 : finalY + 30; // fallback si no devuelve
     });
 
-    doc.save('Agenda_Reservas_GoFit.pdf');
+    doc.save('agenda_reservas.pdf');
+  }
+
+  cancelarReserva(idReserva: number): void {
+    if (confirm('¿Estás seguro de cancelar esta reserva?')) {
+      this.reservaService.cancelarReserva(idReserva).subscribe(() => {
+        this.buscarReservas();
+      });
+    }
+  }
+
+  agruparReservasPorClase(): void {
+    const grupos: { [clase: string]: any[] } = {};
+
+    this.reservas.forEach((r) => {
+      const nombreClase = r.clase?.Nombre || 'Clase sin nombre';
+      if (!grupos[nombreClase]) {
+        grupos[nombreClase] = [];
+        this.paginasPorClase[nombreClase] = 1;
+      }
+      grupos[nombreClase].push(r);
+    });
+
+    this.reservasAgrupadas = Object.keys(grupos).map((clase) => ({
+      clase,
+      items: grupos[clase],
+    }));
+  }
+
+  anteriorPagina(clase: string): void {
+    if (this.paginasPorClase[clase] > 1) {
+      this.paginasPorClase[clase]--;
+    }
+  }
+
+  siguientePagina(clase: string, totalItems: number): void {
+    const maxPaginas = Math.ceil(totalItems / this.itemsPorPagina);
+    if (this.paginasPorClase[clase] < maxPaginas) {
+      this.paginasPorClase[clase]++;
+    }
   }
 }

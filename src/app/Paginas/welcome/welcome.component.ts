@@ -27,22 +27,27 @@ export class WelcomeComponent implements OnInit {
     private router: Router,
     private clasesService: ClasesService // ✅ NUEVO: inyección del servicio
   ) {}
+ngOnInit(): void {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const token = localStorage.getItem('token');
+  this.logueado = !!token;
+  this.usuarioNombre = user.nombre || '';
+  this.usuarioCorreo = user.correo || '';
+  this.usuarioRol = user.rol?.toLowerCase() || '';
 
-  ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const token = localStorage.getItem('token');
-    this.logueado = !!token;
-    this.usuarioNombre = user.nombre || '';
-    this.usuarioCorreo = user.correo || '';
-    this.usuarioRol = user.rol || '';
-
-    // ✅ NUEVO: cargar clases públicas
-    this.clasesService.obtenerClasesPublicas().subscribe({
-      next: (data) => (this.clases = data),
-      error: (err) => console.error('Error al cargar clases públicas', err),
-    });
-
+  // ✅ Redirigir a dashboard-cliente si es cliente
+  if (this.logueado && this.usuarioRol === 'cliente') {
+    this.router.navigate(['/dashboard-cliente/historial']);
+    return; // detenemos aquí para evitar seguir cargando welcome
   }
+
+  // ✅ Si no es cliente, cargar clases públicas normalmente
+  this.clasesService.obtenerClasesPublicas().subscribe({
+    next: (data) => (this.clases = data),
+    error: (err) => console.error('Error al cargar clases públicas', err),
+  });
+}
+
   toggleDropdown(): void {
     this.mostrarMenu = !this.mostrarMenu;
     if (this.mostrarMenu) {

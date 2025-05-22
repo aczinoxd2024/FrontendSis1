@@ -119,6 +119,28 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./Paginas/reservas-cliente/reservas-cliente/reservas-cliente.component').then(m => m.ReservasClienteComponent)
 },
+{
+  path: 'dashboard-cliente',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-cliente/dashboard-cliente/dashboard-cliente.component')
+      .then(m => m.DashboardClienteComponent),
+  children: [
+    {
+      path: 'historial',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/historial/historial.component')
+          .then(m => m.HistorialReservasComponent)
+    },
+    {
+      path: 'nueva',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/nueva-reserva/nueva-reserva.component')
+          .then(m => m.NuevaReservaComponent)
+    }
+  ]
+},
+
+
 
   // MEMBRESÍAS
   {
