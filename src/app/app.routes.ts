@@ -5,7 +5,6 @@ import { recepcionistaGuard } from './guards/recepcionista.guard';
 import { AgendaReservasComponent } from './Paginas/Recepcionista/agenda-reservas/agenda-reservas.component';
 import { ReservasHistoricoComponent } from './Paginas/reservas-historico/reservas-historico.component';
 
-
 export const routes: Routes = [
   {
     path: '',
@@ -66,9 +65,13 @@ export const routes: Routes = [
       {
         path: 'clientes',
         loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
-      }
+      },
+      {
+      path: 'asistencias-generales', // ✅ NUEVA RUTA
+      loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
+    },
     ]
-  },
+  }, // ✅ COMA AGREGADA AQUÍ
 
   // INSTRUCTOR
   {

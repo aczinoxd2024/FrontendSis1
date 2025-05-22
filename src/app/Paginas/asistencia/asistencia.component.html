@@ -1,33 +1,66 @@
-<div class="min-h-screen bg-gray-900 py-10 px-6 animate-gradient-dark-flow">
-  <div class="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
-    <h2 class="text-2xl font-bold text-white mb-6">📍 Marcar Asistencia</h2>
+<div class="min-h-screen bg-gray-900 py-10 px-6 animate-gradient-dark-flow flex flex-col max-w-md mx-auto">
+  <!-- Título principal -->
+  <h2 class="text-2xl font-bold text-white mb-6">📍 Marcar Asistencia</h2>
 
-    <!-- Tab seleccionada fija -->
-    <div class="flex space-x-4 mb-4">
-      <button
-        class="bg-blue-600 text-white px-4 py-2 rounded transition"
-        disabled
-      >
-        📍 Marcar Asistencia
-      </button>
-    </div>
+  <!-- Botón solo texto para marcar asistencia -->
+  <div class="mb-6">
+    <a
+      (click)="marcarAsistencia()"
+      class="text-green-400 cursor-pointer hover:text-green-600 font-semibold text-lg select-none"
+      role="button"
+      tabindex="0"
+      (keydown.enter)="marcarAsistencia()"
+    >
+      ✅ Confirmar Asistencia
+    </a>
 
-    <!-- Botón para registrar asistencia -->
-    <div>
-      <button
-        (click)="marcarAsistencia()"
-        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition w-full"
-      >
-        ✅ Confirmar Asistencia
-      </button>
-
-      <p class="mt-4 text-sm" [ngClass]="{
+    <!-- Mensaje de respuesta -->
+    <p
+      class="mt-4 text-sm"
+      [ngClass]="{
         'text-green-400': mensaje.startsWith('✅'),
         'text-yellow-400': mensaje.startsWith('⚠️'),
         'text-red-400': mensaje.startsWith('❌')
-      }">
-        {{ mensaje }}
-      </p>
-    </div>
+      }"
+    >
+      {{ mensaje }}
+    </p>
   </div>
+
+  <!-- Botón para mostrar/ocultar tabla completa -->
+  <button
+    (click)="mostrarTablaCompleta = !mostrarTablaCompleta"
+    class="bg-rose-600 text-white px-4 py-2 rounded shadow mb-4 hover:bg-rose-700 transition-colors"
+  >
+    {{ mostrarTablaCompleta ? 'Ocultar' : 'Ver todas las asistencias' }}
+  </button>
+<!-- Enlace para Asistencias Generales -->
+<a routerLink="/dashboard-recepcionista/asistencias-generales" routerLinkActive="bg-gray-800"
+   class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+  📅 <span>Asistencias Generales</span>
+</a>
+  <!-- Tabla de historial -->
+  <div *ngIf="mostrarTablaCompleta && historialAsistencia.length > 0" class="mt-6 overflow-x-auto">
+    <table class="min-w-full bg-gray-800 text-white rounded-lg shadow">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 border-b border-gray-600 text-left">#</th>
+          <th class="py-2 px-4 border-b border-gray-600 text-left">Fecha</th>
+          <th class="py-2 px-4 border-b border-gray-600 text-left">Hora</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let asistencia of historialAsistencia; let i = index" class="hover:bg-gray-700">
+          <td class="py-2 px-4 border-b border-gray-700">{{ i + 1 }}</td>
+          <td class="py-2 px-4 border-b border-gray-700">{{ asistencia.fecha | date: 'fullDate' }}</td>
+          <td class="py-2 px-4 border-b border-gray-700">{{ asistencia.fecha | date: 'shortTime' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mensaje si no hay asistencias -->
+  <p *ngIf="mostrarTablaCompleta && historialAsistencia.length === 0" class="mt-6 text-center text-yellow-400">
+    No se encontraron registros de asistencia.
+  </p>
 </div>

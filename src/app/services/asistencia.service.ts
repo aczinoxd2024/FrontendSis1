@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators'; // IMPORTAR map y catchError correctamente
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class AsistenciaService {
   }
 
   marcarAsistencia(): Observable<any> {
-    return this.http.post(`${this.baseUrl}/registrar`, {}, {
+    return this.http.post(`${this.baseUrl}/registrar`, null, {
       headers: this.getHeaders()
     }).pipe(
       catchError(error => {
@@ -29,4 +29,17 @@ export class AsistenciaService {
       })
     );
   }
+
+  obtenerHistorialConFechas(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.baseUrl}`, { headers: this.getHeaders() }).pipe(
+    map((historial: any[]) => historial.map((item: any) => ({
+      ...item,
+      fecha: new Date(item.fecha)
+    }))),
+    catchError(error => {
+      console.error('Error al obtener historial:', error);
+      return throwError(() => error);
+    })
+  );
+}
 }

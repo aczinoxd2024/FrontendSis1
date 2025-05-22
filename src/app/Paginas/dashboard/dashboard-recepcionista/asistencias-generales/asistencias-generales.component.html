@@ -1,0 +1,33 @@
+<h2 class="text-2xl font-semibold text-rose-400 mb-4">📋 Asistencias Generales</h2>
+
+<!-- Mostrar carga mientras se resuelve el Observable -->
+<ng-container *ngIf="asistencias$ | async as asistencias; else loading">
+
+  <!-- Mostrar mensaje si no hay asistencias -->
+  <div *ngIf="asistencias.length === 0" class="text-gray-400">
+    No se encontraron asistencias.
+  </div>
+
+  <!-- Tabla con asistencias -->
+  <table *ngIf="asistencias.length > 0" class="w-full text-sm bg-gray-800 rounded-lg overflow-hidden">
+    <thead class="bg-rose-600 text-white">
+      <tr>
+        <th class="p-2 text-left">Cliente</th>
+        <th class="p-2 text-left">Fecha</th>
+        <th class="p-2 text-left">Hora</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let asistencia of asistencias" class="border-b border-gray-700 hover:bg-gray-700/50">
+        <td class="p-2">{{ asistencia.cliente?.nombreCompleto }}</td>
+        <td class="p-2">{{ asistencia.fecha | date }}</td>
+        <td class="p-2">{{ asistencia.hora }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</ng-container>
+
+<ng-template #loading>
+  <div class="text-gray-300">Cargando asistencias...</div>
+</ng-template>
