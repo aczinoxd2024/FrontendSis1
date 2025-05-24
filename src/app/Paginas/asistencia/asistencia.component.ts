@@ -15,7 +15,7 @@ export class AsistenciaComponent implements OnInit {
   mensaje = '';
   nombreUsuario = '';
   historialAsistencia: any[] = []; // ✅ Aquí se guarda el historial
-  mostrarTablaCompleta: boolean = true;
+  mostrarTablaCompleta: boolean = false;
   constructor(
     private asistenciaService: AsistenciaService,
     private http: HttpClient, // ✅ HttpClient para llamada directa
@@ -70,8 +70,14 @@ export class AsistenciaComponent implements OnInit {
       console.error('❌ Error al obtener historial:', err);
     }
   });
-}
+  }
   toggleTablaCompleta() {
     this.mostrarTablaCompleta = !this.mostrarTablaCompleta;
   }
+  logout() {
+    localStorage.removeItem('token'); // Borra el token
+    this.router.navigate(['/login']); // Redirige al login (ajusta la ruta si tienes otra)
+  }
+
+
 }

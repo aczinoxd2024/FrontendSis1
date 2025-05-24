@@ -51,6 +51,14 @@
     >
       📅 Mis Reservas
     </a>
+       <a
+     *ngIf="usuarioRol?.toLowerCase() === 'cliente'"
+        [routerLink]="['/asistencia']"
+       (click)="cerrarMenus()"
+        class="block w-full px-4 py-2 text-sm text-white hover:bg-rose-600/40 transition"
+      >
+     📍 Asistencia
+    </a>
     <!-- ☝️ Fin de bloque insertado -->
 
     <!-- Opción: Cerrar sesión -->

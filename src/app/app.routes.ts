@@ -49,13 +49,18 @@ export const routes: Routes = [
         path: 'clientes',
         loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
       },
+
+       {
+      path: 'asistencias-generales', // ✅ NUEVA RUTA
+      loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
+    },
       {
   path: 'crear-clase',
   loadComponent: () =>
     import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then(
       (m) => m.CrearClaseComponent
     )
-}
+  }
 
 
     ]
