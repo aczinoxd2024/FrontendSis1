@@ -2,59 +2,121 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservaService } from '../../../services/reserva.service';
-import { ToastrService } from 'ngx-toastr';
-import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nueva-reserva',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './nueva-reserva.component.html'
+  templateUrl: './nueva-reserva.component.html',
 })
 export class NuevaReservaComponent implements OnInit {
-  IDClase: number | null = null;
   clases: any[] = [];
+  reservasActivas: any[] = [];
+  idClase: number | null = null;
+  mensajeError: string = '';
 
-  constructor(
-    private reservaService: ReservaService,
-    private toastr: ToastrService,
-    private http: HttpClient
-  ) {}
+  constructor(private reservaService: ReservaService) {}
 
   ngOnInit(): void {
-    this.cargarClases();
+    this.cargarReservasYClases();
   }
 
-  cargarClases(): void {
-    this.http.get<any[]>('https://web-production-d581.up.railway.app/api/clases')
-      .subscribe({
-        next: (data) => this.clases = data,
-        error: (err) => {
-          console.error('Error al cargar clases', err);
-          this.toastr.error('❌ No se pudieron cargar las clases');
+  cargarReservasYClases() {
+    this.reservaService.getMisReservas().subscribe({
+      next: (reservas) => {
+        this.reservasActivas = reservas;
+        this.cargarClasesPermitidas();
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cargar reservas del cliente',
+          confirmButtonColor: '#ef4444'
+        });
+      }
+    });
+  }
+
+  cargarClasesPermitidas() {
+    this.reservaService.getClasesPermitidas().subscribe({
+      next: (clases) => {
+        this.clases = clases.map((clase: any) => {
+          const yaReservada = this.reservasActivas.some(r => r.clase?.IDClase === clase.IDClase);
+          const llena = clase.NumInscritos >= clase.CupoMaximo;
+          const activa = clase.Estado === 'Activo';
+          return { ...clase, yaReservada, llena, activa };
+        });
+
+        if (this.clases.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sin clases disponibles',
+            text: '🔒 No tienes clases disponibles actualmente.',
+            confirmButtonColor: '#6b7280'
+          });
         }
-      });
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cargar clases permitidas',
+          confirmButtonColor: '#ef4444'
+        });
+      }
+    });
   }
 
-  reservar(): void {
-    if (!this.IDClase) {
-      this.toastr.warning('🔔 Debes seleccionar una clase');
+  puedeReservar(clase: any): boolean {
+    return clase.activa && !clase.yaReservada && !clase.llena;
+  }
+
+  reservar() {
+    if (!this.idClase) {
+      this.mensajeError = '🔔 Debes seleccionar una clase';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atención',
+        text: this.mensajeError,
+        confirmButtonColor: '#facc15'
+      });
       return;
     }
 
-    // 🛠️ Asegura que es un número antes de enviar
-    const claseID = Number(this.IDClase);
-
-    this.reservaService.crearReserva(claseID).subscribe({
+    this.reservaService.crearReserva(this.idClase).subscribe({
       next: (res: any) => {
-        this.toastr.success('✅ Reserva confirmada');
+        this.mensajeError = '';
+
+        Swal.fire({
+          icon: 'success',
+          title: '✅ Reserva confirmada',
+          text: 'Tu reserva fue registrada correctamente',
+          confirmButtonColor: '#10b981'
+        });
+
         if (res.claseActivada) {
-          this.toastr.info('🎉 La clase se ha activado automáticamente');
+          Swal.fire({
+            icon: 'info',
+            title: '🎉 Clase activada',
+            text: 'La clase se ha activado automáticamente',
+            confirmButtonColor: '#3b82f6'
+          });
         }
+
+        this.cargarReservasYClases();
       },
       error: (err: any) => {
         const msg = err.error?.message || '❌ Error al crear la reserva';
-        this.toastr.error(msg);
+        this.mensajeError = msg;
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: msg,
+          confirmButtonColor: '#ef4444'
+        });
       }
     });
   }

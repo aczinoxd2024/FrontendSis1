@@ -1,0 +1,94 @@
+<!-- Fondo animado estilo GoFit -->
+<div class="background-animated fixed inset-0 -z-[1]"></div>
+
+<!-- Contenedor principal -->
+<div class="min-h-screen p-6 bg-gray-900 text-white">
+  <h1 class="text-3xl font-bold mb-6 text-rose-500">📋 Agenda de Reservas (Admin)</h1>
+
+  <!-- Filtros -->
+  <div class="flex flex-wrap gap-4 mb-6">
+    <input [(ngModel)]="ciCliente" placeholder="CI del Cliente"
+           class="p-3 rounded bg-gray-800 text-white border border-gray-600" />
+
+    <select [(ngModel)]="estadoFiltro"
+            class="p-3 rounded bg-gray-800 text-white border border-gray-600">
+      <option value="">Todos los Estados</option>
+      <option value="Confirmada">Confirmada</option>
+      <option value="Cancelada">Cancelada</option>
+      <option value="Pendiente">Pendiente</option>
+    </select>
+
+    <input type="date" [(ngModel)]="fechaInicio"
+           class="p-3 rounded bg-gray-800 text-white border border-gray-600" />
+    <input type="date" [(ngModel)]="fechaFin"
+           class="p-3 rounded bg-gray-800 text-white border border-gray-600" />
+
+    <button (click)="buscarReservas()"
+            class="bg-rose-600 hover:bg-rose-700 text-white px-6 py-2 rounded">
+      Buscar
+    </button>
+
+    <button (click)="limpiarFiltros()"
+            class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded">
+      Limpiar Filtros
+    </button>
+
+    <button (click)="exportarPDF()"
+            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded">
+      Exportar PDF
+    </button>
+  </div>
+
+  <!-- Tabla agrupada -->
+  <div *ngFor="let grupo of reservasAgrupadas" class="mb-12">
+    <h2 class="text-xl font-semibold text-rose-400 mb-3">
+      Clase: {{ grupo.clase }}
+    </h2>
+
+    <table class="w-full bg-gray-800 text-sm rounded overflow-hidden">
+      <thead class="bg-gray-700 text-left text-white">
+        <tr>
+          <th class="p-3">CI Cliente</th>
+          <th class="p-3">Horario</th>
+          <th class="p-3">Estado</th>
+          <th class="p-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of grupo.items | slice: calcularInicio(grupo.clase): calcularFin(grupo.clase)"
+            class="border-b border-gray-700">
+          <td class="p-3">{{ reserva.cliente?.CI }}</td>
+          <td class="p-3">
+            {{ reserva.horario?.HoraIni || '-' }} - {{ reserva.horario?.HoraFin || '-' }}
+          </td>
+          <td class="p-3" [ngClass]="{ 'text-green-400': reserva.estado?.Estado === 'Confirmada', 'text-red-400': reserva.estado?.Estado === 'Cancelada' }">
+            {{ reserva.estado?.Estado || '-' }}
+          </td>
+          <td class="p-3">
+            <button *ngIf="reserva.estado?.Estado !== 'Cancelada'"
+                    (click)="cancelarReserva(reserva.IDReserva)"
+                    class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded">
+              Cancelar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <div class="mt-2 flex justify-end gap-4 items-center text-sm">
+      <button (click)="anteriorPagina(grupo.clase)"
+              [disabled]="paginasPorClase[grupo.clase] <= 1"
+              class="px-4 py-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-40">
+        ← Anterior
+      </button>
+
+      <span>Página {{ paginasPorClase[grupo.clase] || 1 }}</span>
+
+      <button (click)="siguientePagina(grupo.clase, grupo.items.length)"
+              class="px-4 py-1 rounded bg-gray-700 hover:bg-gray-600">
+        Siguiente →
+      </button>
+    </div>
+  </div>
+</div>

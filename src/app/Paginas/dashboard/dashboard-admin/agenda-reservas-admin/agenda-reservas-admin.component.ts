@@ -1,21 +1,19 @@
+// agenda-reservas-admin.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReservaService } from '../../../services/reserva.service';
+import { ReservaService } from '../../../../services/reserva.service';
 import jsPDF from 'jspdf';
-import autoTable, { UserOptions } from 'jspdf-autotable';
-
+import autoTable from 'jspdf-autotable';
 import Swal from 'sweetalert2';
 
-
 @Component({
-  selector: 'app-agenda-reservas',
+  selector: 'app-agenda-reservas-admin',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  providers: [ReservaService],
-  templateUrl: './agenda-reservas.component.html'
+  templateUrl: './agenda-reservas-admin.component.html',
 })
-export class AgendaReservasComponent implements OnInit {
+export class AgendaReservasAdminComponent implements OnInit {
   reservas: any[] = [];
   reservasAgrupadas: any[] = [];
   ciCliente: string = '';
@@ -29,38 +27,30 @@ export class AgendaReservasComponent implements OnInit {
   constructor(private reservaService: ReservaService) {}
 
   ngOnInit(): void {
-    
+    // No buscar automáticamente
   }
 
   buscarReservas(): void {
-    this.reservaService
-      .getReservasFiltradas(this.ciCliente, this.estadoFiltro, this.fechaInicio, this.fechaFin)
-      .subscribe({
-        next: (res: any[]) => {
-          this.reservas = res;
-          this.agruparReservasPorClase();
-        },
-        error: (err: any) => {
-          console.error('Error al obtener reservas', err);
-        }
-      });
+    this.reservaService.getReservasFiltradas(this.ciCliente, this.estadoFiltro, this.fechaInicio, this.fechaFin).subscribe({
+      next: (res: any[]) => {
+        this.reservas = res;
+        this.agruparReservasPorClase();
+      },
+      error: (err: any) => {
+        console.error('Error al obtener reservas', err);
+        Swal.fire('Error', 'No se pudieron cargar las reservas', 'error');
+      },
+    });
   }
 
-limpiarFiltros(): void {
-  this.ciCliente = '';
-  this.estadoFiltro = '';
-  this.fechaInicio = '';
-  this.fechaFin = '';
-  this.reservas = [];
-  this.reservasAgrupadas = [];
-
-  Swal.fire({
-    icon: 'info',
-    title: 'Filtros limpiados',
-    text: 'Los filtros han sido reiniciados. No hay reservas cargadas.',
-    confirmButtonColor: '#3b82f6'
-  });
-}
+  limpiarFiltros(): void {
+    this.ciCliente = '';
+    this.estadoFiltro = '';
+    this.fechaInicio = '';
+    this.fechaFin = '';
+    this.reservas = [];
+    this.reservasAgrupadas = [];
+  }
 
 exportarPDF(): void {
   if (this.reservasAgrupadas.length === 0) {
@@ -74,10 +64,21 @@ exportarPDF(): void {
   }
 
   const doc = new jsPDF();
+  const fechaActual = new Date();
+
+  // 🟢 Título principal
   doc.setFontSize(18);
   doc.text('Agenda de Reservas', 14, 20);
 
-  let finalY = 30;
+  // 📅 Fecha de exportación
+  const fechaTexto = fechaActual.toLocaleString('es-BO', {
+    dateStyle: 'long',
+    timeStyle: 'short'
+  });
+  doc.setFontSize(11);
+  doc.text(`Exportado: ${fechaTexto}`, 14, 28);
+
+  let finalY = 40;
 
   this.reservasAgrupadas.forEach((grupo) => {
     doc.setFontSize(14);
@@ -99,13 +100,16 @@ exportarPDF(): void {
     finalY = (doc as any).lastAutoTable?.finalY + 10 || finalY + 30;
   });
 
-  // Generar nombre con fecha
-  const fechaActual = new Date().toISOString().split('T')[0]; // formato yyyy-mm-dd
-  const nombreArchivo = `agenda_reservas_${fechaActual}.pdf`;
+  // ✍️ Firma final
+  doc.setFontSize(10);
+  doc.text('Oficinas-GoFit Gym', 14, finalY + 10);
+
+  // 📄 Nombre de archivo dinámico
+  const fechaNombre = fechaActual.toISOString().split('T')[0]; // yyyy-mm-dd
+  const nombreArchivo = `agenda_reservas_${fechaNombre}.pdf`;
 
   doc.save(nombreArchivo);
 
-  // Modal de éxito
   Swal.fire({
     icon: 'success',
     title: '¡Exportación exitosa!',
@@ -116,11 +120,21 @@ exportarPDF(): void {
 
 
   cancelarReserva(idReserva: number): void {
-    if (confirm('¿Estás seguro de cancelar esta reserva?')) {
-      this.reservaService.cancelarReserva(idReserva).subscribe(() => {
-        this.buscarReservas();
-      });
-    }
+    Swal.fire({
+      title: '¿Cancelar reserva?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No, mantener'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.reservaService.cancelarReserva(idReserva).subscribe(() => {
+          this.buscarReservas();
+          Swal.fire('Cancelada', 'La reserva fue cancelada.', 'success');
+        });
+      }
+    });
   }
 
   agruparReservasPorClase(): void {
@@ -152,5 +166,13 @@ exportarPDF(): void {
     if (this.paginasPorClase[clase] < maxPaginas) {
       this.paginasPorClase[clase]++;
     }
+  }
+
+  calcularInicio(clase: string): number {
+    return (this.paginasPorClase[clase] - 1) * this.itemsPorPagina;
+  }
+
+  calcularFin(clase: string): number {
+    return this.paginasPorClase[clase] * this.itemsPorPagina;
   }
 }

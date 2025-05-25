@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservaService } from '../../services/reserva.service';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reservar-clase',
@@ -16,11 +16,7 @@ export class ReservarClaseComponent implements OnInit {
   idClase: number | null = null;
   mensajeError: string = '';
 
-
-  constructor(
-    private reservaService: ReservaService,
-    private toastr: ToastrService
-  ) {}
+  constructor(private reservaService: ReservaService) {}
 
   ngOnInit(): void {
     this.cargarReservasYClases();
@@ -30,22 +26,47 @@ export class ReservarClaseComponent implements OnInit {
     this.reservaService.getMisReservas().subscribe({
       next: (reservas) => {
         this.reservasActivas = reservas;
-        this.cargarClases();
+        this.cargarClasesPermitidas();
       },
-      error: () => this.toastr.error('Error al cargar reservas del cliente')
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cargar reservas del cliente',
+          confirmButtonColor: '#ef4444'
+        });
+      }
     });
   }
 
-  cargarClases() {
-    this.reservaService.getClasesDisponibles().subscribe({
+  cargarClasesPermitidas() {
+    this.reservaService.getClasesPermitidas().subscribe({
       next: (clases) => {
-        this.clases = clases.map((clase: any) => {
-          const yaReservada = this.reservasActivas.some(r => r.clase?.IDClase === clase.IDClase);
-          const llena = clase.NumInscritos >= clase.CupoMaximo;
-          return { ...clase, yaReservada, llena };
-        });
+        this.clases = clases
+          .filter(clase => clase.Estado === 'Activo') // ✅ solo clases activas
+          .map((clase: any) => {
+            const yaReservada = this.reservasActivas.some(r => r.clase?.IDClase === clase.IDClase);
+            const llena = clase.NumInscritos >= clase.CupoMaximo;
+            return { ...clase, yaReservada, llena };
+          });
+
+        if (this.clases.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sin clases disponibles',
+            text: 'No tienes clases disponibles actualmente.',
+            confirmButtonColor: '#6b7280'
+          });
+        }
       },
-      error: () => this.toastr.error('Error al cargar clases')
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cargar clases permitidas',
+          confirmButtonColor: '#ef4444'
+        });
+      }
     });
   }
 
@@ -54,27 +75,50 @@ export class ReservarClaseComponent implements OnInit {
   }
 
   reservar() {
-  if (!this.idClase) {
-    this.mensajeError = '🔔 Debes seleccionar una clase';
-    this.toastr.warning(this.mensajeError);
-    return;
-  }
-
-  this.reservaService.crearReserva(this.idClase).subscribe({
-    next: (res: any) => {
-      this.mensajeError = ''; // ✅ LIMPIA mensaje si se reserva bien
-      this.toastr.success('✅ Reserva confirmada');
-      if (res.claseActivada) {
-        this.toastr.info('🎉 La clase se ha activado automáticamente');
-      }
-      this.cargarReservasYClases();
-    },
-    error: (err: any) => {
-      const msg = err.error?.message || '❌ Error al crear la reserva';
-      this.mensajeError = msg;
-      this.toastr.error(msg);
+    if (!this.idClase) {
+      this.mensajeError = '🔔 Debes seleccionar una clase';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atención',
+        text: this.mensajeError,
+        confirmButtonColor: '#facc15'
+      });
+      return;
     }
-  });
-}
 
+    this.reservaService.crearReserva(this.idClase).subscribe({
+      next: (res: any) => {
+        this.mensajeError = '';
+
+        Swal.fire({
+          icon: 'success',
+          title: '✅ Reserva confirmada',
+          text: 'Tu reserva fue registrada correctamente',
+          confirmButtonColor: '#10b981'
+        });
+
+        if (res.claseActivada) {
+          Swal.fire({
+            icon: 'info',
+            title: '🎉 Clase activada',
+            text: 'La clase se ha activado automáticamente',
+            confirmButtonColor: '#3b82f6'
+          });
+        }
+
+        this.cargarReservasYClases();
+      },
+      error: (err: any) => {
+        const msg = err.error?.message || '❌ Error al crear la reserva';
+        this.mensajeError = msg;
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: msg,
+          confirmButtonColor: '#ef4444'
+        });
+      }
+    });
+  }
 }

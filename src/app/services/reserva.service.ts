@@ -30,9 +30,8 @@ export class ReservaService {
   }
 
   getClasesDisponibles() {
-  return this.http.get<any[]>(`https://web-production-d581.up.railway.app/api/clases/disponibles`);
-}
-
+    return this.http.get<any[]>(`https://web-production-d581.up.railway.app/api/clases/disponibles`);
+  }
 
   getReservasFiltradas(ci?: string, estado?: string, fechaInicio?: string, fechaFin?: string) {
     let params = new HttpParams();
@@ -42,4 +41,10 @@ export class ReservaService {
     if (fechaFin) params = params.set('fechaFin', fechaFin);
     return this.http.get<any[]>(`${this.apiUrl}/filtradas`, { params });
   }
+
+  // ✅ Nuevo método para obtener solo las clases permitidas según membresía
+  getClasesPermitidas() {
+  return this.http.get<any[]>(`https://web-production-d581.up.railway.app/api/clases/permitidas`);
+}
+
 }

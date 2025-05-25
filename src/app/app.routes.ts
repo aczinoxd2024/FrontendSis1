@@ -56,7 +56,13 @@ export const routes: Routes = [
     import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then(
       (m) => m.CrearClaseComponent
     )
+},
+{
+  path: 'agenda-reservas',
+  loadComponent: () => import('./Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component')
+    .then(m => m.AgendaReservasAdminComponent)
 }
+
 
       
     ]
@@ -159,10 +165,13 @@ export const routes: Routes = [
   },
 
   // PERFIL
-  {
-    path: 'perfil',
-    loadComponent: () => import('./Paginas/perfil/perfil.component').then(m => m.PerfilComponent),
-  },
+ {
+  path: 'perfil',
+  loadComponent: () =>
+    import('./Paginas/perfil/perfil.component').then(m => m.PerfilComponent),
+},
+
+
   {
     path: 'perfil/editar',
     loadComponent: () => import('./Paginas/perfil/editar-perfil/editar-perfil.component').then(m => m.EditarPerfilComponent),
