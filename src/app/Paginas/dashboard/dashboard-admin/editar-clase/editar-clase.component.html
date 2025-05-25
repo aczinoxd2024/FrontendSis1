@@ -1,0 +1,47 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4 py-6">
+  <div class="bg-gray-800 p-8 rounded-xl shadow-xl w-full max-w-2xl border border-rose-500">
+    <h2 class="text-3xl font-bold text-rose-500 mb-6 flex items-center gap-2">
+      ✏️ Editar Clase
+    </h2>
+
+    <label class="block mb-1 text-sm">Nombre:</label>
+    <input [(ngModel)]="clase.Nombre" class="w-full mb-4 p-3 rounded bg-gray-700 text-white"/>
+
+    <label class="block mb-1 text-sm">Sala:</label>
+    <select [(ngModel)]="clase.IDSalaa" class="w-full mb-4 p-3 rounded bg-gray-700 text-white">
+      <option value="" disabled>Seleccione una sala</option>
+      <option *ngFor="let sala of salas" [value]="sala.IDSala">
+        {{ sala.Descripcion }}
+      </option>
+    </select>
+
+    <label class="block mb-1 text-sm">Instructor:</label>
+    <select [(ngModel)]="clase.CIInstructor" class="w-full mb-4 p-3 rounded bg-gray-700 text-white">
+      <option value="" disabled>Seleccione un instructor</option>
+      <option *ngFor="let instructor of instructores" [value]="instructor.ci">
+        {{ instructor.nombre }} {{ instructor.apellido }}
+      </option>
+    </select>
+
+    <label class="block mb-1 text-sm">Día de la semana:</label>
+    <select [(ngModel)]="clase.Dia" class="w-full mb-4 p-3 rounded bg-gray-700 text-white">
+      <option value="" disabled>Seleccione un día</option>
+      <option *ngFor="let dia of diasSemana" [value]="dia">
+        {{ dia }}
+      </option>
+    </select>
+
+    <label class="block mb-1 text-sm">Cupo Máximo:</label>
+    <input type="number" [(ngModel)]="clase.CupoMaximo" class="w-full mb-4 p-3 rounded bg-gray-700 text-white"/>
+
+    <label class="block mb-1 text-sm">Hora de Inicio:</label>
+    <input type="time" [(ngModel)]="clase.HoraIni" class="w-full mb-4 p-3 rounded bg-gray-700 text-white"/>
+
+    <label class="block mb-1 text-sm">Hora de Fin:</label>
+    <input type="time" [(ngModel)]="clase.HoraFin" class="w-full mb-6 p-3 rounded bg-gray-700 text-white"/>
+
+    <button (click)="actualizarClase()" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded transition">
+      Guardar Cambios
+    </button>
+  </div>
+</div>

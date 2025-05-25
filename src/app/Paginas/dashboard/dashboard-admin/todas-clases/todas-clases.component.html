@@ -1,31 +1,59 @@
-<h1 class="text-3xl font-bold mb-6 text-rose-500">Todas las Clases</h1>
+<div class="bg-gray-900 min-h-screen text-white p-6">
+  <h1 class="text-3xl font-bold text-rose-500 mb-6">Todas las Clases</h1>
 
-<!-- Contenedor scrollable para pantallas pequeñas -->
-<div class="overflow-x-auto rounded shadow-lg bg-gray-900 border border-gray-700">
-  <table class="min-w-full text-sm text-left text-white">
-    <thead class="bg-rose-600 text-white uppercase">
-      <tr>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap">ID</th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap">Nombre</th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap">Estado</th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap">Sala</th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap">Inscritos</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let clase of clases" class="border-b border-gray-700 hover:bg-gray-800 transition">
-        <td class="px-6 py-4">{{ clase.IDClase }}</td>
-        <td class="px-6 py-4">{{ clase.Nombre }}</td>
-        <td class="px-6 py-4">
-          <span [ngClass]="{
-              'text-green-400': clase.Estado === 'Activo',
-              'text-yellow-400': clase.Estado === 'Suspendido',
-              'text-red-400': clase.Estado === 'Inactivo'
-            }">{{ clase.Estado }}</span>
-        </td>
-        <td class="px-6 py-4">Sala #{{ clase.IDSalaa }}</td>
-        <td class="px-6 py-4">{{ clase.NumInscritos }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="overflow-x-auto rounded shadow-lg">
+    <table class="min-w-full table-auto border-collapse">
+      <thead>
+        <tr class="bg-rose-600 text-white text-left">
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Nombre</th>
+          <th class="px-4 py-2">Estado</th>
+          <th class="px-4 py-2">Sala</th>
+          <th class="px-4 py-2">Inscritos</th>
+          <th class="px-15 py-2">Editar</th>
+          <th class="px-12 py-2">Suspender</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let clase of clases" class="border-b border-gray-700 hover:bg-gray-800 transition">
+          <td class="px-4 py-2">{{ clase.IDClase }}</td>
+          <td class="px-4 py-2">{{ clase.Nombre }}</td>
+          <td class="px-4 py-2">
+            <span
+              [ngClass]="{
+                'text-green-400': clase.Estado === 'Activo',
+                'text-red-400': clase.Estado === 'Inactivo',
+                'text-yellow-400': clase.Estado === 'Suspendido'
+              }"
+            >
+              {{ clase.Estado }}
+            </span>
+          </td>
+          
+          <td class="px-4 py-2">Sala #{{ clase.IDSala }}</td>
+          <td class="px-4 py-2">{{ clase.NumInscritos }}</td>
+          <!-- ✅ Columna EDITAR centrado -->
+ <td class="px-4 py-2 text-center align-middle">
+  <button
+    class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+    (click)="editarClase(clase.IDClase)">
+    ✏️
+  </button>
+</td>
+
+
+
+  <!-- ✅ Columna SUSPENDER centrado -->
+ <td class="px-4 py-2 text-center align-middle">
+  <button
+    *ngIf="clase.Estado !== 'Suspendida'"
+    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+    (click)="confirmarSuspension(clase.IDClase)">
+    🛑 Suspender
+  </button>
+</td>
+
+      </tbody>
+    </table>
+  </div>
 </div>

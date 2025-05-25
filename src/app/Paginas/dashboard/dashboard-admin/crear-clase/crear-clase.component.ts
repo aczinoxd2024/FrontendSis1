@@ -36,6 +36,7 @@ export class CrearClaseComponent implements OnInit {
   }
 
   cargarInstructores() {
+    
     this.instructorService.getInstructores().subscribe({
       next: (data) => this.instructores = data,
       error: () => {

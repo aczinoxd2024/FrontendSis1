@@ -24,8 +24,22 @@ export class ClasesService {
 crearClase(clase: any): Observable<any> {
   return this.http.post(`${this.apiUrl}`, clase);
 }
+
 obtenerInstructoresDisponibles(): Observable<any[]> {
   return this.http.get<any[]>('https://web-production-d581.up.railway.app/api/instructores');
+}
+// ✅ Obtener clase por ID
+getClasePorId(id: number): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/${id}`);
+}
+
+// ✅ Actualizar clase existente
+actualizarClase(id: number, clase: any): Observable<any> {
+  return this.http.put<any>(`${this.apiUrl}/${id}`, clase);
+}
+
+suspenderClase(id: number) {
+  return this.http.patch(`${this.apiUrl}/${id}/suspender`, {});
 }
 
 

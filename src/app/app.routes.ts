@@ -61,10 +61,13 @@ export const routes: Routes = [
   path: 'agenda-reservas',
   loadComponent: () => import('./Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component')
     .then(m => m.AgendaReservasAdminComponent)
+},
+{
+  path: 'editar-clase/:id',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-admin/editar-clase/editar-clase.component')
+      .then(m => m.EditarClaseComponent)
 }
-
-
-      
     ]
   },
 
