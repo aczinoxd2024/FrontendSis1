@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsistenciaService } from '../../../../services/asistencia.service';
+import { AsistenciaService } from '../../../services/asistencia.service';
 import { FormsModule } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -45,9 +45,10 @@ export class AsistenciasGeneralesComponent {
         return of([]);
       })
     ).subscribe(data => {
-      this.asistencias = data,
-      this.aplicarFiltros();
-    });
+  console.log('Asistencias recibidas:', data);
+  this.asistencias = data;
+  this.aplicarFiltros();
+});
   }
 
   aplicarFiltros() {
@@ -56,9 +57,12 @@ export class AsistenciasGeneralesComponent {
 
     this.asistenciasFiltradas = this.asistencias.filter(asistencia => {
       const nombreCompleto = `${asistencia.persona?.Nombre ?? ''} ${asistencia.persona?.Apellido ?? ''}`.toLowerCase();
-      const fechaCoincide = this.filtroFecha ? asistencia.fecha.startsWith(this.filtroFecha) : true;
-      const clienteCoincide = nombreCompleto.includes(clienteLower);
-      return fechaCoincide && clienteCoincide;
+       const fechaISO = new Date(asistencia.fecha).toISOString().split('T')[0];
+
+    const fechaCoincide = this.filtroFecha ? fechaISO.startsWith(this.filtroFecha) : true;
+    const clienteCoincide = nombreCompleto.includes(clienteLower);
+
+    return fechaCoincide && clienteCoincide;
     });
   }
 
@@ -87,7 +91,7 @@ export class AsistenciasGeneralesComponent {
   autoTable(doc, {
     startY: finalY,
     head: [['#', 'Nombre Cliente', 'Fecha', 'Hora Entrada']],
-    body: this.asistencias.map((a: any, i: number) => [
+    body:this.asistenciasFiltradas.map((a: any, i: number) => [
       i + 1,
       `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
       new Date(a.fecha).toLocaleDateString(),

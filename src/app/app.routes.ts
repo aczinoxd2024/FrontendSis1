@@ -52,7 +52,7 @@ export const routes: Routes = [
 
        {
       path: 'asistencias-generales', // ✅ NUEVA RUTA
-      loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
+      loadComponent: () => import('./Paginas/Administrador/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
     },
       {
   path: 'crear-clase',
@@ -86,9 +86,9 @@ export const routes: Routes = [
         path: 'clientes',
         loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
       },
-      {
-      path: 'asistencias-generales', // ✅ NUEVA RUTA
-      loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
+     {
+      path: 'asistencias-hoy',  // NUEVA RUTA
+      loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-hoy/asistencias-hoy.component').then(m => m.AsistenciasHoyComponent)
     },
     ]
   },

@@ -8,8 +8,8 @@ import { map, catchError } from 'rxjs/operators'; // IMPORTAR map y catchError c
 })
 export class AsistenciaService {
 
-  private baseUrl = 'https://web-production-d581.up.railway.app/api/asistencia';
-
+ // private baseUrl = 'https://web-production-d581.up.railway.app/api/asistencia';
+private baseUrl = 'http://localhost:3000/api/asistencia';
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
@@ -38,6 +38,20 @@ export class AsistenciaService {
     }))),
     catchError(error => {
       console.error('Error al obtener historial:', error);
+      return throwError(() => error);
+     })
+   );
+  }
+  obtenerAsistenciasDelDia(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.baseUrl}/hoy`, { headers: this.getHeaders() }).pipe(
+    map((data: any[]) =>
+     (data || []).map(item => ({
+        ...item,
+        fecha: item.fecha ? new Date(item.fecha) : null
+      }))
+    ),
+    catchError(error => {
+      console.error('Error al obtener asistencias del día:', error);
       return throwError(() => error);
     })
   );
