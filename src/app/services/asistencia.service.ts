@@ -8,8 +8,8 @@ import { map, catchError } from 'rxjs/operators'; // IMPORTAR map y catchError c
 })
 export class AsistenciaService {
 
- // private baseUrl = 'https://web-production-d581.up.railway.app/api/asistencia';
-private baseUrl = 'http://localhost:3000/api/asistencia';
+  private baseUrl = 'https://web-production-d581.up.railway.app/api/asistencia';
+//private baseUrl = 'http://localhost:3000/api/asistencia';
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {

@@ -79,16 +79,4 @@ export class AsistenciasHoyComponent {
     doc.save('asistencias_dia.pdf');
   }
 
-  exportarExcel() {
-    const data = this.asistenciasFiltradas.map((a: any, i: number) => ({
-      '#': i + 1,
-      'Nombre Cliente': `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
-      'Fecha': a.fecha ? new Date(a.fecha).toLocaleDateString() : '',
-      'Hora Entrada': a.horaEntrada || '',
-    }));
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = { Sheets: { 'Hoy': worksheet }, SheetNames: ['Hoy'] };
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    FileSaver.saveAs(new Blob([excelBuffer], { type: 'application/octet-stream' }), 'asistencias_dia.xlsx');
-  }
 }
