@@ -1,38 +1,59 @@
 <div class="min-h-screen bg-gray-900 py-10 px-6 animate-gradient-dark-flow">
-  <h2 class="text-3xl font-bold text-center text-rose-500 mb-10 neon-text">Elige tu Membresía</h2>
+  <h2 class="text-3xl font-bold text-center text-rose-500 mb-10 neon-text">
+    Elige tu Membresía
+  </h2>
 
-  <div class="flex flex-col md:flex-row justify-center items-center gap-8">
-
+  <div
+    class="flex flex-col md:flex-row justify-center items-center gap-8 flex-wrap"
+  >
     <!-- Membresía Básica -->
-    <div class="bg-gray-800/90 border border-gray-700 rounded-xl shadow-lg p-6 w-80 hover:border-rose-500 transition-all duration-300 hover:-translate-y-2">
-      <h3 class="text-xl font-semibold mb-2 text-center text-white">Membresía Básica</h3>
-      <p class="text-gray-300 text-sm mb-4 text-center">Acceso a las áreas de máquinas, pesas y cardio.</p>
+    <div
+      class="bg-gray-800/90 border border-gray-700 rounded-xl shadow-lg p-6 w-80 hover:border-rose-500 transition-all duration-300 hover:-translate-y-2"
+    >
+      <h3 class="text-xl font-semibold mb-2 text-center text-white">
+        Membresía Básica
+      </h3>
+      <p class="text-gray-300 text-sm mb-4 text-center">
+        Acceso a las áreas de máquinas, pesas y cardio.
+      </p>
       <p class="text-lg font-bold text-center mb-4 text-rose-500">$20 / mes</p>
       <button
-  class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-full transition-all transform hover:scale-105"
-  (click)="seleccionarMembresia('basica')"
->
-  Adquirir
-</button>
-
+        class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-full transition-all transform hover:scale-105"
+        (click)="seleccionarMembresia('basica')"
+      >
+        Adquirir
+      </button>
     </div>
-<!-- Clases Dirigidas
-<div class="bg-gray-800/90 border border-rose-500 rounded-xl shadow-lg p-6 w-80 transition-all duration-300 hover:-translate-y-2">
-  <h3 class="text-xl font-semibold mb-2 text-center text-white">Clases Dirigidas</h3>
-  <p class="text-gray-300 text-sm mb-4 text-center">Entrena en nuestras disciplinas con los mejores instructores certificados.</p>
-  <p class="text-lg font-bold text-center mb-4 text-rose-500">Desde $7 / clase</p>
-  <button
-    class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-full transition-all transform hover:scale-105"
-    (click)="verDisciplinas()"
-  >
-    Ver Clases
-  </button>
-</div>
--->
+
+    <!-- Membresía Disciplina -->
+    <div
+      class="bg-gray-800/90 border border-gray-700 rounded-xl shadow-lg p-6 w-80 hover:border-rose-500 transition-all duration-300 hover:-translate-y-2"
+    >
+      <h3 class="text-xl font-semibold mb-2 text-center text-white">
+        Solo Disciplina
+      </h3>
+      <p class="text-gray-300 text-sm mb-4 text-center">
+        Acceso a una clase específica sin uso de máquinas.
+      </p>
+      <p class="text-lg font-bold text-center mb-4 text-rose-500">$15 / mes</p>
+      <button
+        class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-full transition-all transform hover:scale-105"
+        (click)="seleccionarMembresia('disciplina')"
+      >
+        Adquirir
+      </button>
+    </div>
+
     <!-- Membresía Gold -->
-    <div class="bg-gray-800/90 border border-gray-700 rounded-xl shadow-lg p-6 w-80 hover:border-rose-500 transition-all duration-300 hover:-translate-y-2">
-      <h3 class="text-xl font-semibold mb-2 text-center text-white">Membresía Gold</h3>
-      <p class="text-gray-300 text-sm mb-4 text-center">Incluye todo lo básico + clases dirigidas y evaluaciones.</p>
+    <div
+      class="bg-gray-800/90 border border-gray-700 rounded-xl shadow-lg p-6 w-80 hover:border-rose-500 transition-all duration-300 hover:-translate-y-2"
+    >
+      <h3 class="text-xl font-semibold mb-2 text-center text-white">
+        Membresía Gold
+      </h3>
+      <p class="text-gray-300 text-sm mb-4 text-center">
+        Incluye todo lo básico + clases dirigidas y evaluaciones.
+      </p>
       <p class="text-lg font-bold text-center mb-4 text-rose-500">$35 / mes</p>
       <button
         class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-full transition-all transform hover:scale-105"
@@ -43,28 +64,35 @@
     </div>
   </div>
 </div>
+
 <style>
-.animate-gradient-dark-flow {
-  background-size: 300% 300%;
-  background-image: linear-gradient(
-    45deg,
-    #0a0e17 0%,
-    #13182b 25%,
-    #1a223f 50%,
-    #13182b 75%,
-    #0a0e17 100%
-  );
-  animation: gradientFlow 15s ease infinite;
-}
+  .animate-gradient-dark-flow {
+    background-size: 300% 300%;
+    background-image: linear-gradient(
+      45deg,
+      #0a0e17 0%,
+      #13182b 25%,
+      #1a223f 50%,
+      #13182b 75%,
+      #0a0e17 100%
+    );
+    animation: gradientFlow 15s ease infinite;
+  }
 
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 
-.neon-text {
-  text-shadow: 0 0 10px rgba(239, 68, 68, 0.7),
-               0 0 20px rgba(239, 68, 68, 0.4);
-}
+  .neon-text {
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.7),
+      0 0 20px rgba(239, 68, 68, 0.4);
+  }
 </style>

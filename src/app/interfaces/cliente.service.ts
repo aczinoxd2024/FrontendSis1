@@ -7,7 +7,7 @@ import { Cliente } from '../interfaces/cliente';
   providedIn: 'root',
 })
 export class ClienteService {
-  private apiUrl = 'https://web-production-d581.up.railway.app/api/clientes';
+  private apiUrl = 'http://localhost:3000/api/clientes';
 
   constructor(private http: HttpClient) {}
 
@@ -26,7 +26,9 @@ export class ClienteService {
 
   // 👉 Obtener todos los clientes
   obtenerClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(this.apiUrl, { headers: this.getHeaders() });
+    return this.http.get<Cliente[]>(this.apiUrl, {
+      headers: this.getHeaders(),
+    });
   }
 
   // 👉 Adquirir membresía (público)
@@ -36,26 +38,30 @@ export class ClienteService {
 
   // 👉 Actualizar cliente
   actualizarCliente(ci: string, datos: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${ci}`, datos, { headers: this.getHeaders() });
+    return this.http.put(`${this.apiUrl}/${ci}`, datos, {
+      headers: this.getHeaders(),
+    });
   }
 
   // 👉 Obtener cliente por CI
   obtenerClientePorCI(ci: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${ci}`, { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/${ci}`, {
+      headers: this.getHeaders(),
+    });
   }
 
   // 👉 Eliminar cliente (desactivar)
   eliminarCliente(ci: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${ci}`, { headers: this.getHeaders() });
+    return this.http.delete(`${this.apiUrl}/${ci}`, {
+      headers: this.getHeaders(),
+    });
   }
 
   // 👉 Actualizar perfil del cliente autenticado
   actualizarPerfil(data: any): Observable<any> {
-    return this.http.put(
-      `${this.apiUrl}/perfil/actualizar`,
-      data,
-      { headers: this.getHeaders() }
-    );
+    return this.http.put(`${this.apiUrl}/perfil/actualizar`, data, {
+      headers: this.getHeaders(),
+    });
   }
 
   // 👉 Obtener perfil del cliente autenticado
@@ -67,5 +73,9 @@ export class ClienteService {
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.get(`${this.apiUrl}/perfil`, { headers });
+  }
+
+  adquirirMembresiaConRuta(cliente: any, endpoint: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${endpoint}`, cliente);
   }
 }

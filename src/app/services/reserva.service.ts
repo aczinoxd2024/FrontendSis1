@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReservaService {
   private apiUrl = 'https://web-production-d581.up.railway.app/api/reservas';
@@ -30,10 +30,17 @@ export class ReservaService {
   }
 
   getClasesDisponibles() {
-    return this.http.get<any[]>(`https://web-production-d581.up.railway.app/api/clases/disponibles`);
+    return this.http.get<any[]>(
+      `https://web-production-d581.up.railway.app/api/clases/disponibles`
+    );
   }
 
-  getReservasFiltradas(ci?: string, estado?: string, fechaInicio?: string, fechaFin?: string) {
+  getReservasFiltradas(
+    ci?: string,
+    estado?: string,
+    fechaInicio?: string,
+    fechaFin?: string
+  ) {
     let params = new HttpParams();
     if (ci) params = params.set('ci', ci);
     if (estado) params = params.set('estado', estado);
@@ -44,7 +51,8 @@ export class ReservaService {
 
   // ✅ Nuevo método para obtener solo las clases permitidas según membresía
   getClasesPermitidas() {
-  return this.http.get<any[]>(`https://web-production-d581.up.railway.app/api/clases/permitidas`);
-}
-
+    return this.http.get<any[]>(
+      `https://web-production-d581.up.railway.app/api/clases/permitidas`
+    );
+  }
 }
