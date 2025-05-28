@@ -5,7 +5,7 @@
     <label for="clase" class="block mb-1 text-sm">Clase</label>
     <select [(ngModel)]="idClase" id="clase"
             class="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white">
-      <option [ngValue]="null" disabled selected>-- Selecciona una clase permitida --</option>
+      <option [value]="null" disabled>-- Selecciona una clase permitida --</option>
 
       <option *ngFor="let clase of clases"
               [value]="clase.IDClase"
