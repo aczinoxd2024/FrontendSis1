@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservaService } from '../../../services/reserva.service';
-import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mis-reservas-cliente',
@@ -14,10 +14,7 @@ export class MisReservasClienteComponent implements OnInit {
   reservas: any[] = [];
   estadoFiltro: string = '';
 
-  constructor(
-    private reservaService: ReservaService,
-    private toastr: ToastrService
-  ) {}
+  constructor(private reservaService: ReservaService) {}
 
   ngOnInit(): void {
     this.cargarReservas();
@@ -27,23 +24,60 @@ export class MisReservasClienteComponent implements OnInit {
     this.reservaService.getMisReservas().subscribe({
       next: (res: any[]) => {
         this.reservas = res;
+
+        if (this.reservas.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sin reservas',
+            text: 'No tienes reservas activas ni pasadas.',
+            confirmButtonColor: '#3b82f6'
+          });
+        }
       },
       error: () => {
-        this.toastr.error('Error al cargar reservas');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudieron cargar tus reservas.',
+          confirmButtonColor: '#ef4444'
+        });
       },
     });
   }
 
   cancelarReserva(idReserva: number): void {
-    this.reservaService.cancelarReserva(idReserva).subscribe({
-      next: (res: any) => {
-        console.log('Respuesta del backend:', res); // ✅ Para depurar si lo deseas
-        this.toastr.success(res.message || 'Reserva cancelada');
-        this.cargarReservas();
-      },
-      error: () => {
-        this.toastr.error('No se pudo cancelar la reserva');
-      },
+    Swal.fire({
+      title: '¿Cancelar reserva?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No, volver',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.reservaService.cancelarReserva(idReserva).subscribe({
+          next: (res: any) => {
+            this.cargarReservas();
+            Swal.fire({
+              icon: 'success',
+              title: 'Reserva cancelada',
+              text: res.message || 'La reserva fue cancelada correctamente.',
+              confirmButtonColor: '#10b981'
+            });
+          },
+          error: (err: any) => {
+            const msg = err.error?.message || '❌ No se pudo cancelar la reserva.';
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: msg,
+              confirmButtonColor: '#ef4444'
+            });
+          },
+        });
+      }
     });
   }
 

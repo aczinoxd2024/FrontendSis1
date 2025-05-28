@@ -5,12 +5,11 @@
     <label for="clase" class="block mb-1 text-sm">Clase</label>
     <select [(ngModel)]="idClase" id="clase"
             class="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white">
+      <option [ngValue]="null" disabled selected>-- Selecciona una clase permitida --</option>
       <option *ngFor="let clase of clases" 
               [value]="clase.IDClase"
               [disabled]="!puedeReservar(clase)">
-        {{ clase.Nombre }} 
-        ({{ clase.Estado }}) 
-        - 
+        {{ clase.Nombre }} - {{ clase.Horario?.HoraIni }} a {{ clase.Horario?.HoraFin }}
         <span *ngIf="clase.yaReservada">🔁 Ya reservada</span>
         <span *ngIf="clase.llena && !clase.yaReservada">🔴 Llena</span>
         <span *ngIf="!clase.llena && !clase.yaReservada">🟢 Disponible</span>
@@ -22,9 +21,8 @@
           class="w-full bg-rose-600 hover:bg-rose-700 transition rounded py-3 font-semibold">
     Confirmar Reserva
   </button>
- <div *ngIf="mensajeError" class="text-red-400 text-sm mt-2 text-center">
-  {{ mensajeError }}
-</div>
 
-
+  <div *ngIf="mensajeError" class="text-red-400 text-sm mt-2 text-center">
+    {{ mensajeError }}
+  </div>
 </div>

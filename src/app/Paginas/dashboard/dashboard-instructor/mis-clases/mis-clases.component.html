@@ -1,23 +1,24 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-8">
-  <h1 class="text-3xl font-bold text-ef4444 mb-6">Mis Clases Asignadas</h1>
+  <h1 class="text-3xl font-bold text-[#ef4444] mb-6">Mis Clases Asignadas</h1>
 
   <div *ngIf="clases.length === 0" class="text-gray-400 italic text-center">
     No tienes clases asignadas actualmente.
   </div>
 
   <div *ngFor="let clase of clases" class="bg-[#1f2937] p-5 rounded-xl mb-6 shadow-lg">
-    <h2 class="text-xl font-bold text-ef4444 mb-2">{{ clase.Nombre }}</h2>
+    <h2 class="text-xl font-bold text-[#ef4444] mb-2">{{ clase.Nombre }}</h2>
     <p><span class="text-gray-400">Estado:</span> {{ clase.Estado }}</p>
 
     <div *ngIf="clase.Horarios?.length > 0" class="mt-4">
       <p class="text-gray-300 font-semibold">Horarios:</p>
       <ul class="list-disc list-inside space-y-1">
-  <li *ngFor="let h of clase.Horarios">
-    {{ h }}
-  </li>
+  <li *ngFor="let h of getHorariosUnicos(clase.Horarios)">
+  {{ h.dia }}: {{ h.horaInicio }} a {{ h.horaFin }}
+</li>
+
 </ul>
+
 
     </div>
   </div>
 </div>
-

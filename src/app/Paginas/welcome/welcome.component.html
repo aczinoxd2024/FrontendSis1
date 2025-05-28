@@ -111,10 +111,23 @@
       Mejora tu salud, transforma tu cuerpo y alcanza tus objetivos fitness con el mejor acompañamiento.
     </p>
 
-    <button [routerLink]="['/menbresias']" class="px-6 py-3 border border-gray-400 text-white hover:bg-gray-700 hover:text-white rounded-full text-sm transition block md:inline-block">
-      Ver Membresías
-    </button>
+    <button *ngIf="!logueado"
+        [routerLink]="['/menbresias']"
+        class="px-6 py-3 border border-gray-400 text-white hover:bg-gray-700 hover:text-white rounded-full text-sm transition block md:inline-block">
+  Ver Membresías
+</button>
+
   </div>
+
+  <!-- BOTÓN: Ir a mi Panel -->
+<button
+  *ngIf="logueado && usuarioRol === 'cliente'"
+  routerLink="/dashboard-cliente"
+  class="px-6 py-3 mt-4 text-white bg-rose-600 hover:bg-rose-700 rounded-full text-sm transition block md:inline-block"
+>
+  Ir a mi panel
+</button>
+
 
   <div class="flex justify-center">
     <img src="/assets/gym-welcome.jpg" alt="Welcome Gym" class="w-10/12 md:w-full max-w-md animate-fade-in" />

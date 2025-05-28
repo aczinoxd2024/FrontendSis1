@@ -27,5 +27,19 @@ export class MisClasesComponent implements OnInit {
       error: (err: any) => console.error('Error al obtener clases', err)
     });
   }
+
+ getHorariosUnicos(horarios: any[]): any[] {
+  const vistos = new Set();
+  return (horarios || []).filter(h => {
+    if (!h.dia || !h.horaInicio || !h.horaFin) return false;
+    const clave = `${h.dia}-${h.horaInicio}-${h.horaFin}`;
+    if (vistos.has(clave)) return false;
+    vistos.add(clave);
+    return true;
+  });
 }
+
+
+}
+
 

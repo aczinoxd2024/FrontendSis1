@@ -1,20 +1,67 @@
 <h1 class="text-2xl font-bold text-rose-500 mb-4">➕ Nueva Reserva</h1>
 
-<div class="bg-gray-800 p-6 rounded shadow-lg space-y-4 max-w-md text-white">
+<div class="bg-gray-800 p-6 rounded-lg shadow-lg space-y-4 max-w-xl text-white mx-auto">
   <div>
-    <label class="block mb-1 text-sm">Clase</label>
-    <select [(ngModel)]="IDClase"
-            [ngModelOptions]="{ standalone: true }"
-            class="w-full p-3 rounded bg-gray-700 border border-gray-600">
-      <option [ngValue]="null">-- Selecciona una clase --</option>
-      <option *ngFor="let clase of clases" [ngValue]="clase.IDClase">
+    <label for="clase" class="block mb-1 text-sm">Clase</label>
+    <select [(ngModel)]="idClase" id="clase"
+            class="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white">
+      <option [ngValue]="null" disabled selected>-- Selecciona una clase permitida --</option>
+
+      <option *ngFor="let clase of clases"
+              [value]="clase.IDClase"
+              [disabled]="!puedeReservar(clase)">
         {{ clase.Nombre }} ({{ clase.Estado }})
+        <span *ngIf="clase.yaReservada"> - 🔁 Reservada</span>
+        <span *ngIf="clase.llena && !clase.yaReservada"> - 🔴 Llena</span>
+        <span *ngIf="!clase.activa"> - 🔒 Inactiva</span>
       </option>
     </select>
   </div>
 
-  <button (click)="reservar()"
-          class="w-full bg-rose-600 hover:bg-rose-700 transition rounded py-3 font-semibold">
-    Confirmar Reserva
-  </button>
-</div>
+  <!-- Información adicional de clase seleccionada -->
+  <div *ngIf="idClase">
+    <div *ngFor="let clase of clases">
+      <div *ngIf="clase.IDClase === idClase" class="mt-4 bg-gray-700 p-4 rounded-lg space-y-2 text-sm">
+
+        <div>
+          <strong>🕒 Horarios:</strong>
+          <ul class="list-disc list-inside ml-2">
+            <li *ngFor="let h of clase.horarios">
+                {{ h.HoraIni }} - {{ h.HoraFin }} | {{ h.diaSemana?.Dia }}
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <strong>👨‍🏫 Instructores:</strong>
+          <ul class="list-disc list-inside ml-2">
+            <li *ngFor="let i of clase.claseInstructores">
+              {{ i.instructor?.nombre || 'Instructor sin nombre' }}
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <strong>🏟️ Sala:</strong> {{ clase.sala?.Descripcion || 'N/D' }}
+        </div>
+
+        <!-- Botón solo visible si puede reservar -->
+<button *ngIf="puedeReservarSeleccionada()"
+        (click)="reservar()"
+        class="w-full bg-rose-600 hover:bg-rose-700 transition rounded py-3 font-semibold">
+  Confirmar Reserva
+</button>
+
+
+        </div>
+
+        <div *ngIf="!puedeReservar(clase)" class="text-yellow-400 text-sm mt-2">
+          ⚠️ No puedes reservar esta clase (ya reservada, llena o inactiva).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mensajeError" class="text-red-400 text-sm mt-2 text-center">
+    {{ mensajeError }}
+  </div>

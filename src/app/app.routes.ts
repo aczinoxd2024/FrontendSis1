@@ -60,7 +60,7 @@ export const routes: Routes = [
     import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then(
       (m) => m.CrearClaseComponent
     )
-  }
+}
 
 
     ]
@@ -167,10 +167,13 @@ export const routes: Routes = [
   },
 
   // PERFIL
-  {
-    path: 'perfil',
-    loadComponent: () => import('./Paginas/perfil/perfil.component').then(m => m.PerfilComponent),
-  },
+ {
+  path: 'perfil',
+  loadComponent: () =>
+    import('./Paginas/perfil/perfil.component').then(m => m.PerfilComponent),
+},
+
+
   {
     path: 'perfil/editar',
     loadComponent: () => import('./Paginas/perfil/editar-perfil/editar-perfil.component').then(m => m.EditarPerfilComponent),

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ClienteService } from '../../../../interfaces/cliente.service';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
+
 
 
 @Component({
@@ -32,48 +34,76 @@ export class ActualizarClienteComponent {
   }
 
   buscarCliente() {
-    if (!this.ciBuscar) {
-      this.mensaje = 'Ingrese un CI para buscar.';
-      return;
-    }
-
-    this.clienteService.obtenerClientePorCI(this.ciBuscar).subscribe({
-      next: (cliente) => {
-        console.log('✅ Cliente encontrado:', cliente);
-        this.clienteForm.patchValue({
-          nombre: cliente.nombre || '',
-          apellido: cliente.apellido || '',
-          telefono: cliente.telefono || '',
-          direccion: cliente.direccion || '',
-        });
-
-        this.ci = cliente.ci; // ✅ Guardamos el CI para usar al actualizar
-        this.clienteCargado = true;
-        this.mensaje = '';
-      },
-      error: (err) => {
-        console.error('❌ Error al cargar cliente:', err);
-        this.mensaje = 'No se encontró cliente con ese CI.';
-        this.clienteCargado = false;
-      }
+  if (!this.ciBuscar) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campo requerido',
+      text: 'Ingrese un CI para buscar.',
+      confirmButtonColor: '#facc15'
     });
+    return;
   }
+
+      this.clienteService.obtenerClientePorCI(this.ciBuscar).subscribe({
+    next: (cliente) => {
+      this.clienteForm.patchValue({
+        nombre: cliente.nombre || '',
+        apellido: cliente.apellido || '',
+        telefono: cliente.telefono || '',
+        direccion: cliente.direccion || '',
+      });
+
+      this.ci = cliente.ci;
+      this.clienteCargado = true;
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Cliente encontrado',
+        text: 'Los datos se han cargado correctamente.',
+        confirmButtonColor: '#10b981'
+      });
+    },
+    error: (err) => {
+      this.clienteCargado = false;
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Cliente no encontrado',
+        text: 'No se encontró cliente con ese CI.',
+        confirmButtonColor: '#ef4444'
+      });
+    }
+  });
+}
 
   actualizarCliente() {
-    if (this.clienteForm.invalid) {
-      this.mensaje = 'Por favor complete todos los campos.';
-      return;
-    }
-
-    this.clienteService.actualizarCliente(this.ci, this.clienteForm.value).subscribe({
-      next: (res) => {
-        console.log('✅ Cliente actualizado:', res);
-        this.mensaje = '🎉 Cliente actualizado exitosamente.';
-      },
-      error: (err) => {
-        console.error('❌ Error al actualizar cliente:', err);
-        this.mensaje = err?.error?.message || 'Error al actualizar cliente.';
-      }
+  if (this.clienteForm.invalid) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Formulario incompleto',
+      text: 'Por favor complete todos los campos.',
+      confirmButtonColor: '#facc15'
     });
+    return;
   }
+
+  this.clienteService.actualizarCliente(this.ci, this.clienteForm.value).subscribe({
+    next: () => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Cliente actualizado',
+        text: '🎉 Cliente actualizado exitosamente.',
+        confirmButtonColor: '#10b981'
+      });
+    },
+    error: (err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al actualizar',
+        text: err?.error?.message || 'Error al actualizar cliente.',
+        confirmButtonColor: '#ef4444'
+      });
+    }
+  });
+}
 }
