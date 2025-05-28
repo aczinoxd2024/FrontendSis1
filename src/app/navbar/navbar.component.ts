@@ -48,8 +48,4 @@ export class NavbarComponent {
   irAHistoricoReservas() {
     this.router.navigate(['/reservas/historico']);
   }
-  irAVerClases() {
-  this.router.navigate(['/dashboard-admin/todas-clases']);
-}
-
 }

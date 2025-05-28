@@ -53,7 +53,8 @@ export class MisReservasClienteComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: 'Sí, cancelar',
       cancelButtonText: 'No, volver',
-      confirmButtonColor: '#ef4444'
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
     }).then((result) => {
       if (result.isConfirmed) {
         this.reservaService.cancelarReserva(idReserva).subscribe({
@@ -66,11 +67,12 @@ export class MisReservasClienteComponent implements OnInit {
               confirmButtonColor: '#10b981'
             });
           },
-          error: () => {
+          error: (err: any) => {
+            const msg = err.error?.message || '❌ No se pudo cancelar la reserva.';
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'No se pudo cancelar la reserva.',
+              text: msg,
               confirmButtonColor: '#ef4444'
             });
           },

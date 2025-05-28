@@ -15,17 +15,32 @@
   <!-- Reservas -->
   <div *ngIf="reservasFiltradas.length > 0; else sinReservas">
     <div *ngFor="let r of reservasFiltradas"
-         class="bg-gray-800 p-4 rounded mb-4 shadow-md flex flex-col gap-2">
-      <p><strong>Clase:</strong> {{ r.clase?.Nombre }}</p>
-      <p><strong>Horario:</strong> {{ r.horario?.HoraIni }} - {{ r.horario?.HoraFin }}</p>
-      <p><strong>Estado:</strong> {{ r.estado?.Estado }}</p>
+     class="bg-gray-800 p-4 rounded mb-4 shadow-md flex flex-col gap-2">
+  <p><strong>Clase:</strong> {{ r.clase?.Nombre }}</p>
+  <p><strong>Horario:</strong> {{ r.horario?.HoraIni }} - {{ r.horario?.HoraFin }}</p>
+  <p><strong>Fecha de Reserva:</strong> {{ r.FechaReserva | date: 'shortDate' }}</p>
+  <p>
+    <strong>Estado:</strong>
+    <span [ngClass]="{
+      'text-green-400': r.estado?.Estado === 'Confirmada',
+      'text-yellow-400': r.estado?.Estado === 'Cancelada',
+      'text-red-400': !r.estado
+    }">
+      <ng-container [ngSwitch]="r.estado?.Estado">
+        <span *ngSwitchCase="'Confirmada'">✅ Confirmada</span>
+        <span *ngSwitchCase="'Cancelada'">❌ Cancelada</span>
+        <span *ngSwitchDefault>⚠️ Desconocido</span>
+      </ng-container>
+    </span>
+  </p>
 
-      <button *ngIf="r.estado?.Estado === 'Confirmada'"
-              (click)="cancelarReserva(r.IDReserva)"
-              class="mt-2 bg-rose-600 px-3 py-2 rounded hover:bg-rose-500 transition w-full sm:w-fit">
-        Cancelar
-      </button>
-    </div>
+  <button *ngIf="r.estado?.Estado === 'Confirmada'"
+          (click)="cancelarReserva(r.IDReserva)"
+          class="mt-2 bg-rose-600 px-3 py-2 rounded hover:bg-rose-500 transition w-full sm:w-fit">
+    Cancelar
+  </button>
+</div>
+
   </div>
 
   <!-- ⬇️ AQUI colocas el template mejorado -->

@@ -46,14 +46,33 @@ export class NuevaReservaComponent implements OnInit {
           const yaReservada = this.reservasActivas.some(r => r.clase?.IDClase === clase.IDClase);
           const llena = clase.NumInscritos >= clase.CupoMaximo;
           const activa = clase.Estado === 'Activo';
+
+          console.log('Clase cargada:', {
+            nombre: clase.Nombre,
+            activa,
+            yaReservada,
+            llena,
+            estado: clase.Estado
+          });
+
           return { ...clase, yaReservada, llena, activa };
         });
 
-        if (this.clases.length === 0) {
+        // Establecer clase seleccionada automáticamente si hay alguna válida
+        const seleccionable = this.clases.find(c => this.puedeReservar(c));
+        this.idClase = seleccionable?.IDClase ?? null;
+
+        if (!seleccionable) {
           Swal.fire({
             icon: 'info',
-            title: 'Sin clases disponibles',
-            text: '🔒 No tienes clases disponibles actualmente.',
+            title: 'Sin clases disponibles para reservar',
+            html: `
+              🔒 Actualmente no hay clases disponibles que puedas reservar.<br><br>
+              📅 Puede deberse a que:<br>
+              - Ya reservaste esa clase<br>
+              - La clase está llena<br>
+              - Ya comenzó o quedan menos de 30 minutos para iniciar
+            `,
             confirmButtonColor: '#6b7280'
           });
         }
@@ -70,7 +89,20 @@ export class NuevaReservaComponent implements OnInit {
   }
 
   puedeReservar(clase: any): boolean {
-    return clase.activa && !clase.yaReservada && !clase.llena;
+    const ahora = new Date();
+    const tieneHorarioValido = (clase.horarios || []).some((h: any) => {
+      const hoy = new Date();
+      const horaInicio = new Date(`${hoy.toISOString().split('T')[0]}T${h.HoraIni}`);
+      return ahora < horaInicio;
+    });
+
+    console.log('🔍 Horarios válidos:', tieneHorarioValido, clase.horarios);
+    return clase.activa && !clase.yaReservada && !clase.llena && tieneHorarioValido;
+  }
+
+  puedeReservarSeleccionada(): boolean {
+    const clase = this.clases.find(c => Number(c.IDClase) === Number(this.idClase));
+    return clase ? this.puedeReservar(clase) : false;
   }
 
   reservar() {
@@ -85,7 +117,9 @@ export class NuevaReservaComponent implements OnInit {
       return;
     }
 
-    this.reservaService.crearReserva(this.idClase).subscribe({
+    const id = Number(this.idClase);
+
+    this.reservaService.crearReserva(id).subscribe({
       next: (res: any) => {
         this.mensajeError = '';
 
@@ -108,7 +142,12 @@ export class NuevaReservaComponent implements OnInit {
         this.cargarReservasYClases();
       },
       error: (err: any) => {
-        const msg = err.error?.message || '❌ Error al crear la reserva';
+        console.error('❌ Error completo:', err);
+        const msg =
+          (err?.error && typeof err.error === 'object' && err.error.message) ||
+          err?.message ||
+          '❌ Error al crear la reserva';
+
         this.mensajeError = msg;
 
         Swal.fire({

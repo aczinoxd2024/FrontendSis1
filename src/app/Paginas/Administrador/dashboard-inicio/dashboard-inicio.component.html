@@ -25,8 +25,13 @@
       </a>
 
       <a routerLink="/dashboard-admin/todas-clases" routerLinkActive="bg-gray-800"
+     class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+      📋 <span>Ver todas las clases</span>
+</a>
+<!-- Asistencias Generales -->
+<a routerLink="/dashboard-admin/asistencias-generales" routerLinkActive="bg-gray-800"
   class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
-  📋 <span>Ver todas las clases</span>
+  🕓 <span>Asistencias Generales</span>
 </a>
 <a routerLink="/dashboard-admin/agenda-reservas" routerLinkActive="bg-gray-800"
   class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
@@ -39,7 +44,14 @@
   ➕ <span>Crear Clase</span>
 </a>
 
+  <!-- 🆕 Eliminar Clase -->
+  <a routerLink="/dashboard-admin/eliminar-clase" routerLinkActive="bg-gray-800"
+    class="flex items-center gap-3 px-4 py-2 rounded hover:bg-red-600/20 transition-all text-red-400 font-semibold">
+    🗑️ <span>Eliminar Clase</span>
+  </a>
+
     </nav>
+
 
     <button (click)="logout()"
       class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-xl transition-all shadow hover:scale-105">

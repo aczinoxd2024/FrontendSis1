@@ -1,0 +1,48 @@
+<h2 class="text-2xl font-semibold text-rose-400 mb-4">📋asistencia hoy</h2>
+
+<!-- Filtros -->
+<div class="flex flex-col md:flex-row gap-2 mb-4">
+  <input type="text" [(ngModel)]="filtroCliente" (input)="aplicarFiltros()"
+         placeholder="Filtrar por cliente" class="p-2 rounded bg-gray-700 text-white w-full md:w-1/3" />
+  <!-- Botón exportar PDF -->
+  <button class="border border-red-600 text-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition"
+  (click)="exportarPDF()">
+    <i class="fas fa-file-pdf mr-2"></i> Exportar PDF
+    📄
+  </button>
+</div>
+
+<!-- Mostrar mensaje si no hay asistencias -->
+<div *ngIf="asistenciasFiltradas.length === 0" class="text-gray-400">
+  No se encontraron asistencias.
+</div>
+
+<!-- Tabla -->
+<table *ngIf="asistenciasFiltradas.length > 0" class="w-full text-sm bg-gray-800 rounded-lg overflow-hidden">
+  <thead class="bg-rose-600 text-white">
+    <tr>
+      <th class="p-2 text-left">#</th>
+      <th class="p-2 text-left">Cliente</th>
+      <th class="p-2 text-left">Fecha</th>
+      <th class="p-2 text-left">Hora</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let asistencia of obtenerAsistenciasPaginadas(); let i = index" class="border-b border-gray-700 hover:bg-gray-700/50">
+      <td class="p-2">{{ (paginaActual - 1) * elementosPorPagina + i + 1 }}</td>
+      <td class="p-2">{{ asistencia.persona?.Nombre }} {{ asistencia.persona?.Apellido }}</td>
+     <td class="p-2">{{ asistencia.fecha ? (asistencia.fecha | date:'fullDate') : '' }}</td>
+      <td class="p-2">{{ asistencia.horaEntrada || '' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Paginación -->
+<div *ngIf="totalPaginas() > 1" class="mt-4 flex justify-center gap-2">
+  <button *ngFor="let pagina of [].constructor(totalPaginas()); let i = index"
+          (click)="cambiarPagina(i + 1)"
+          [class.bg-rose-600]="paginaActual === i + 1"
+          class="px-3 py-1 rounded bg-gray-700 text-white hover:bg-rose-500">
+    {{ i + 1 }}
+  </button>
+</div>

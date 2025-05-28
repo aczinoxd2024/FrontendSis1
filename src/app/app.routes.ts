@@ -5,7 +5,6 @@ import { recepcionistaGuard } from './guards/recepcionista.guard';
 import { AgendaReservasComponent } from './Paginas/Recepcionista/agenda-reservas/agenda-reservas.component';
 import { ReservasHistoricoComponent } from './Paginas/reservas-historico/reservas-historico.component';
 
-
 export const routes: Routes = [
   {
     path: '',
@@ -50,24 +49,20 @@ export const routes: Routes = [
         path: 'clientes',
         loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
       },
+
+       {
+      path: 'asistencias-generales', // ✅ NUEVA RUTA
+      loadComponent: () => import('./Paginas/Administrador/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
+    },
       {
   path: 'crear-clase',
   loadComponent: () =>
     import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then(
       (m) => m.CrearClaseComponent
     )
-},
-{
-  path: 'agenda-reservas',
-  loadComponent: () => import('./Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component')
-    .then(m => m.AgendaReservasAdminComponent)
-},
-{
-  path: 'editar-clase/:id',
-  loadComponent: () =>
-    import('./Paginas/dashboard/dashboard-admin/editar-clase/editar-clase.component')
-      .then(m => m.EditarClaseComponent)
 }
+
+
     ]
   },
 
@@ -90,14 +85,13 @@ export const routes: Routes = [
       {
         path: 'clientes',
         loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
-      }
+      },
+     {
+      path: 'asistencias-hoy',  // NUEVA RUTA
+      loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-hoy/asistencias-hoy.component').then(m => m.AsistenciasHoyComponent)
+    },
     ]
   },
-  {
-    path: 'clases',
-    loadComponent: () => import('./Paginas/welcome/clases-disponibles/clases-disponibles.component').then(m => m.ClasesDisponiblesComponent)
-  },
-
 
   // INSTRUCTOR
   {
@@ -156,7 +150,12 @@ export const routes: Routes = [
 },
 
 
-
+// ✅ ASISTENCIA
+  {
+    path: 'asistencia',
+    loadComponent: () => import('./Paginas/asistencia/asistencia.component').then(m => m.AsistenciaComponent),
+    canActivate: [AuthGuard],
+  },
   // MEMBRESÍAS
   {
     path: 'menbresias',

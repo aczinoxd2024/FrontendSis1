@@ -43,4 +43,12 @@ export class ClasesService {
   suspenderClase(id: number) {
     return this.http.patch(`${this.apiUrl}/${id}/suspender`, {});
   }
+
+  reactivarClase(id: number) {
+    return this.http.patch(`${this.apiUrl}/${id}/reactivar`, {});
+  }
+
+  eliminarClase(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

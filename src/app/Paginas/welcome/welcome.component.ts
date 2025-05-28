@@ -35,13 +35,6 @@ ngOnInit(): void {
   this.usuarioCorreo = user.correo || '';
   this.usuarioRol = user.rol?.toLowerCase() || '';
 
- 
-
-  // ✅ Si no es cliente, cargar clases públicas normalmente
-  this.clasesService.obtenerClasesPublicas().subscribe({
-    next: (data) => (this.clases = data),
-    error: (err) => console.error('Error al cargar clases públicas', err),
-  });
 }
 
   toggleDropdown(): void {

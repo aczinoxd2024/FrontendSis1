@@ -6,11 +6,12 @@
     <h2 class="text-2xl font-bold text-rose-500 mb-6">Panel Cliente</h2>
 
     <a
-      routerLink="/perfil"
-      routerLinkActive="bg-rose-600"
-      class="px-4 py-2 rounded hover:bg-rose-500 transition flex items-center gap-2 mb-2"
+      *ngIf="usuarioRol?.toLowerCase() === 'cliente'"
+      [routerLink]="['/asistencia']"
+      (click)="cerrarMenus()"
+      class="block w-full px-4 py-2 text-sm text-white hover:bg-rose-600/40 transition"
     >
-      👤 Mi Perfil
+      📍 Asistencia
     </a>
 
     <a
@@ -34,6 +35,13 @@
       class="px-4 py-2 rounded hover:bg-rose-500 transition flex items-center gap-2 mb-2"
     >
       📋 Mis Reservas
+    </a>
+    <a
+      *ngIf="usuarioRol?.toLowerCase() === 'cliente'"
+      [routerLink]="['/dashboard-cliente/asistencia']"
+      (click)="cerrarMenus()"
+      class="block w-full px-4 py-2 text-sm text-white hover:bg-rose-600/40 transition"
+    >
     </a>
 
     <button
