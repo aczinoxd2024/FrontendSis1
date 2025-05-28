@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class ClasesService {
    private apiUrl = 'https://web-production-d581.up.railway.app/api/clases'; // Ajusta si estás en producción
+   //private apiUrl = 'http://localhost:3000/api/clases';
+
   constructor(private http: HttpClient) {}
 
   obtenerClasesPublicas(): Observable<any[]> {
@@ -40,6 +42,15 @@ actualizarClase(id: number, clase: any): Observable<any> {
 
 suspenderClase(id: number) {
   return this.http.patch(`${this.apiUrl}/${id}/suspender`, {});
+}
+
+reactivarClase(id: number) {
+  return this.http.patch(`${this.apiUrl}/${id}/reactivar`, {});
+}
+
+
+eliminarClase(id: number) {
+  return this.http.delete(`${this.apiUrl}/${id}`);
 }
 
 

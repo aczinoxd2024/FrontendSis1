@@ -67,7 +67,9 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./Paginas/dashboard/dashboard-admin/editar-clase/editar-clase.component')
       .then(m => m.EditarClaseComponent)
-}
+},
+
+
     ]
   },
 

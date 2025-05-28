@@ -10,8 +10,8 @@
           <th class="px-4 py-2">Estado</th>
           <th class="px-4 py-2">Sala</th>
           <th class="px-4 py-2">Inscritos</th>
-          <th class="px-15 py-2">Editar</th>
-          <th class="px-12 py-2">Suspender</th>
+          <th class="px-4 py-2">Editar</th>
+          <th class="px-4 py-2">Acción</th>
         </tr>
       </thead>
       <tbody>
@@ -29,30 +29,46 @@
               {{ clase.Estado }}
             </span>
           </td>
-          
-          <td class="px-4 py-2">Sala #{{ clase.IDSala }}</td>
+
+          <!-- ✅ Sala mostrada desde la relación -->
+          <td class="px-4 py-2">
+  <ng-container *ngIf="clase.sala; else sinSala">
+    #{{ clase.sala.IDSala }} - {{ clase.sala.Descripcion }}
+  </ng-container>
+  <ng-template #sinSala>
+    <span class="text-gray-400 italic">No asignada</span>
+  </ng-template>
+</td>
+
+
           <td class="px-4 py-2">{{ clase.NumInscritos }}</td>
-          <!-- ✅ Columna EDITAR centrado -->
- <td class="px-4 py-2 text-center align-middle">
-  <button
-    class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-    (click)="editarClase(clase.IDClase)">
-    ✏️
-  </button>
-</td>
 
+          <!-- Editar -->
+          <td class="px-4 py-2 text-center align-middle">
+            <button
+              class="bg-yellow-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+              (click)="editarClase(clase.IDClase)">
+              ✏️
+            </button>
+          </td>
 
+          <!-- Suspender / Reactivar -->
+          <td class="px-4 py-2 text-center align-middle">
+            <button
+              *ngIf="clase.Estado !== 'Suspendida'"
+              class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+              (click)="confirmarSuspension(clase.IDClase)">
+              🛑 Suspender
+            </button>
 
-  <!-- ✅ Columna SUSPENDER centrado -->
- <td class="px-4 py-2 text-center align-middle">
-  <button
-    *ngIf="clase.Estado !== 'Suspendida'"
-    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
-    (click)="confirmarSuspension(clase.IDClase)">
-    🛑 Suspender
-  </button>
-</td>
-
+            <button
+              *ngIf="clase.Estado === 'Suspendida'"
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
+              (click)="confirmarReactivacion(clase.IDClase)">
+              🔄 Reactivar
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
