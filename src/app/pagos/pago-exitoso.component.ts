@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { CommonModule } from '@angular/common'; // ✅ IMPORTANTE
 
 @Component({
   selector: 'app-pago-exitoso',
   standalone: true, // ✅ obligatorio si no forma parte de otro módulo
   imports: [CommonModule], // ✅ Aquí asegúrate de incluirlo
   templateUrl: './pago-exitoso.component.html',
-  imports: [CommonModule], // ✅ para habilitar *ngIf, *ngFor, etc.
 })
 export class PagoExitosoComponent implements OnInit {
   correo: string = '';

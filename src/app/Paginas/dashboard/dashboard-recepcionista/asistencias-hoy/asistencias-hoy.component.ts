@@ -14,7 +14,7 @@ import { of } from 'rxjs';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './asistencias-hoy.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class AsistenciasHoyComponent {
   asistencias: any[] = [];
@@ -28,33 +28,43 @@ export class AsistenciasHoyComponent {
   }
 
   cargarAsistenciasHoy() {
-  this.asistenciaService.obtenerAsistenciasDelDia().pipe(
-    catchError(err => {
-      console.error('Error al cargar asistencias del día:', err);
-      return of([]);
-    })
-  ).subscribe(data => {
-    console.log('Asistencias del día recibidas:', data);
-    this.asistencias = data;
-    this.aplicarFiltros();
-  });
-}
+    this.asistenciaService
+      .obtenerAsistenciasDelDia()
+      .pipe(
+        catchError((err) => {
+          console.error('Error al cargar asistencias del día:', err);
+          return of([]);
+        })
+      )
+      .subscribe((data) => {
+        console.log('Asistencias del día recibidas:', data);
+        this.asistencias = data;
+        this.aplicarFiltros();
+      });
+  }
 
   aplicarFiltros() {
     const clienteLower = this.filtroCliente.toLowerCase();
-    this.asistenciasFiltradas = this.asistencias.filter(asistencia => {
-      const nombre = `${asistencia.persona?.Nombre ?? ''} ${asistencia.persona?.Apellido ?? ''}`.toLowerCase();
+    this.asistenciasFiltradas = this.asistencias.filter((asistencia) => {
+      const nombre = `${asistencia.persona?.Nombre ?? ''} ${
+        asistencia.persona?.Apellido ?? ''
+      }`.toLowerCase();
       return nombre.includes(clienteLower);
     });
   }
 
   obtenerAsistenciasPaginadas() {
     const inicio = (this.paginaActual - 1) * this.elementosPorPagina;
-    return this.asistenciasFiltradas.slice(inicio, inicio + this.elementosPorPagina);
+    return this.asistenciasFiltradas.slice(
+      inicio,
+      inicio + this.elementosPorPagina
+    );
   }
 
   totalPaginas(): number {
-    return Math.ceil(this.asistenciasFiltradas.length / this.elementosPorPagina);
+    return Math.ceil(
+      this.asistenciasFiltradas.length / this.elementosPorPagina
+    );
   }
 
   cambiarPagina(pagina: number) {
@@ -78,5 +88,4 @@ export class AsistenciasHoyComponent {
     });
     doc.save('asistencias_dia.pdf');
   }
-
 }
