@@ -152,7 +152,15 @@ export const routes: Routes = [
       loadComponent: () =>
         import('./Paginas/Clientes/mis-reservas/mis-reservas-cliente.component')
           .then(m => m.MisReservasClienteComponent)
-    }
+    },
+    {
+  path: 'seleccionar-clase',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-cliente/seleccionar-clase/seleccionar-clase.component')
+      .then(m => m.SeleccionarClaseComponent)
+}
+
+
   ]
 },
 
@@ -172,6 +180,15 @@ export const routes: Routes = [
     path: 'adquirir-menbresia/:id',
     loadComponent: () => import('./Paginas/adquirir-membresia/adquirir-membresia.component').then(m => m.AdquirirMembresiaComponent),
   },
+
+ {
+  path: 'renovar-membresia',
+  loadComponent: () =>
+    import('./Paginas/adquirir-membresia/renovar-membresia/renovar-membresia.component')
+      .then(m => m.RenovarMembresiaComponent) // ✅ nombre correcto
+},
+
+
 
   // PERFIL
  {

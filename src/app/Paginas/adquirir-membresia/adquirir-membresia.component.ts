@@ -137,7 +137,7 @@ export class AdquirirMembresiaComponent implements OnInit {
 
         this.http
           .post<{ url: string }>(
-            'http://localhost:3000/api/stripe/checkout',
+            'https://web-production-d581.up.railway.app/api/stripe/checkout',
             body
           )
           .subscribe({

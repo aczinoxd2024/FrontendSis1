@@ -1,0 +1,16 @@
+select {
+  background-color: #1f2937;       /* Gris oscuro */
+  color: white;                    /* Texto blanco */
+  border: 1px solid #4b5563;       /* Borde gris */
+  padding: 0.5rem 1rem;            /* Espaciado interno */
+  border-radius: 8px;              /* Bordes redondeados */
+  font-size: 1rem;                 /* Tamaño de fuente */
+  font-weight: 500;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+select:focus {
+  border-color: #ef4444;           /* Rojo GoFit al enfocar */
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4); /* Sombra roja */
+}

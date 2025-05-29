@@ -26,7 +26,7 @@ export class PagoExitosoComponent implements OnInit {
     if (sessionId) {
       this.http
         .get<any>(
-          `http://localhost:3000/api/stripe/success-info?session_id=${sessionId}`
+          `https://web-production-d581.up.railway.app/api/stripe/success-info?session_id=${sessionId}`
         )
 
         .subscribe({
@@ -44,11 +44,16 @@ export class PagoExitosoComponent implements OnInit {
   }
 
   descargarComprobante() {
-    const link = document.createElement('a');
-    link.href = `http://localhost:3000/api/pagos/comprobante/${this.nroPago}`;
-    link.target = '_blank';
-    link.click();
+  if (!this.nroPago) {
+    alert('No se encontró el número de comprobante.');
+    return;
   }
+
+  const link = document.createElement('a');
+  link.href = `https://web-production-d581.up.railway.app/api/pagos/comprobante/${this.nroPago}`;
+  link.target = '_blank';
+  link.click();
+}
 
   irAlLogin() {
     this.router.navigate(['/login']);

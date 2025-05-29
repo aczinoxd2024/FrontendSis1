@@ -1,0 +1,35 @@
+<div class="min-h-screen bg-gray-900 text-white px-6 py-10 animate-gradient-dark-flow">
+  <h2 class="text-2xl font-bold text-center text-rose-500 mb-6">
+    Selecciona una clase para tu Membresía {{ tipo === 'gold' ? 'Gold' : 'Disciplina' }}
+  </h2>
+
+  <p class="text-sm text-gray-300 text-center italic mb-6">
+    Puedes elegir cualquier clase disponible para incluirla en esta membresía.
+  </p>
+
+  <div *ngIf="loading" class="text-center text-gray-400">Cargando clases disponibles...</div>
+
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div
+      *ngFor="let clase of clases"
+      class="bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition-all cursor-pointer border-2"
+      [ngClass]="{ 'border-rose-500': clase === claseSeleccionada }"
+      (click)="claseSeleccionada = clase"
+    >
+      <h3 class="text-lg font-semibold text-rose-400">{{ clase.Nombre }}</h3>
+      <p><strong>ID:</strong> {{ clase.IDClase }}</p>
+      <p><strong>Cupo:</strong> {{ clase.CupoMaximo }}</p>
+      <p><strong>Estado:</strong> {{ clase.Estado }}</p>
+    </div>
+  </div>
+
+  <div class="text-center mt-8">
+    <button
+      (click)="pagar()"
+      [disabled]="!claseSeleccionada"
+      class="px-6 py-3 bg-rose-600 text-white font-bold rounded-lg hover:bg-rose-700 transition disabled:opacity-50"
+    >
+      Pagar Membresía
+    </button>
+  </div>
+</div>

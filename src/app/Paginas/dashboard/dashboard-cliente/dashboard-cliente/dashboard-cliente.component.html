@@ -1,8 +1,6 @@
 <div class="min-h-screen flex flex-col md:flex-row bg-white">
   <!-- Sidebar -->
-  <aside
-    class="w-full md:w-64 bg-gray-900 text-white flex flex-col p-4 shadow-md"
-  >
+  <aside class="w-full md:w-64 bg-gray-900 text-white flex flex-col p-4 shadow-md">
     <h2 class="text-2xl font-bold text-rose-500 mb-6">Panel Cliente</h2>
 
     <a
@@ -29,6 +27,7 @@
     >
       ➕ Nueva Reserva
     </a>
+
     <a
       routerLink="mis-reservas"
       routerLinkActive="bg-rose-600"
@@ -36,21 +35,17 @@
     >
       📋 Mis Reservas
     </a>
+
+    <!-- Botón de Membresía -->
     <a
-      *ngIf="usuarioRol?.toLowerCase() === 'cliente'"
-      [routerLink]="['/dashboard-cliente/asistencia']"
-      (click)="cerrarMenus()"
-      class="block w-full px-4 py-2 text-sm text-white hover:bg-rose-600/40 transition"
-    >
-    </a>
+  routerLink="/renovar-membresia"
+  routerLinkActive="bg-rose-600"
+  class="px-4 py-2 rounded-full border-2 border-rose-600 hover:bg-rose-600 text-white text-center transition-all cursor-pointer mt-4"
+>
+  ➕ Adquirir / Renovar Membresía
+</a>
 
-    <button
-      routerLink="/adquirir-menbresia"
-      class="mt-4 bg-rose-600 text-white px-4 py-2 rounded hover:bg-rose-700 transition-all"
-    >
-      Ver Membresías
-    </button>
-
+    <!-- Cerrar sesión -->
     <button
       (click)="cerrarSesion()"
       class="mt-auto bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded transition"
@@ -59,8 +54,23 @@
     </button>
   </aside>
 
-  <!-- Contenido -->
+  <!-- Contenido principal -->
   <main class="flex-1 p-6 bg-gray-100 min-h-screen overflow-x-auto">
+    <!-- Tarjetas de Membresía (mostrar en contenido central) -->
+    <div *ngIf="mostrarMembresias" class="bg-gray-900 p-8 rounded-lg mb-6 text-center">
+      <h2 class="text-3xl font-bold text-rose-500 mb-8 neon-text">Renovar / Adquirir Membresía</h2>
+
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 flex-wrap">
+        <div class="card-membresia" *ngFor="let tipo of tipos">
+          <h3 class="titulo">{{ tipo.nombre }}</h3>
+          <p class="descripcion">{{ tipo.descripcion }}</p>
+          <p class="precio">{{ tipo.precio }}</p>
+          <button (click)="redirigirAPago(tipo.id)">Adquirir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista dinámica -->
     <router-outlet></router-outlet>
   </main>
 </div>

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { NuevaReservaComponent } from './nueva-reserva.component';
+import { NuevaReservaComponent } from './nueva-reserva.component'; // ✅ Corrección de nombre
 
 describe('NuevaReservaComponent', () => {
   let component: NuevaReservaComponent;
@@ -8,7 +7,7 @@ describe('NuevaReservaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NuevaReservaComponent]
+      imports: [NuevaReservaComponent] // ✅ Debe coincidir
     })
     .compileComponents();
 

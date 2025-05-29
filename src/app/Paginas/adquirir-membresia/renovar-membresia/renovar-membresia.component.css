@@ -35,3 +35,18 @@ button {
 button:hover {
   background-color: #dc2626;
 }
+.btn-adquirir {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-adquirir:hover {
+  background-color: #dc2626;
+}
+

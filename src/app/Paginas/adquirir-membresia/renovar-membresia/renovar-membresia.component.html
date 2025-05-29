@@ -1,0 +1,31 @@
+<div class="min-h-screen bg-gray-900 py-10 px-6 animate-gradient-dark-flow">
+  <h2 class="text-3xl font-bold text-center text-rose-500 mb-10 neon-text">
+    Renovar / Adquirir Membresía
+  </h2>
+
+  <div class="flex flex-col md:flex-row justify-center items-center gap-8 flex-wrap">
+    <!-- Membresía Básica -->
+    <div class="card-membresia">
+      <h3 class="titulo">Membresía Básica</h3>
+      <p class="descripcion">Acceso total a máquinas, pesas y cardio.</p>
+      <p class="precio">$20 / mes</p>
+      <button (click)="redirigirAPago('basica')" class="btn-adquirir">Adquirir</button>
+    </div>
+
+    <!-- Membresía Disciplina -->
+    <div class="card-membresia">
+      <h3 class="titulo">Solo Disciplina</h3>
+      <p class="descripcion">Acceso a una clase específica.</p>
+      <p class="precio">$15 / mes</p>
+      <button (click)="redirigirAPago('disciplina')" class="btn-adquirir">Adquirir</button>
+    </div>
+
+    <!-- Membresía Gold -->
+    <div class="card-membresia">
+      <h3 class="titulo">Membresía Gold</h3>
+      <p class="descripcion">Todo lo anterior + clases dirigidas.</p>
+      <p class="precio">$35 / mes</p>
+      <button (click)="redirigirAPago('gold')" class="btn-adquirir">Adquirir</button>
+    </div>
+  </div>
+</div>
