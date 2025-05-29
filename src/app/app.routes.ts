@@ -8,11 +8,17 @@ import { ReservasHistoricoComponent } from './Paginas/reservas-historico/reserva
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./Paginas/welcome/welcome.component').then(m => m.WelcomeComponent)
+    loadComponent: () =>
+      import('./Paginas/welcome/welcome.component').then(
+        (m) => m.WelcomeComponent
+      ),
   },
   {
     path: 'login',
-    loadComponent: () => import('./Paginas/login-page/login-page.component').then(m => m.LoginComponent)
+    loadComponent: () =>
+      import('./Paginas/login-page/login-page.component').then(
+        (m) => m.LoginComponent
+      ),
   },
 
   // ✅ RUTA DE RECEPCIONISTA PROTEGIDA CON GUARD
@@ -22,107 +28,152 @@ export const routes: Routes = [
     children: [
       {
         path: 'agenda',
-        component: AgendaReservasComponent
-      }
-    ]
+        component: AgendaReservasComponent,
+      },
+    ],
   },
 
   // ADMINISTRADOR
   {
     path: 'dashboard-admin',
-    loadComponent: () => import('./Paginas/Administrador/dashboard-inicio/dashboard-inicio.component').then(m => m.DashboardComponent),
+    loadComponent: () =>
+      import(
+        './Paginas/Administrador/dashboard-inicio/dashboard-inicio.component'
+      ).then((m) => m.DashboardComponent),
     canActivate: [AdminGuard],
     children: [
       {
         path: 'todas-clases',
-        loadComponent: () => import('./Paginas/dashboard/dashboard-admin/todas-clases/todas-clases.component').then(m => m.TodasClasesComponent)
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-admin/todas-clases/todas-clases.component'
+          ).then((m) => m.TodasClasesComponent),
       },
       {
         path: 'eliminar-cliente',
-        loadComponent: () => import('./Paginas/Administrador/eliminar-cliente/eliminar-cliente.component').then(m => m.EliminarClienteComponent)
+        loadComponent: () =>
+          import(
+            './Paginas/Administrador/eliminar-cliente/eliminar-cliente.component'
+          ).then((m) => m.EliminarClienteComponent),
       },
       {
         path: 'bitacora',
-        loadComponent: () => import('./Paginas/Administrador/bitacora/bitacora.component').then(m => m.BitacoraComponent)
+        loadComponent: () =>
+          import('./Paginas/Administrador/bitacora/bitacora.component').then(
+            (m) => m.BitacoraComponent
+          ),
       },
       {
         path: 'clientes',
-        loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
+        loadComponent: () =>
+          import(
+            './Paginas/Clientes/clientes-lista/clientes-lista.component'
+          ).then((m) => m.ClientesListaComponent),
       },
 
-       {
-      path: 'asistencias-generales', // ✅ NUEVA RUTA
-      loadComponent: () => import('./Paginas/Administrador/asistencias-generales/asistencias-generales.component').then(m => m.AsistenciasGeneralesComponent)
-    },
       {
-  path: 'crear-clase',
-  loadComponent: () =>
-    import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then(
-      (m) => m.CrearClaseComponent
-    )
-},
-{
-  path: 'editar-clase/:id',
-  loadComponent: () =>
-    import('./Paginas/dashboard/dashboard-admin/editar-clase/editar-clase.component')
-      .then(m => m.EditarClaseComponent)
-},
-
-
-
-    ]
+        path: 'asistencias-generales', // ✅ NUEVA RUTA
+        loadComponent: () =>
+          import(
+            './Paginas/Administrador/asistencias-generales/asistencias-generales.component'
+          ).then((m) => m.AsistenciasGeneralesComponent),
+      },
+      {
+        path: 'crear-clase',
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component'
+          ).then((m) => m.CrearClaseComponent),
+      },
+      {
+        path: 'editar-clase/:id',
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-admin/editar-clase/editar-clase.component'
+          ).then((m) => m.EditarClaseComponent),
+      },
+    ],
   },
-
-
 
   // RECEPCIONISTA DASHBOARD
   {
     path: 'dashboard-recepcionista',
-    loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/dashboard-recepcionista.component').then(m => m.DashboardRecepcionistaComponent),
+    loadComponent: () =>
+      import(
+        './Paginas/dashboard/dashboard-recepcionista/dashboard-recepcionista.component'
+      ).then((m) => m.DashboardRecepcionistaComponent),
     canActivate: [recepcionistaGuard],
     children: [
       {
         path: 'registrar-cliente',
-        loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/registrar-cliente/registrar-cliente.component').then(m => m.RegistrarClienteComponent)
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-recepcionista/registrar-cliente/registrar-cliente.component'
+          ).then((m) => m.RegistrarClienteComponent),
       },
       {
         path: 'actualizar-cliente',
-        loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/actualizar-cliente/actualizar-cliente.component').then(m => m.ActualizarClienteComponent)
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-recepcionista/actualizar-cliente/actualizar-cliente.component'
+          ).then((m) => m.ActualizarClienteComponent),
       },
       {
         path: 'clientes',
-        loadComponent: () => import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then(m => m.ClientesListaComponent)
+        loadComponent: () =>
+          import(
+            './Paginas/Clientes/clientes-lista/clientes-lista.component'
+          ).then((m) => m.ClientesListaComponent),
       },
-     {
-      path: 'asistencias-hoy',  // NUEVA RUTA
-      loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/asistencias-hoy/asistencias-hoy.component').then(m => m.AsistenciasHoyComponent)
-    },
-    ]
+      {
+        path: 'asistencias-hoy', // NUEVA RUTA
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-recepcionista/asistencias-hoy/asistencias-hoy.component'
+          ).then((m) => m.AsistenciasHoyComponent),
+      },
+      {
+        path: 'comprobantes',
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-recepcionista/comprobantes-recepcionista/comprobantes-recepcionista.component'
+          ).then((m) => m.ComprobantesRecepcionistaComponent),
+      },
+    ],
   },
 
   // INSTRUCTOR
   {
     path: 'dashboard-instructor',
-    loadComponent: () => import('./Paginas/dashboard/dashboard-instructor/dashboard-instructor.component').then(m => m.DashboardInstructorComponent),
+    loadComponent: () =>
+      import(
+        './Paginas/dashboard/dashboard-instructor/dashboard-instructor.component'
+      ).then((m) => m.DashboardInstructorComponent),
     canActivate: [AuthGuard],
     children: [
       {
         path: 'mis-clases',
-        loadComponent: () => import('./Paginas/dashboard/dashboard-instructor/mis-clases/mis-clases.component').then(m => m.MisClasesComponent)
-      }
-    ]
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-instructor/mis-clases/mis-clases.component'
+          ).then((m) => m.MisClasesComponent),
+      },
+    ],
   },
-//RESERVAS PASADAS
+  //RESERVAS PASADAS
   {
-  path: 'reservas/historico',
-  component: ReservasHistoricoComponent,
-  canActivate: [AuthGuard], // si usas protección
-},
-//RESERVAS CLIENTES
-{
-  path: 'cliente/reservar',
-  loadComponent: () => import('./Paginas/reservar-clase/reservar-clase.component').then(m => m.ReservarClaseComponent)
-},
+    path: 'reservas/historico',
+    component: ReservasHistoricoComponent,
+    canActivate: [AuthGuard], // si usas protección
+  },
+  //RESERVAS CLIENTES
+  {
+    path: 'cliente/reservar',
+    loadComponent: () =>
+      import('./Paginas/reservar-clase/reservar-clase.component').then(
+        (m) => m.ReservarClaseComponent
+      ),
+  },
 
 {
   path: 'cliente/reservas',
@@ -164,21 +215,29 @@ export const routes: Routes = [
   ]
 },
 
-
-// ✅ ASISTENCIA
+  // ✅ ASISTENCIA
   {
     path: 'asistencia',
-    loadComponent: () => import('./Paginas/asistencia/asistencia.component').then(m => m.AsistenciaComponent),
+    loadComponent: () =>
+      import('./Paginas/asistencia/asistencia.component').then(
+        (m) => m.AsistenciaComponent
+      ),
     canActivate: [AuthGuard],
   },
   // MEMBRESÍAS
   {
     path: 'menbresias',
-    loadComponent: () => import('./Paginas/ver-menbresias/menbresias.component').then(m => m.MenbresiasComponent),
+    loadComponent: () =>
+      import('./Paginas/ver-menbresias/menbresias.component').then(
+        (m) => m.MenbresiasComponent
+      ),
   },
   {
     path: 'adquirir-menbresia/:id',
-    loadComponent: () => import('./Paginas/adquirir-membresia/adquirir-membresia.component').then(m => m.AdquirirMembresiaComponent),
+    loadComponent: () =>
+      import('./Paginas/adquirir-membresia/adquirir-membresia.component').then(
+        (m) => m.AdquirirMembresiaComponent
+      ),
   },
 
  {
@@ -191,39 +250,55 @@ export const routes: Routes = [
 
 
   // PERFIL
- {
-  path: 'perfil',
-  loadComponent: () =>
-    import('./Paginas/perfil/perfil.component').then(m => m.PerfilComponent),
-},
-
+  {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./Paginas/perfil/perfil.component').then(
+        (m) => m.PerfilComponent
+      ),
+  },
 
   {
     path: 'perfil/editar',
-    loadComponent: () => import('./Paginas/perfil/editar-perfil/editar-perfil.component').then(m => m.EditarPerfilComponent),
+    loadComponent: () =>
+      import('./Paginas/perfil/editar-perfil/editar-perfil.component').then(
+        (m) => m.EditarPerfilComponent
+      ),
   },
 
   // RECUPERACIÓN
   {
     path: 'forgot-password',
-    loadComponent: () => import('./Paginas/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+    loadComponent: () =>
+      import('./Paginas/forgot-password/forgot-password.component').then(
+        (m) => m.ForgotPasswordComponent
+      ),
   },
   {
-  path: 'pagos/success',
-  loadComponent: () => import('./pagos/pago-exitoso.component').then(m => m.PagoExitosoComponent)
-},
-{
-  path: 'pagos/cancel',
-  loadComponent: () => import('./pagos/pago-cancelado.component').then(m => m.PagoCanceladoComponent)
-},
+    path: 'pagos/success',
+    loadComponent: () =>
+      import('./pagos/pago-exitoso.component').then(
+        (m) => m.PagoExitosoComponent
+      ),
+  },
+  {
+    path: 'pagos/cancel',
+    loadComponent: () =>
+      import('./pagos/pago-cancelado.component').then(
+        (m) => m.PagoCanceladoComponent
+      ),
+  },
   {
     path: 'reset-password',
-    loadComponent: () => import('./Paginas/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+    loadComponent: () =>
+      import('./Paginas/reset-password/reset-password.component').then(
+        (m) => m.ResetPasswordComponent
+      ),
   },
 
   // WILDCARD
   {
     path: '**',
     redirectTo: '',
-  }
+  },
 ];

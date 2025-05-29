@@ -1,0 +1,69 @@
+<div class="container mx-auto p-6 text-white">
+  <h2 class="text-2xl font-bold text-center text-rose-500 mb-6">
+    Comprobantes de Pago - Buscar por CI
+  </h2>
+
+  <!-- Buscador -->
+  <div class="mb-6 flex gap-4 items-center justify-center">
+    <input
+      [(ngModel)]="ciBusqueda"
+      placeholder="Ingrese CI del cliente"
+      class="w-80 p-2 rounded bg-gray-800 border border-gray-600 text-white"
+    />
+    <button
+      (click)="buscarPagos()"
+      class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded shadow"
+    >
+      Buscar
+    </button>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="mensaje" class="text-center text-red-500 mb-4">
+    {{ mensaje }}
+  </div>
+
+  <!-- Tabla de resultados -->
+  <div *ngIf="pagos.length > 0" class="overflow-x-auto">
+    <table class="w-full bg-gray-900 border border-gray-700 rounded">
+      <thead>
+        <tr class="text-left bg-gray-800 text-rose-400">
+          <th class="p-3">Nro. Pago</th>
+          <th class="p-3">Fecha</th>
+          <th class="p-3">Monto</th>
+          <th class="p-3">Método</th>
+          <th class="p-3">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let pago of pagos"
+          class="border-t border-gray-700 hover:bg-gray-800"
+        >
+          <td class="p-3">{{ pago.NroPago }}</td>
+          <td class="p-3">{{ pago.Fecha | date : "dd/MM/yyyy" }}</td>
+          <td class="p-3">${{ pago.Monto }}</td>
+          <td class="p-3">
+            {{
+              pago.MetodoPago === 1
+                ? "Efectivo"
+                : pago.MetodoPago === 2
+                ? "Tarjeta"
+                : pago.MetodoPago === 3
+                ? "Transferencia"
+                : "Otro"
+            }}
+          </td>
+          <td class="p-3">
+            <button
+              (click)="descargar(pago.NroPago)"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
+            >
+              Descargar Comprobante
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
