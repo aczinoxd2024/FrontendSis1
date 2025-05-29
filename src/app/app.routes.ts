@@ -85,6 +85,13 @@ export const routes: Routes = [
             './Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component'
           ).then((m) => m.CrearClaseComponent),
       },
+      {
+        path: 'editar-clase/:id',
+        loadComponent: () =>
+          import(
+            './Paginas/dashboard/dashboard-admin/editar-clase/editar-clase.component'
+          ).then((m) => m.EditarClaseComponent),
+      },
     ],
   },
 
