@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Cliente } from '../interfaces/cliente';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class ClienteService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Utilidad para generar headers con token
+  // ✅ Utilidad para generar headers con token JWT
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
@@ -21,7 +21,9 @@ export class ClienteService {
 
   // 👉 Registrar cliente
   registrarCliente(cliente: Cliente): Observable<any> {
-    return this.http.post(this.apiUrl, cliente, { headers: this.getHeaders() });
+    return this.http.post(this.apiUrl, cliente, {
+      headers: this.getHeaders(),
+    });
   }
 
   // 👉 Obtener todos los clientes
@@ -31,12 +33,17 @@ export class ClienteService {
     });
   }
 
-  // 👉 Adquirir membresía (público)
+  // 👉 Adquirir membresía desde la web (público)
   adquirirMembresia(cliente: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/adquirir`, cliente);
   }
 
-  // 👉 Actualizar cliente
+  // 👉 Adquirir membresía usando una ruta dinámica (opcional)
+  adquirirMembresiaConRuta(cliente: any, endpoint: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${endpoint}`, cliente);
+  }
+
+  // 👉 Actualizar cliente (por CI)
   actualizarCliente(ci: string, datos: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${ci}`, datos, {
       headers: this.getHeaders(),
@@ -64,18 +71,10 @@ export class ClienteService {
     });
   }
 
-  // 👉 Obtener perfil del cliente autenticado
+  // ✅ Obtener perfil del cliente autenticado (corregido)
   obtenerPerfilCliente(): Observable<any> {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return throwError(() => new Error('No hay token disponible.'));
-    }
-
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(`${this.apiUrl}/perfil`, { headers });
-  }
-
-  adquirirMembresiaConRuta(cliente: any, endpoint: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${endpoint}`, cliente);
+    return this.http.get(`${this.apiUrl}/perfil`, {
+      headers: this.getHeaders(),
+    });
   }
 }

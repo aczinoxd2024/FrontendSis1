@@ -23,6 +23,28 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/_redirects",
+              {
+                "glob": "**/*",
+                "input": "node_modules/bootstrap/dist/css",
+                "output": "bootstrap"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/bootstrap/dist/js",
+                "output": "bootstrap/js"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@fortawesome/fontawesome-free/css",
+                "output": "fontawesome-free/css"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@fortawesome/fontawesome-free/webfonts",
+                "output": "fontawesome-free/webfonts"
+              }
+
               {
                 "glob": "**/*",
                 "input": "public"
