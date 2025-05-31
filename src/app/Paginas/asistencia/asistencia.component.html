@@ -1,44 +1,25 @@
-<!-- Fondo animado -->
-<div class="background-animated fixed inset-0 -z-10"></div>
+<!-- Fondo degradado animado oscuro -->
+<div class="fixed inset-0 -z-10 bg-gradient-to-br from-gray-900 via-gray-800 to-black bg-[length:300%_300%] animate-gradientFlow"></div>
 
-<!-- Header fijo -->
-<header
-  class="flex justify-between items-center px-6 py-4 bg-gray-900 text-white shadow-md fixed top-0 left-0 right-0 z-20"
->
-  <h1 class="text-xl font-bold text-rose-500">
-    cliente - Go<span class="text-white">Fit</span>
-  </h1>
-  <div class="flex items-center gap-4">
-    <span class="text-sm select-none">👤 {{ nombreUsuario }}</span>
+<!-- Contenedor principal con diseño vertical -->
+<div class="flex flex-col items-center justify-start p-6 gap-6 min-h-screen text-white">
+
+  <!-- Tarjeta fija: Confirmar asistencia -->
+  <div class="bg-gray-800 p-6 w-full max-w-3xl rounded-2xl shadow-lg border border-white/10 space-y-4">
+    <h2 class="text-2xl font-bold text-rose-500 flex items-center gap-2">
+      📍 Marcar Asistencia
+    </h2>
+    <p class="text-lg font-medium">
+      ¡Hola, <span class="text-rose-400">{{ nombreUsuario }}</span>!
+    </p>
     <button
-      (click)="logout()"
-      class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded transition-transform transform hover:scale-105 shadow"
-    >
-      Cerrar Sesión
-    </button>
-  </div>
-</header>
-
-<!-- Contenido principal -->
-<main
-  class="pt-20 px-6 pb-10 max-w-4xl mx-auto flex flex-col gap-6"
->
-  <!-- Título principal -->
-  <h2 class="text-3xl font-bold text-white mb-6 text-center">📍 Marcar Asistencia</h2>
-
-  <!-- Botón marcar asistencia -->
-  <div class="text-center">
-    <a
       (click)="marcarAsistencia()"
-      class="inline-block text-green-400 cursor-pointer hover:text-green-600 font-semibold text-lg select-none"
-      role="button"
-      tabindex="0"
-      (keydown.enter)="marcarAsistencia()"
+      class="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold shadow transition duration-300"
     >
       ✅ Confirmar Asistencia
-    </a>
+    </button>
     <p
-      class="mt-4 text-sm"
+      class="text-sm font-medium"
       [ngClass]="{
         'text-green-400': mensaje.startsWith('✅'),
         'text-yellow-400': mensaje.startsWith('⚠️'),
@@ -49,95 +30,52 @@
     </p>
   </div>
 
-  <!-- Botón mostrar/ocultar tabla -->
-  <div class="text-center">
-    <button
-      (click)="mostrarTablaCompleta = !mostrarTablaCompleta"
-      class="bg-rose-600 text-white px-6 py-2 rounded shadow hover:bg-rose-700 transition-colors"
+  <!-- Tarjeta flexible: Historial -->
+  <div class="bg-gray-800 p-6 w-full max-w-6xl rounded-2xl shadow-lg border border-white/10 space-y-4 flex flex-col">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-rose-500 flex items-center gap-2">
+        📄 Historial de Asistencia
+      </h2>
+      <button
+        (click)="toggleTablaCompleta()"
+        class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow transition"
+      >
+        {{ mostrarTablaCompleta ? '⬅️ Ocultar' : '📄 Ver' }}
+      </button>
+    </div>
+
+    <!-- Tabla -->
+    <section
+      *ngIf="mostrarTablaCompleta && historialAsistencia.length > 0"
+      class="overflow-x-auto rounded-md border border-white/10 bg-gray-700/60"
     >
-      {{ mostrarTablaCompleta ? 'Ocultar' : 'Ver todas las asistencias' }}
-    </button>
+      <table class="min-w-full text-sm text-white">
+        <thead class="uppercase tracking-wide text-rose-200 bg-gray-700/80">
+          <tr>
+            <th class="py-3 px-4 text-left">#</th>
+            <th class="py-3 px-4 text-left">Fecha</th>
+            <th class="py-3 px-4 text-left">Hora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let asistencia of historialAsistencia; let i = index"
+            class="hover:bg-gray-600/60 transition"
+          >
+            <td class="py-2 px-4 border-t border-white/10">{{ i + 1 }}</td>
+            <td class="py-2 px-4 border-t border-white/10">{{ asistencia.fecha | date: 'fullDate' }}</td>
+            <td class="py-2 px-4 border-t border-white/10">{{ asistencia.horaEntrada }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Sin registros -->
+    <p
+      *ngIf="mostrarTablaCompleta && historialAsistencia.length === 0"
+      class="text-yellow-300 text-sm"
+    >
+      ⚠️ No se encontraron registros de asistencia.
+    </p>
   </div>
-
-  <!-- Tabla de historial -->
-  <section
-    *ngIf="mostrarTablaCompleta && historialAsistencia.length > 0"
-    class="overflow-x-auto rounded-lg shadow-lg"
-  >
-    <table class="min-w-full bg-gray-800 text-white rounded-lg">
-      <thead>
-        <tr>
-          <th class="py-3 px-6 border-b border-gray-600 text-left">#</th>
-          <th class="py-3 px-6 border-b border-gray-600 text-left">Fecha</th>
-          <th class="py-3 px-6 border-b border-gray-600 text-left">Hora</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let asistencia of historialAsistencia; let i = index"
-          class="hover:bg-gray-700 transition-colors"
-        >
-          <td class="py-3 px-6 border-b border-gray-700">{{ i + 1 }}</td>
-          <td class="py-3 px-6 border-b border-gray-700">
-            {{ asistencia.fecha | date: 'fullDate' }}
-          </td>
-          <td class="py-3 px-6 border-b border-gray-700">
-             {{ asistencia.horaEntrada }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- Mensaje si no hay asistencias -->
-  <p
-    *ngIf="mostrarTablaCompleta && historialAsistencia.length === 0"
-    class="text-center text-yellow-400"
-  >
-    No se encontraron registros de asistencia.
-  </p>
-</main>
-<style>
-  .background-animated {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background-size: 300% 300%;
-    background-image: linear-gradient(45deg, #0a0e17, #13182b, #1a223f, #13182b, #0a0e17);
-    animation: gradientFlow 15s ease infinite;
-  }
-
-  @keyframes gradientFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  .nav-link {
-    display: block;
-    padding: 10px 14px;
-    border-radius: 6px;
-    background-color: transparent;
-    color: #f3f4f6;
-    transition: all 0.2s ease;
-  }
-
-  .nav-link:hover {
-    background-color: #374151;
-  }
-
-  .active-link {
-    background-color: #ef4444;
-    color: white;
-    font-weight: bold;
-  }
-
-  @media (max-width: 640px) {
-    aside {
-      display: none;
-    }
-    main {
-      padding: 1rem;
-    }
-  }
-</style>
+</div>

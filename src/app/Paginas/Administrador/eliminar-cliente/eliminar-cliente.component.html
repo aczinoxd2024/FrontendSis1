@@ -1,10 +1,12 @@
-<div class="min-h-screen bg-gray-900 text-white p-6">
+<div class="min-h-screen bg-gray-900 text-white px-4 py-6 sm:px-6 lg:px-12">
 
-  <!-- Título -->
-  <h1 class="text-3xl font-bold mb-8 text-rose-500 neon-text">Eliminar Cliente</h1>
+  <!-- Título centrado en móviles -->
+  <h1 class="text-3xl font-bold mb-8 text-rose-500 neon-text text-center sm:text-left">
+    Eliminar Cliente
+  </h1>
 
   <!-- Buscar por CI -->
-  <form (submit)="buscarCliente()" class="space-y-4 mb-10 max-w-xl mx-auto">
+  <form (submit)="buscarCliente()" class="space-y-4 mb-10 max-w-xl mx-auto w-full">
     <input
       [(ngModel)]="ciBuscar"
       name="ciBuscar"
@@ -26,7 +28,8 @@
   </div>
 
   <!-- Resultado -->
-  <div *ngIf="cliente" class="bg-gray-800/90 rounded-xl p-6 border border-gray-700 shadow-lg space-y-4 max-w-xl mx-auto backdrop-blur-sm">
+  <div *ngIf="cliente"
+       class="bg-gray-800/90 rounded-xl p-6 border border-gray-700 shadow-lg space-y-4 max-w-xl w-full mx-auto backdrop-blur-sm">
 
     <h2 class="text-xl font-semibold text-white">Datos del Cliente</h2>
 
@@ -35,20 +38,22 @@
       ⚠️ Este cliente se encuentra <strong>INACTIVO</strong>. No se recomienda modificar sus datos.
     </div>
 
-    <p><strong class="text-gray-300">Nombre:</strong> {{ cliente.nombre }}</p>
-    <p><strong class="text-gray-300">Apellido:</strong> {{ cliente.apellido }}</p>
-    <p><strong class="text-gray-300">Teléfono:</strong> {{ cliente.telefono }}</p>
-    <p><strong class="text-gray-300">Dirección:</strong> {{ cliente.direccion }}</p>
+    <div class="space-y-1 text-sm sm:text-base">
+      <p><strong class="text-gray-300">Nombre:</strong> {{ cliente.nombre }}</p>
+      <p><strong class="text-gray-300">Apellido:</strong> {{ cliente.apellido }}</p>
+      <p><strong class="text-gray-300">Teléfono:</strong> {{ cliente.telefono }}</p>
+      <p><strong class="text-gray-300">Dirección:</strong> {{ cliente.direccion }}</p>
 
-    <p>
-      <strong class="text-gray-300">Estado:</strong>
-      <span [ngClass]="{
-        'text-green-400 font-semibold': cliente.estado === 'Activo',
-        'text-red-500 font-semibold': cliente.estado === 'Inactivo'
-      }">
-        {{ cliente.estado }}
-      </span>
-    </p>
+      <p>
+        <strong class="text-gray-300">Estado:</strong>
+        <span [ngClass]="{
+          'text-green-400 font-semibold': cliente.estado === 'Activo',
+          'text-red-500 font-semibold': cliente.estado === 'Inactivo'
+        }">
+          {{ cliente.estado }}
+        </span>
+      </p>
+    </div>
 
     <button
       (click)="eliminarCliente()"
