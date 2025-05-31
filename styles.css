@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Clases personalizadas */
+.toast-tailwind-bottom-center {
+  @apply fixed bottom-20 left-1/2 -translate-x-1/2 z-[9999];
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradientFlow {
+  animation: gradientFlow 15s ease infinite;
+}
+/* styles.css */
+
+.form-control {
+  @apply w-full p-3 bg-gray-800 text-white border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-rose-500;
+}
+
+.btn-accion {
+  @apply bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 px-6 rounded-md transition duration-300;
+}
+

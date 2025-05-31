@@ -1,17 +1,18 @@
-<!-- Fondo animado estilo GoFit -->
-<div class="background-animated fixed inset-0 -z-[1]"></div>
+<!-- Fondo degradado animado estilo GoFit -->
+<div class="fixed inset-0 -z-10 bg-gradient-to-br from-gray-900 via-gray-800 to-black bg-[length:300%_300%] animate-gradientFlow"></div>
 
 <!-- Contenedor principal -->
-<div class="min-h-screen p-6 bg-gray-900 text-white">
-  <h1 class="text-3xl font-bold mb-6 text-rose-500">📋 Agenda de Reservas (Admin)</h1>
+<div class="min-h-screen p-6 text-white">
+  <!-- Título -->
+  <h1 class="text-3xl font-extrabold text-rose-500 mb-8 text-center sm:text-left">📋 Agenda de Reservas (Admin)</h1>
 
-  <!-- Filtros -->
-  <div class="flex flex-wrap gap-4 mb-6">
+  <!-- Filtros responsivos -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
     <input [(ngModel)]="ciCliente" placeholder="CI del Cliente"
-           class="p-3 rounded bg-gray-800 text-white border border-gray-600" />
+      class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 placeholder-gray-400" />
 
     <select [(ngModel)]="estadoFiltro"
-            class="p-3 rounded bg-gray-800 text-white border border-gray-600">
+      class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600">
       <option value="">Todos los Estados</option>
       <option value="Confirmada">Confirmada</option>
       <option value="Cancelada">Cancelada</option>
@@ -19,74 +20,79 @@
     </select>
 
     <input type="date" [(ngModel)]="fechaInicio"
-           class="p-3 rounded bg-gray-800 text-white border border-gray-600" />
+      class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600" />
+
     <input type="date" [(ngModel)]="fechaFin"
-           class="p-3 rounded bg-gray-800 text-white border border-gray-600" />
+      class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600" />
 
     <button (click)="buscarReservas()"
-            class="bg-rose-600 hover:bg-rose-700 text-white px-6 py-2 rounded">
-      Buscar
+      class="w-full bg-rose-600 hover:bg-rose-700 text-white px-6 py-2 rounded transition-all">
+      🔍 Buscar
     </button>
 
     <button (click)="limpiarFiltros()"
-            class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded">
-      Limpiar Filtros
+      class="w-full bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded transition-all">
+      🧹 Limpiar
     </button>
 
     <button (click)="exportarPDF()"
-            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded">
-      Exportar PDF
+      class="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition-all">
+      📄 Exportar PDF
     </button>
   </div>
 
-  <!-- Tabla agrupada -->
+  <!-- Tabla por grupo de clases -->
   <div *ngFor="let grupo of reservasAgrupadas" class="mb-12">
-    <h2 class="text-xl font-semibold text-rose-400 mb-3">
-      Clase: {{ grupo.clase }}
-    </h2>
+    <h2 class="text-xl font-bold text-rose-400 mb-4">Clase: {{ grupo.clase }}</h2>
 
-    <table class="w-full bg-gray-800 text-sm rounded overflow-hidden">
-      <thead class="bg-gray-700 text-left text-white">
-        <tr>
-          <th class="p-3">CI Cliente</th>
-          <th class="p-3">Horario</th>
-          <th class="p-3">Estado</th>
-          <th class="p-3">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let reserva of grupo.items | slice: calcularInicio(grupo.clase): calcularFin(grupo.clase)"
-            class="border-b border-gray-700">
-          <td class="p-3">{{ reserva.cliente?.CI }}</td>
-          <td class="p-3">
-            {{ reserva.horario?.HoraIni || '-' }} - {{ reserva.horario?.HoraFin || '-' }}
-          </td>
-          <td class="p-3" [ngClass]="{ 'text-green-400': reserva.estado?.Estado === 'Confirmada', 'text-red-400': reserva.estado?.Estado === 'Cancelada' }">
-            {{ reserva.estado?.Estado || '-' }}
-          </td>
-          <td class="p-3">
-            <button *ngIf="reserva.estado?.Estado !== 'Cancelada'"
-                    (click)="cancelarReserva(reserva.IDReserva)"
-                    class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded">
-              Cancelar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="overflow-x-auto rounded-lg shadow border border-white/10 bg-gray-800/80">
+      <table class="min-w-full text-sm text-white">
+        <thead class="bg-gray-700/80 text-rose-200 uppercase">
+          <tr>
+            <th class="p-3 text-left">CI Cliente</th>
+            <th class="p-3 text-left">Horario</th>
+            <th class="p-3 text-left">Estado</th>
+            <th class="p-3 text-left">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reserva of grupo.items | slice: calcularInicio(grupo.clase): calcularFin(grupo.clase)"
+              class="border-t border-white/10 hover:bg-gray-700/50 transition">
+            <td class="p-3">{{ reserva.cliente?.CI }}</td>
+            <td class="p-3">
+              {{ reserva.horario?.HoraIni || '-' }} - {{ reserva.horario?.HoraFin || '-' }}
+            </td>
+            <td class="p-3" [ngClass]="{
+              'text-green-400': reserva.estado?.Estado === 'Confirmada',
+              'text-red-400': reserva.estado?.Estado === 'Cancelada',
+              'text-yellow-400': reserva.estado?.Estado === 'Pendiente'
+            }">
+              {{ reserva.estado?.Estado || '-' }}
+            </td>
+            <td class="p-3">
+              <button *ngIf="reserva.estado?.Estado !== 'Cancelada'"
+                (click)="cancelarReserva(reserva.IDReserva)"
+                class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded transition">
+                Cancelar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Paginación -->
-    <div class="mt-2 flex justify-end gap-4 items-center text-sm">
+    <div class="mt-4 flex flex-wrap justify-between sm:justify-end gap-4 items-center text-sm">
       <button (click)="anteriorPagina(grupo.clase)"
-              [disabled]="paginasPorClase[grupo.clase] <= 1"
-              class="px-4 py-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-40">
+        [disabled]="paginasPorClase[grupo.clase] <= 1"
+        class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50 transition">
         ← Anterior
       </button>
 
       <span>Página {{ paginasPorClase[grupo.clase] || 1 }}</span>
 
       <button (click)="siguientePagina(grupo.clase, grupo.items.length)"
-              class="px-4 py-1 rounded bg-gray-700 hover:bg-gray-600">
+        class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 transition">
         Siguiente →
       </button>
     </div>

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
   imports: [CommonModule, RouterModule]
 })
 export class DashboardComponent implements OnInit {
+    mostrarMenu: boolean = false;
 
   rol: string | null = null;
 
