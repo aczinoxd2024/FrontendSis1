@@ -1,0 +1,67 @@
+<div class="text-center text-white p-4 max-w-xl mx-auto">
+  <h2 class="text-3xl font-bold mb-6 text-rose-500">Escaneo de Asistencia</h2>
+
+  <!-- Botón para cambiar entre entrada/salida -->
+  <button
+    (click)="cambiarModo()"
+    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg mb-6 transition-all shadow-lg hover:scale-105"
+  >
+    Cambiar a {{ modo === 'entrada' ? 'Salida' : 'Entrada' }}
+  </button>
+
+  <p class="mb-4 text-lg">
+    Modo actual:
+    <span class="font-bold" [ngClass]="{
+      'text-green-400': modo === 'entrada',
+      'text-yellow-400': modo === 'salida'
+    }">
+      {{ modo.toUpperCase() }}
+    </span>
+  </p>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="scannerError" class="text-red-400 bg-red-800/20 p-2 rounded-lg mb-4">
+    {{ scannerError }}
+  </div>
+
+  <!-- Selector de cámara -->
+<div *ngIf="availableDevices.length > 1" class="mb-6 flex justify-center items-center gap-2">
+  <label for="deviceSelect" class="text-sm">Seleccionar cámara:</label>
+  <select
+    id="deviceSelect"
+    [(ngModel)]="selectedDeviceId"
+    class="bg-gray-900 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none max-w-xs overflow-hidden truncate"
+  >
+    <option
+      *ngFor="let device of availableDevices"
+      [value]="device.deviceId"
+      [selected]="device.deviceId === selectedDeviceId"
+    >
+      {{ device.label || 'Cámara ' + device.deviceId }}
+    </option>
+  </select>
+</div>
+
+
+  <!-- Lector QR con altura forzada -->
+  <div
+    class="rounded-lg overflow-hidden border-2 border-blue-500 shadow-xl max-w-full"
+    style="width: 100%; max-width: 500px; height: 320px; margin: 0 auto;"
+  >
+   <zxing-scanner
+  [device]="selectedDeviceId"
+  (scanSuccess)="onCodeResult($event)"
+  (camerasFound)="onCamerasFound($event)"
+  (scanError)="onScanError($event)"
+  [formats]="['QR_CODE']"
+></zxing-scanner>
+
+
+
+  </div>
+
+  <!-- Resultado escaneado -->
+  <div *ngIf="resultadoQR" class="mt-6 text-green-400 font-semibold">
+    Último CI escaneado: {{ resultadoQR }}
+  </div>
+</div>

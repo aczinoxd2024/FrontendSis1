@@ -1,0 +1,27 @@
+<div class="max-w-md mx-auto bg-gray-800 p-6 rounded-xl shadow-lg text-white text-center space-y-4 animate-fade-in">
+  <h2 class="text-2xl font-bold text-rose-400">Tarjeta de Asistencia</h2>
+
+  <div *ngIf="datos; else errorContent">
+    <p><strong>CI:</strong> {{ datos.ci }}</p>
+    <p><strong>Nombre:</strong> {{ datos.nombre }}</p>
+    <p><strong>Cargo:</strong> {{ datos.cargo }}</p>
+    <p><strong>Fecha:</strong> {{ datos.fecha }}</p>
+
+    <div *ngIf="datos.horario?.length" class="mt-2">
+      <p class="font-semibold">Horario de Hoy:</p>
+      <ul class="text-sm space-y-1 mt-1">
+        <li *ngFor="let h of datos.horario">🕒 {{ h.horaInicio }} - {{ h.horaFin }}</li>
+      </ul>
+    </div>
+
+    <img
+      [src]="qrUrl"
+      alt="Código QR de asistencia"
+      class="mx-auto mt-6 w-40 h-40 border-2 border-white rounded-lg shadow-md"
+    />
+  </div>
+
+  <ng-template #errorContent>
+    <p class="text-red-400 text-sm italic">{{ error }}</p>
+  </ng-template>
+</div>

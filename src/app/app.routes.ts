@@ -105,6 +105,22 @@ export const routes: Routes = [
           import('./Paginas/dashboard/dashboard-recepcionista/comprobantes-recepcionista/comprobantes-recepcionista.component').then((m) => m.ComprobantesRecepcionistaComponent),
       },
       {
+  path: 'escanear-asistencia',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-recepcionista/escanear-asistencia/escanear-asistencia.component')
+      .then((m) => m.EscanearAsistenciaComponent),
+  canActivate: [recepcionistaGuard],
+},
+{
+  path: 'tarjeta-asistencia',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-recepcionista/tarjeta-asistencia/tarjeta-asistencia-recepcionista.component')
+      .then((m) => m.TarjetaAsistenciaRecepcionistaComponent),
+  canActivate: [recepcionistaGuard],
+},
+
+
+      {
   path: 'agenda',
   loadComponent: () =>
     import('./Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component').then((m) => m.AgendaReservasAdminComponent),

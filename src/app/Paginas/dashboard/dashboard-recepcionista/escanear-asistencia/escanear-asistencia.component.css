@@ -1,0 +1,21 @@
+zxing-scanner {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  height: 320px;
+  margin: 0 auto;
+  background: black;
+  border: 2px solid #2563eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 👇 Forzar canvas/video internos a ocupar el contenedor */
+zxing-scanner video,
+zxing-scanner canvas {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+}
