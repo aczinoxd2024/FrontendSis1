@@ -137,6 +137,13 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: 'seguimiento',
+        loadComponent: () =>
+          import('./Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component')
+            .then((m) => m.SeguimientoClienteComponent),
+      },
+
+      {
         path: 'mis-clases',
         loadComponent: () =>
           import('./Paginas/dashboard/dashboard-instructor/mis-clases/mis-clases.component').then((m) => m.MisClasesComponent),

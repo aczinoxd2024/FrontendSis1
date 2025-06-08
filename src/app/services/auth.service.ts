@@ -16,18 +16,25 @@ export class AuthService {
    * Inicia sesión enviando las credenciales al backend
    */
   login(correo: string, password: string, rol: string) {
-    return this.http.post<any>(`${this.apiUrl}/login`, {
-      correo,
-      password,
-      rol
-    }).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.access_token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        localStorage.setItem('rol', response.user.rol);
-      })
-    );
-  }
+  return this.http.post<any>(`${this.apiUrl}/login`, {
+    correo,
+    password,
+    rol
+  }).pipe(
+    tap(response => {
+      localStorage.setItem('token', response.access_token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('rol', response.user.rol);
+
+      // ✅ Guardar el CI de la persona logueada (Instructor, Cliente, etc.)
+      const ci = response.user.ci || response.user.idPersona;
+      if (ci) {
+        localStorage.setItem('ci', ci);
+      }
+    })
+  );
+}
+
 
   /**
    * Cierra la sesión llamando al backend para registrar en bitácora

@@ -1,15 +1,28 @@
-<div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-6">
-  <header class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">Panel del Instructor</h1>
+<div class="min-h-screen flex bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
 
-    <a
-      routerLink="mis-clases"
-      class="bg-ef4444 hover:bg-red-700 text-white px-4 py-2 rounded transition"
-    >
-      Ver Mis Clases
-    </a>
-  </header>
+  <!-- Sidebar izquierdo -->
+  <div class="w-64 bg-slate-900 text-white p-6">
+    <h2 class="text-xl font-bold mb-6 text-red-500">Menú Principal</h2>
+    <ul class="space-y-3">
+      <li><a routerLink="seguimiento" class="hover:text-red-400">📋 Seguimiento Físico</a></li>
+      <li><a routerLink="mis-clases" class="hover:text-red-400">🧘 Mis Clases</a></li>
+    </ul>
+  </div>
 
-  <!-- Rutas hijas como 'mis-clases' se mostrarán aquí -->
-  <router-outlet></router-outlet>
+  <!-- Contenido principal -->
+  <div class="flex-1 p-6">
+    <header class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold">Panel del Instructor</h1>
+      <a
+        routerLink="mis-clases"
+        class="bg-ef4444 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+      >
+        Ver Mis Clases
+      </a>
+    </header>
+
+    <!-- Aquí se mostrará el componente hijo -->
+    <router-outlet></router-outlet>
+  </div>
 </div>
+
