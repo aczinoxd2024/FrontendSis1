@@ -114,7 +114,7 @@ export const routes: Routes = [
 {
   path: 'tarjeta-asistencia',
   loadComponent: () =>
-    import('./Paginas/dashboard/dashboard-recepcionista/tarjeta-asistencia/tarjeta-asistencia-recepcionista.component')
+    import('./Paginas/tarjeta-asistencia/tarjeta-asistencia.component')
       .then((m) => m.TarjetaAsistenciaRecepcionistaComponent),
   canActivate: [recepcionistaGuard],
 },
@@ -142,6 +142,12 @@ export const routes: Routes = [
           import('./Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component')
             .then((m) => m.SeguimientoClienteComponent),
       },
+      {
+        path: 'tarjeta-asistencia',
+  loadComponent: () =>
+    import('./Paginas/tarjeta-asistencia/tarjeta-asistencia.component')
+      .then((m) => m.TarjetaAsistenciaRecepcionistaComponent),
+},
 
       {
         path: 'mis-clases',
