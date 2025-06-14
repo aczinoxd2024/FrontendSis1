@@ -1,6 +1,7 @@
+<!-- Asistencias de Clientes -->
 <h2 class="text-2xl font-semibold text-rose-400 mb-4">📋 Asistencias Generales</h2>
 
-<!-- Filtros -->
+<!-- Filtros Clientes -->
 <div class="flex flex-col md:flex-row gap-2 mb-4">
   <input type="text" [(ngModel)]="filtroCliente" (input)="aplicarFiltros()"
          placeholder="Filtrar por cliente" class="p-2 rounded bg-gray-700 text-white w-full md:w-1/3" />
@@ -8,25 +9,19 @@
   <input type="date" [(ngModel)]="filtroFecha" (change)="aplicarFiltros()"
          class="p-2 rounded bg-gray-700 text-white w-full md:w-1/3" />
 
-  <!-- Botón exportar PDF -->
   <button class="border border-red-600 text-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition"
-  (click)="exportarPDF()">
-    <i class="fas fa-file-pdf mr-2"></i> Exportar PDF
-    📄
+          (click)="exportarPDF()">
+    <i class="fas fa-file-pdf mr-2"></i> Exportar PDF 📄
   </button>
-  <!-- Botón exportar Excel -->
-<button class="border border-green-600 text-green-600 px-4 py-2 rounded hover:bg-green-600 hover:text-white transition"
-(click)="exportarExcel()">
-  <i class="fas fa-file-excel mr-2"></i> Exportar Excel 📊
-</button>
+
+  <button class="border border-green-600 text-green-600 px-4 py-2 rounded hover:bg-green-600 hover:text-white transition"
+          (click)="exportarExcel()">
+    <i class="fas fa-file-excel mr-2"></i> Exportar Excel 📊
+  </button>
 </div>
 
-<!-- Mostrar mensaje si no hay asistencias -->
-<div *ngIf="asistenciasFiltradas.length === 0" class="text-gray-400">
-  No se encontraron asistencias.
-</div>
+<div *ngIf="asistenciasFiltradas.length === 0" class="text-gray-400">No se encontraron asistencias.</div>
 
-<!-- Tabla -->
 <table *ngIf="asistenciasFiltradas.length > 0" class="w-full text-sm bg-gray-800 rounded-lg overflow-hidden">
   <thead class="bg-rose-600 text-white">
     <tr>
@@ -46,11 +41,80 @@
   </tbody>
 </table>
 
-<!-- Paginación -->
 <div *ngIf="totalPaginas() > 1" class="mt-4 flex justify-center gap-2">
   <button *ngFor="let pagina of [].constructor(totalPaginas()); let i = index"
           (click)="cambiarPagina(i + 1)"
           [class.bg-rose-600]="paginaActual === i + 1"
+          class="px-3 py-1 rounded bg-gray-700 text-white hover:bg-rose-500">
+    {{ i + 1 }}
+  </button>
+</div>
+
+<!-- SEPARADOR -->
+<hr class="my-10 border-gray-600" />
+
+<!-- Asistencias del Personal -->
+<h2 class="text-2xl font-semibold text-rose-400 mb-4">🪪 Asistencias del Personal</h2>
+
+<!-- Filtros Personal -->
+<div class="flex flex-col md:flex-row gap-2 mb-4">
+  <input type="text" [(ngModel)]="filtroPersonal" (input)="aplicarFiltrosPersonal()"
+         placeholder="Filtrar por nombre o CI" class="p-2 rounded bg-gray-700 text-white w-full md:w-1/3" />
+
+  <input type="date" [(ngModel)]="filtroFechaPersonal" (change)="aplicarFiltrosPersonal()"
+         class="p-2 rounded bg-gray-700 text-white w-full md:w-1/3" />
+
+  <button class="border border-red-600 text-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition"
+          (click)="exportarPDFPersonal()">
+    <i class="fas fa-file-pdf mr-2"></i> Exportar PDF 📄
+  </button>
+
+  <button class="border border-green-600 text-green-600 px-4 py-2 rounded hover:bg-green-600 hover:text-white transition"
+          (click)="exportarExcelPersonal()">
+    <i class="fas fa-file-excel mr-2"></i> Exportar Excel 📊
+  </button>
+</div>
+
+<div *ngIf="asistenciasPersonalFiltradas.length === 0" class="text-gray-400">No se encontraron asistencias del personal.</div>
+
+<table *ngIf="asistenciasPersonalFiltradas.length > 0" class="w-full text-sm bg-gray-800 rounded-lg overflow-hidden">
+  <thead class="bg-rose-600 text-white">
+    <tr>
+      <th class="p-2 text-left">#</th>
+      <th class="p-2 text-left">CI</th>
+      <th class="p-2 text-left">Nombre</th>
+      <th class="p-2 text-left">Fecha</th>
+      <th class="p-2 text-left">Hora Entrada</th>
+      <th class="p-2 text-left">Hora Salida</th>
+      <th class="p-2 text-left">Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let asistencia of obtenerAsistenciasPersonalPaginadas(); let i = index"
+        class="border-b border-gray-700 hover:bg-gray-700/50">
+      <td class="p-2">{{ (paginaActualPersonal - 1) * elementosPorPagina + i + 1 }}</td>
+      <td class="p-2">{{ asistencia.ci }}</td>
+      <td class="p-2">{{ asistencia.persona?.Nombre }} {{ asistencia.persona?.Apellido }}</td>
+      <td class="p-2">{{ asistencia.fecha | date: 'fullDate' }}</td>
+      <td class="p-2">{{ asistencia.horaEntrada || '-' }}</td>
+      <td class="p-2">{{ asistencia.horaSalida || '-' }}</td>
+      <td class="p-2">
+        <span [ngClass]="{
+          'text-green-400': asistencia.estado === 'Puntual',
+          'text-yellow-400': asistencia.estado === 'Con Retraso',
+          'text-red-400': asistencia.estado === 'Inasistencia'
+        }">
+          {{ asistencia.estado }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="totalPaginasPersonal() > 1" class="mt-4 flex justify-center gap-2">
+  <button *ngFor="let pagina of [].constructor(totalPaginasPersonal()); let i = index"
+          (click)="cambiarPaginaPersonal(i + 1)"
+          [class.bg-rose-600]="paginaActualPersonal === i + 1"
           class="px-3 py-1 rounded bg-gray-700 text-white hover:bg-rose-500">
     {{ i + 1 }}
   </button>
