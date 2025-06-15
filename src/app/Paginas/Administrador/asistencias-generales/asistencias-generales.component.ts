@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AsistenciaService } from '../../../services/asistencia.service';
+import { PersonalService } from '../../../services/personal.service';
 import { FormsModule } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { HttpClient} from '@angular/common/http';
+import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -22,21 +23,29 @@ export class AsistenciasGeneralesComponent {
   asistenciasFiltradas: any[] = [];
   error = '';
 
-  // Filtros
+  // Filtros clientes
   filtroCliente = '';
   filtroFecha = '';
-
-  // Paginación
   paginaActual = 1;
   elementosPorPagina = 10;
 
+  // Filtros personal
+  asistenciasPersonal: any[] = [];
+  asistenciasPersonalFiltradas: any[] = [];
+  filtroPersonal = '';
+  filtroFechaPersonal = '';
+  paginaActualPersonal = 1;
+
   constructor(
     private asistenciaService: AsistenciaService,
+    private personalService: PersonalService,
     private http: HttpClient
   ) {
     this.cargarAsistencias();
+    this.cargarAsistenciasPersonal();
   }
 
+  // CLIENTES
   cargarAsistencias() {
     this.asistenciaService.obtenerHistorialConFechas().pipe(
       catchError(err => {
@@ -45,24 +54,19 @@ export class AsistenciasGeneralesComponent {
         return of([]);
       })
     ).subscribe(data => {
-  console.log('Asistencias recibidas:', data);
-  this.asistencias = data;
-  this.aplicarFiltros();
-});
+      this.asistencias = data;
+      this.aplicarFiltros();
+    });
   }
 
   aplicarFiltros() {
     this.paginaActual = 1;
     const clienteLower = this.filtroCliente.toLowerCase();
-
     this.asistenciasFiltradas = this.asistencias.filter(asistencia => {
       const nombreCompleto = `${asistencia.persona?.Nombre ?? ''} ${asistencia.persona?.Apellido ?? ''}`.toLowerCase();
-       const fechaISO = new Date(asistencia.fecha).toISOString().split('T')[0];
-
-    const fechaCoincide = this.filtroFecha ? fechaISO.startsWith(this.filtroFecha) : true;
-    const clienteCoincide = nombreCompleto.includes(clienteLower);
-
-    return fechaCoincide && clienteCoincide;
+      const fechaISO = new Date(asistencia.fecha).toISOString().split('T')[0];
+      return (!this.filtroFecha || fechaISO.startsWith(this.filtroFecha)) &&
+             nombreCompleto.includes(clienteLower);
     });
   }
 
@@ -79,43 +83,111 @@ export class AsistenciasGeneralesComponent {
     this.paginaActual = pagina;
   }
 
-   exportarPDF(): void {
-  const doc = new jsPDF();
-  doc.setFontSize(18);
-  doc.text('Historial de Asistencias', 14, 20);
-
-  let finalY = 30;
-
-  // Suponiendo que 'asistencias' es tu array cargado con datos
-  // Aquí construimos la tabla para el PDF:
-  autoTable(doc, {
-    startY: finalY,
-    head: [['#', 'Nombre Cliente', 'Fecha', 'Hora Entrada']],
-    body:this.asistenciasFiltradas.map((a: any, i: number) => [
-      i + 1,
-      `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
-      new Date(a.fecha).toLocaleDateString(),
-      a.horaEntrada || '',
-    ]),
-    theme: 'grid',
-    styles: { fontSize: 10 },
-  });
-
-  doc.save('historial_asistencias.pdf');
+  exportarPDF(): void {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text('Historial de Asistencias', 14, 20);
+    autoTable(doc, {
+      startY: 30,
+      head: [['#', 'Nombre Cliente', 'Fecha', 'Hora Entrada']],
+      body: this.asistenciasFiltradas.map((a, i) => [
+        i + 1,
+        `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
+        new Date(a.fecha).toLocaleDateString(),
+        a.horaEntrada || '',
+      ]),
+      theme: 'grid',
+      styles: { fontSize: 10 },
+    });
+    doc.save('historial_asistencias.pdf');
   }
+
   exportarExcel(): void {
-  const data = this.asistencias.map((a: any, i: number) => ({
-    '#': i + 1,
-    'Nombre Cliente': `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
-    'Fecha': new Date(a.fecha).toLocaleDateString(),
-    'Hora Entrada': a.horaEntrada || '',
-  }));
+    const data = this.asistenciasFiltradas.map((a, i) => ({
+      '#': i + 1,
+      'Nombre Cliente': `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
+      'Fecha': new Date(a.fecha).toLocaleDateString(),
+      'Hora Entrada': a.horaEntrada || '',
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = { Sheets: { 'Asistencias': worksheet }, SheetNames: ['Asistencias'] };
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'historial_asistencias.xlsx');
+  }
 
-  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
-  const workbook: XLSX.WorkBook = { Sheets: { 'Asistencias': worksheet }, SheetNames: ['Asistencias'] };
-  const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+  // PERSONAL
+  cargarAsistenciasPersonal() {
+    this.personalService.obtenerHistorialPersonal().pipe(
+      catchError(err => {
+        console.error('Error al cargar asistencia del personal:', err);
+        return of([]);
+      })
+    ).subscribe(data => {
+      this.asistenciasPersonal = data;
+      this.aplicarFiltrosPersonal();
+    });
+  }
 
-  FileSaver.saveAs(blob, 'historial_asistencias.xlsx');
-}
+  aplicarFiltrosPersonal() {
+    this.paginaActualPersonal = 1;
+    const texto = this.filtroPersonal.toLowerCase();
+    this.asistenciasPersonalFiltradas = this.asistenciasPersonal.filter(asistencia => {
+      const nombre = `${asistencia.persona?.Nombre ?? ''} ${asistencia.persona?.Apellido ?? ''}`.toLowerCase();
+      const ci = asistencia.ci?.toLowerCase() ?? '';
+      const fechaISO = new Date(asistencia.fecha).toISOString().split('T')[0];
+      return (!this.filtroFechaPersonal || fechaISO.startsWith(this.filtroFechaPersonal)) &&
+             (nombre.includes(texto) || ci.includes(texto));
+    });
+  }
+
+  obtenerAsistenciasPersonalPaginadas() {
+    const inicio = (this.paginaActualPersonal - 1) * this.elementosPorPagina;
+    return this.asistenciasPersonalFiltradas.slice(inicio, inicio + this.elementosPorPagina);
+  }
+
+  totalPaginasPersonal(): number {
+    return Math.ceil(this.asistenciasPersonalFiltradas.length / this.elementosPorPagina);
+  }
+
+  cambiarPaginaPersonal(pagina: number) {
+    this.paginaActualPersonal = pagina;
+  }
+
+  exportarPDFPersonal(): void {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text('Asistencia del Personal', 14, 20);
+    autoTable(doc, {
+      startY: 30,
+      head: [['#', 'CI', 'Nombre', 'Fecha', 'Hora Entrada', 'Hora Salida', 'Estado']],
+      body: this.asistenciasPersonalFiltradas.map((a, i) => [
+        i + 1,
+        a.ci || '',
+        `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
+        new Date(a.fecha).toLocaleDateString(),
+        a.horaEntrada || '-',
+        a.horaSalida || '-',
+        a.estado || '-',
+      ]),
+      theme: 'grid',
+      styles: { fontSize: 10 },
+    });
+    doc.save('asistencia_personal.pdf');
+  }
+
+  exportarExcelPersonal(): void {
+    const data = this.asistenciasPersonalFiltradas.map((a, i) => ({
+      '#': i + 1,
+      'CI': a.ci || '',
+      'Nombre': `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
+      'Fecha': new Date(a.fecha).toLocaleDateString(),
+      'Hora Entrada': a.horaEntrada || '-',
+      'Hora Salida': a.horaSalida || '-',
+      'Estado': a.estado || '-',
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = { Sheets: { 'Asistencias': worksheet }, SheetNames: ['Asistencias'] };
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'asistencia_personal.xlsx');
+  }
 }
