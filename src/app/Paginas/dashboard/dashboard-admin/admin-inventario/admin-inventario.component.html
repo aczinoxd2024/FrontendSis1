@@ -1,5 +1,6 @@
 <div class="p-6 text-white">
   <h2 class="text-2xl font-semibold mb-4">Inventario General</h2>
+
   <!-- Mensaje de éxito -->
   <div *ngIf="mensajeExito" class="bg-green-600 text-white p-3 rounded mb-4">
     {{ mensajeExito }}
@@ -114,13 +115,6 @@
     class="bg-gray-900 text-white p-6 rounded-lg w-full max-w-md shadow-lg border border-gray-700"
   >
     <h3 class="text-xl font-semibold mb-4">Registrar Nuevo Ítem</h3>
-    <!-- Mensaje dentro del modal -->
-    <div *ngIf="mensajeExito" class="bg-green-600 text-white p-2 rounded mb-3">
-      {{ mensajeExito }}
-    </div>
-    <div *ngIf="mensajeError" class="bg-red-600 text-white p-2 rounded mb-3">
-      {{ mensajeError }}
-    </div>
 
     <form (ngSubmit)="guardarNuevoItem()">
       <input
@@ -140,14 +134,13 @@
       ></textarea>
       <input
         type="number"
+        min="1"
         placeholder="Cantidad"
         [(ngModel)]="nuevoItem.cantidadActual"
         name="cantidadActual"
-        min="1"
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
       />
-
       <select
         [ngModel]="nuevoItem.estadoId"
         (ngModelChange)="nuevoItem.estadoId = +$event"
@@ -156,7 +149,7 @@
         required
       >
         <option [value]="''" disabled selected>Selecciona un estado</option>
-        <option *ngFor="let estado of estados" [value]="estado.id">
+        <option *ngFor="let estado of estadosFiltrados" [value]="estado.id">
           {{ estado.estado }}
         </option>
       </select>
@@ -189,26 +182,19 @@
     class="bg-gray-900 text-white p-6 rounded-lg w-full max-w-md shadow-lg border border-gray-700"
   >
     <h3 class="text-xl font-semibold mb-4">Editar Ítem</h3>
-    <!-- Mensajes dentro del modal editar -->
-    <div *ngIf="mensajeExito" class="bg-green-600 text-white p-2 rounded mb-3">
-      {{ mensajeExito }}
-    </div>
-    <div *ngIf="mensajeError" class="bg-red-600 text-white p-2 rounded mb-3">
-      {{ mensajeError }}
-    </div>
 
-    <form (ngSubmit)="guardarEdicionItem()">
+    <form (ngSubmit)="guardarEdicion()">
       <input
         type="text"
         placeholder="Nombre"
-        [(ngModel)]="itemSeleccionado.nombre"
+        [(ngModel)]="itemAEditar.nombre"
         name="editarNombre"
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
       />
       <textarea
         placeholder="Descripción"
-        [(ngModel)]="itemSeleccionado.descripcion"
+        [(ngModel)]="itemAEditar.descripcion"
         name="editarDescripcion"
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
@@ -217,20 +203,20 @@
         type="number"
         min="1"
         placeholder="Cantidad"
-        [(ngModel)]="itemSeleccionado.cantidadActual"
+        [(ngModel)]="itemAEditar.cantidadActual"
         name="editarCantidad"
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
       />
       <select
-        [ngModel]="itemSeleccionado.estado?.id"
-        (ngModelChange)="itemSeleccionado.estado.id = +$event"
+        [ngModel]="itemAEditar.estado?.id"
+        (ngModelChange)="itemAEditar.estado.id = +$event"
         name="editarEstado"
         class="w-full mb-4 p-2 rounded bg-gray-800 border border-gray-600"
         required
       >
         <option [value]="''" disabled>Selecciona un estado</option>
-        <option *ngFor="let estado of estados" [value]="estado.id">
+        <option *ngFor="let estado of estadosFiltrados" [value]="estado.id">
           {{ estado.estado }}
         </option>
       </select>

@@ -11,6 +11,8 @@ import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
   styleUrls: ['./admin-inventario.component.css'],
 })
 export class AdminInventarioComponent implements OnInit {
+  private apiUrl = 'https://web-production-d581.up.railway.app/api';
+
   filtros = {
     nombre: '',
     estadoId: '',
@@ -19,9 +21,23 @@ export class AdminInventarioComponent implements OnInit {
   };
 
   estados: any[] = [];
+  estadosFiltrados: any[] = [];
   inventario: any[] = [];
+
   mensajeExito: string | null = null;
   mensajeError: string | null = null;
+
+  modalCrearAbierto = false;
+  modalEditarAbierto = false;
+
+  nuevoItem = {
+    nombre: '',
+    descripcion: '',
+    cantidadActual: null,
+    estadoId: '',
+  };
+
+  itemAEditar: any = null;
 
   constructor(private http: HttpClient) {}
 
@@ -31,15 +47,15 @@ export class AdminInventarioComponent implements OnInit {
   }
 
   obtenerEstados(): void {
-    this.http.get<any[]>('/api/estado-inventario').subscribe({
-      next: (data) => {
-        // Filtramos para mostrar solo "Buen estado" y "Mal estado"
-        this.estados = data.filter((estado) => estado.estado !== 'Dañado');
+    this.http.get<any[]>(`${this.apiUrl}/estado-inventario`).subscribe(
+      (data) => {
+        this.estados = data;
+        this.estadosFiltrados = data.filter((e) => e.estado !== 'Dañado');
       },
-      error: (err) => {
-        console.error('Error al obtener estados:', err);
-      },
-    });
+      (error) => {
+        console.error('Error al obtener estados:', error);
+      }
+    );
   }
 
   obtenerInventario(): void {
@@ -53,8 +69,8 @@ export class AdminInventarioComponent implements OnInit {
     if (this.filtros.cantidadMax)
       params = params.set('cantidadMax', this.filtros.cantidadMax);
 
-    this.http.get('/api/inventario', { params }).subscribe({
-      next: (data: any) => (this.inventario = data),
+    this.http.get<any[]>(`${this.apiUrl}/inventario`, { params }).subscribe({
+      next: (data) => (this.inventario = data),
       error: (err) => console.error('Error al obtener inventario:', err),
     });
   }
@@ -69,23 +85,18 @@ export class AdminInventarioComponent implements OnInit {
     this.obtenerInventario();
   }
 
-  modalCrearAbierto = false;
-  modalEditarAbierto = false;
-  itemSeleccionado: any = null;
-
-  nuevoItem = {
-    nombre: '',
-    descripcion: '',
-    cantidadActual: null,
-    estadoId: '',
-  };
-
   crearItem() {
+    this.nuevoItem = {
+      nombre: '',
+      descripcion: '',
+      cantidadActual: null,
+      estadoId: '',
+    };
     this.modalCrearAbierto = true;
   }
 
   guardarNuevoItem() {
-    this.http.post('/api/inventario', this.nuevoItem).subscribe({
+    this.http.post(`${this.apiUrl}/inventario`, this.nuevoItem).subscribe({
       next: () => {
         this.mensajeExito = '¡Ítem agregado con éxito!';
         this.mensajeError = null;
@@ -104,29 +115,22 @@ export class AdminInventarioComponent implements OnInit {
   }
 
   editarItem(item: any) {
-    this.itemSeleccionado = JSON.parse(JSON.stringify(item)); // Clonar para evitar modificar directo
+    this.itemAEditar = { ...item };
     this.modalEditarAbierto = true;
   }
 
-  guardarEdicionItem() {
-    if (this.itemSeleccionado.cantidadActual < 1) {
-      this.mensajeError = 'La cantidad debe ser mayor a 0.';
-      this.mensajeExito = null;
-      return;
-    }
-
-    const id = this.itemSeleccionado.idItem;
-
+  guardarEdicion() {
+    const id = this.itemAEditar.idItem;
     const body = {
-      nombre: this.itemSeleccionado.nombre,
-      descripcion: this.itemSeleccionado.descripcion,
-      cantidadActual: this.itemSeleccionado.cantidadActual,
-      estadoId: this.itemSeleccionado.estado.id,
+      nombre: this.itemAEditar.nombre,
+      descripcion: this.itemAEditar.descripcion,
+      cantidadActual: this.itemAEditar.cantidadActual,
+      estadoId: this.itemAEditar.estado?.id,
     };
 
-    this.http.put(`/api/inventario/${id}`, body).subscribe({
+    this.http.put(`${this.apiUrl}/inventario/${id}`, body).subscribe({
       next: () => {
-        this.mensajeExito = 'Ítem actualizado con éxito';
+        this.mensajeExito = 'Ítem actualizado correctamente.';
         this.mensajeError = null;
         this.modalEditarAbierto = false;
         this.obtenerInventario();
@@ -134,7 +138,8 @@ export class AdminInventarioComponent implements OnInit {
         setTimeout(() => (this.mensajeExito = null), 4000);
       },
       error: (err) => {
-        this.mensajeError = err.error?.message || 'Error al actualizar ítem.';
+        this.mensajeError =
+          err.error?.message || 'Error al actualizar el ítem.';
         this.mensajeExito = null;
 
         setTimeout(() => (this.mensajeError = null), 5000);
@@ -143,28 +148,24 @@ export class AdminInventarioComponent implements OnInit {
   }
 
   darDeBaja(item: any) {
-    const confirmacion = confirm(
-      `¿Estás seguro de que deseas dar de baja el ítem "${item.nombre}"? Esta acción no se puede deshacer.`
-    );
+    this.http
+      .put(`${this.apiUrl}/inventario/${item.idItem}/baja`, {})
+      .subscribe({
+        next: () => {
+          this.mensajeExito = `Ítem "${item.nombre}" dado de baja correctamente.`;
+          this.mensajeError = null;
+          this.obtenerInventario();
 
-    if (!confirmacion) return;
+          setTimeout(() => (this.mensajeExito = null), 4000);
+        },
+        error: (err) => {
+          this.mensajeError =
+            err.error?.message || 'Error al dar de baja el ítem.';
+          this.mensajeExito = null;
 
-    this.http.put(`/api/inventario/${item.idItem}/baja`, {}).subscribe({
-      next: () => {
-        this.mensajeExito = `Ítem "${item.nombre}" dado de baja correctamente.`;
-        this.mensajeError = null;
-        this.obtenerInventario();
-
-        setTimeout(() => (this.mensajeExito = null), 4000);
-      },
-      error: (err) => {
-        this.mensajeError =
-          err.error?.message || 'Error al dar de baja el ítem.';
-        this.mensajeExito = null;
-
-        setTimeout(() => (this.mensajeError = null), 5000);
-      },
-    });
+          setTimeout(() => (this.mensajeError = null), 5000);
+        },
+      });
   }
 
   inventarioFiltrado() {
