@@ -58,6 +58,13 @@ export const routes: Routes = [
         import('./Paginas/Administrador/bitacora/bitacora.component').then((m) => m.BitacoraComponent),
     },
     {
+      path: 'gestionar-personal',
+      loadComponent: () =>
+        import('./Paginas/Administrador/gestion-personal/gestion-personal.component')
+        .then((m) => m.GestionPersonalComponent),
+    },
+
+    {
       path: 'asistencias-generales',
       loadComponent: () =>
         import('./Paginas/Administrador/asistencias-generales/asistencias-generales.component').then((m) => m.AsistenciasGeneralesComponent),
