@@ -22,6 +22,13 @@ export class PersonalService {
       headers: this.getHeaders()
     });
   }
+    // ✅ NUEVO: Obtener historial de asistencias del personal
+  obtenerHistorialPersonal(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/asistencias/hoy`, {
+
+      headers: this.getHeaders()
+    });
+  }
 
   // 🔹 Actualizar personal
   actualizarPersonal(ci: string, data: any): Observable<any> {

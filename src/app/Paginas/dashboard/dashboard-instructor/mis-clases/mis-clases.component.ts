@@ -10,7 +10,6 @@ import { ChangeDetectorRef } from '@angular/core';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './mis-clases.component.html',
-  styleUrls: ['./mis-clases.component.css']
 })
 export class MisClasesComponent implements OnInit {
   clases: any[] = [];

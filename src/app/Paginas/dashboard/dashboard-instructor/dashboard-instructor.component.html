@@ -1,28 +1,83 @@
-<div class="min-h-screen flex bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+<!-- Fondo degradado -->
+<div class="fixed inset-0 -z-10 bg-gradient-to-br from-gray-900 via-gray-800 to-black bg-[length:300%_300%] animate-gradientFlow"></div>
 
-  <!-- Sidebar izquierdo -->
-  <div class="w-64 bg-slate-900 text-white p-6">
-    <h2 class="text-xl font-bold mb-6 text-red-500">Menú Principal</h2>
-    <ul class="space-y-3">
-      <li><a routerLink="seguimiento" class="hover:text-red-400">📋 Seguimiento Físico</a></li>
-      <li><a routerLink="mis-clases" class="hover:text-red-400">🧘 Mis Clases</a></li>
-    </ul>
-  </div>
+<!-- Contenedor principal -->
+<div class="flex flex-col min-h-screen text-white">
 
-  <!-- Contenido principal -->
-  <div class="flex-1 p-6">
-    <header class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold">Panel del Instructor</h1>
-      <a
-        routerLink="mis-clases"
-        class="bg-ef4444 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+  <!-- Header -->
+  <header class="flex justify-between items-center px-4 py-3 bg-gray-900 shadow-md z-10">
+    <div class="flex items-center gap-4">
+      <button class="md:hidden focus:outline-none" (click)="mostrarMenu = !mostrarMenu">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path *ngIf="!mostrarMenu" d="M4 6h16M4 12h16M4 18h16" />
+          <path *ngIf="mostrarMenu" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <h1 class="text-lg md:text-xl font-bold text-rose-500">
+        Instructor - <span class="text-white">GoFit</span>
+      </h1>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <span class="text-sm hidden sm:inline">👤 {{ nombreUsuario }}</span>
+      <button
+        (click)="logout()"
+        class="bg-rose-600 hover:bg-rose-700 px-3 py-1.5 rounded transition hover:scale-105 shadow text-sm"
       >
-        Ver Mis Clases
-      </a>
-    </header>
+        Cerrar Sesión
+      </button>
+    </div>
+  </header>
 
-    <!-- Aquí se mostrará el componente hijo -->
-    <router-outlet></router-outlet>
+  <!-- Cuerpo: Sidebar + contenido -->
+  <div class="flex flex-1">
+
+    <!-- Sidebar -->
+    <aside class="hidden md:block w-64 bg-slate-900 p-6 space-y-4 border-r border-gray-700">
+      <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú Principal</h2>
+      <nav class="space-y-2 text-sm">
+        <a routerLink="seguimiento" routerLinkActive="text-rose-400 font-bold"
+           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Seguimiento Físico</a>
+        <a routerLink="mis-clases" routerLinkActive="text-rose-400 font-bold"
+           class="block px-4 py-2 rounded hover:bg-gray-700 transition">🧘 Mis Clases</a>
+        <a (click)="refrescarTarjeta()" class="block px-4 py-2 rounded hover:bg-gray-700 transition cursor-pointer">
+          🪪 Mi Tarjeta Asistencia
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Sidebar móvil -->
+    <aside *ngIf="mostrarMenu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-gray-900 p-6 space-y-4 z-50 shadow-xl border-r border-gray-700">
+      <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú</h2>
+      <nav class="space-y-2 text-sm">
+        <a routerLink="seguimiento" routerLinkActive="text-rose-400 font-bold"
+           (click)="mostrarMenu = false"
+           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Seguimiento Físico</a>
+        <a routerLink="mis-clases" routerLinkActive="text-rose-400 font-bold"
+           (click)="mostrarMenu = false"
+           class="block px-4 py-2 rounded hover:bg-gray-700 transition">🧘 Mis Clases</a>
+        <a (click)="refrescarTarjeta(); mostrarMenu = false"
+           class="block px-4 py-2 rounded hover:bg-gray-700 transition cursor-pointer">🪪 Mi Tarjeta Asistencia</a>
+      </nav>
+    </aside>
+
+    <!-- Contenido dinámico -->
+    <main class="flex-1 p-4 md:p-6 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
   </div>
 </div>
 
+<!-- Estilo animado de fondo -->
+<style>
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .animate-gradientFlow {
+    animation: gradientFlow 15s ease infinite;
+  }
+</style>
