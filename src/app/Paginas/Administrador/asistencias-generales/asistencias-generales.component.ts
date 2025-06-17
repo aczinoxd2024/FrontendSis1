@@ -153,41 +153,45 @@ export class AsistenciasGeneralesComponent {
     this.paginaActualPersonal = pagina;
   }
 
-  exportarPDFPersonal(): void {
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text('Asistencia del Personal', 14, 20);
-    autoTable(doc, {
-      startY: 30,
-      head: [['#', 'CI', 'Nombre', 'Fecha', 'Hora Entrada', 'Hora Salida', 'Estado']],
-      body: this.asistenciasPersonalFiltradas.map((a, i) => [
-        i + 1,
-        a.ci || '',
-        `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
-        new Date(a.fecha).toLocaleDateString(),
-        a.horaEntrada || '-',
-        a.horaSalida || '-',
-        a.estado || '-',
-      ]),
-      theme: 'grid',
-      styles: { fontSize: 10 },
-    });
-    doc.save('asistencia_personal.pdf');
-  }
+exportarPDFPersonal(): void {
+  const doc = new jsPDF();
+  doc.setFontSize(18);
+  doc.text('Asistencia del Personal', 14, 20);
+  autoTable(doc, {
+    startY: 30,
+    head: [['#', 'CI', 'Nombre', 'Fecha', 'Hora Entrada', 'Hora Salida', 'Estado', 'Registrado por']],
+    body: this.asistenciasPersonalFiltradas.map((a, i) => [
+      i + 1,
+      a.ci || '',
+      `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
+      new Date(a.fecha).toLocaleDateString(),
+      a.horaEntrada || '-',
+      a.horaSalida || '-',
+      a.estado || '-',
+      `${a.responsable?.idPersona?.Nombre || ''} ${a.responsable?.idPersona?.Apellido || ''}`
+    ]),
+    theme: 'grid',
+    styles: { fontSize: 10 },
+  });
+  doc.save('asistencia_personal.pdf');
+}
+
 
   exportarExcelPersonal(): void {
-    const data = this.asistenciasPersonalFiltradas.map((a, i) => ({
-      '#': i + 1,
-      'CI': a.ci || '',
-      'Nombre': `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
-      'Fecha': new Date(a.fecha).toLocaleDateString(),
-      'Hora Entrada': a.horaEntrada || '-',
-      'Hora Salida': a.horaSalida || '-',
-      'Estado': a.estado || '-',
-    }));
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = { Sheets: { 'Asistencias': worksheet }, SheetNames: ['Asistencias'] };
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'asistencia_personal.xlsx');
-  }
+  const data = this.asistenciasPersonalFiltradas.map((a, i) => ({
+    '#': i + 1,
+    'CI': a.ci || '',
+    'Nombre': `${a.persona?.Nombre || ''} ${a.persona?.Apellido || ''}`,
+    'Fecha': new Date(a.fecha).toLocaleDateString(),
+    'Hora Entrada': a.horaEntrada || '-',
+    'Hora Salida': a.horaSalida || '-',
+    'Estado': a.estado || '-',
+    'Registrado por': `${a.responsable?.idPersona?.Nombre || ''} ${a.responsable?.idPersona?.Apellido || ''}`
+  }));
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = { Sheets: { 'Asistencias': worksheet }, SheetNames: ['Asistencias'] };
+  const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'asistencia_personal.xlsx');
+}
+
 }
