@@ -6,6 +6,8 @@ import { recepcionistaGuard } from './guards/recepcionista.guard';
 // ✅ Rutas con componentes standalone
 import { ReservasHistoricoComponent } from './Paginas/reservas-historico/reservas-historico.component';
 import { AgendaReservasAdminComponent } from './Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component';
+import { SeguimientoClienteComponent } from './Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component';
+import { DashboardClienteComponent } from './Paginas/dashboard/dashboard-cliente/dashboard-cliente/dashboard-cliente.component';
 
 export const routes: Routes = [
   {
@@ -159,6 +161,45 @@ export const routes: Routes = [
 
   // 🧾 CLIENTE
   {
+  path: 'dashboard-cliente',
+  component: DashboardClienteComponent,
+  children: [
+    {
+      path: 'historial',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/historial/historial.component').then(m => m.HistorialReservasComponent),
+    },
+    {
+      path: 'nueva',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/nueva-reserva/nueva-reserva.component').then(m => m.NuevaReservaComponent),
+    },
+    {
+      path: 'mis-reservas',
+      loadComponent: () =>
+        import('./Paginas/Clientes/mis-reservas/mis-reservas-cliente.component').then(m => m.MisReservasClienteComponent),
+    },
+    {
+      path: 'seguimiento',
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component')
+          .then(m => m.SeguimientoClienteComponent),
+    },
+    {
+      path: 'seleccionar-clase',
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-cliente/seleccionar-clase/seleccionar-clase.component')
+          .then(m => m.SeleccionarClaseComponent),
+    },
+    {
+      path: 'asistencia',
+      loadComponent: () =>
+        import('./Paginas/asistencia/asistencia.component')
+          .then(m => m.AsistenciaComponent),
+    },
+  ]
+},
+ /* {               --paque no digan que lo cague ahi estan las otras rutas por si no funciona sus metodos
     path: 'dashboard-cliente',
     loadComponent: () =>
       import('./Paginas/dashboard/dashboard-cliente/dashboard-cliente/dashboard-cliente.component').then((m) => m.DashboardClienteComponent),
@@ -179,6 +220,13 @@ export const routes: Routes = [
           import('./Paginas/Clientes/mis-reservas/mis-reservas-cliente.component').then((m) => m.MisReservasClienteComponent),
       },
       {
+        path: 'dashboard-cliente',
+        component: DashboardClienteComponent,
+        children: [
+          { path: 'seguimiento', loadComponent: () => import('./Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component').then(m => m.SeguimientoClienteComponent) },
+        ]
+      },
+      {
         path: 'seleccionar-clase',
         loadComponent: () =>
           import('./Paginas/dashboard/dashboard-cliente/seleccionar-clase/seleccionar-clase.component').then((m) => m.SeleccionarClaseComponent),
@@ -188,9 +236,10 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/asistencia/asistencia.component').then((m) => m.AsistenciaComponent),
       },
+
     ],
   },
-
+*/
   // 📌 MEMBRESÍAS
   {
     path: 'menbresias',
