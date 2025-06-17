@@ -1,12 +1,22 @@
 <!-- Fondo oscuro y responsive -->
 <div class="min-h-screen flex flex-col md:flex-row bg-gray-900 text-white">
-
   <!-- Header fijo solo visible en móviles -->
-  <header class="md:hidden flex justify-between items-center px-4 py-3 bg-gray-900 shadow-md z-10">
-    <h1 class="text-lg font-bold text-rose-500">Admin - <span class="text-white">GoFit</span></h1>
+  <header
+    class="md:hidden flex justify-between items-center px-4 py-3 bg-gray-900 shadow-md z-10"
+  >
+    <h1 class="text-lg font-bold text-rose-500">
+      Admin - <span class="text-white">GoFit</span>
+    </h1>
     <button (click)="mostrarMenu = !mostrarMenu" class="focus:outline-none">
-      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2"
-           viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        class="w-6 h-6 text-white"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <ng-container *ngIf="!mostrarMenu">
           <path d="M4 6h16M4 12h16M4 18h16" />
         </ng-container>
@@ -18,70 +28,138 @@
   </header>
 
   <!-- Sidebar fijo en escritorio -->
-  <aside class="hidden md:block w-64 bg-gray-900 text-white p-6 space-y-8 border-r border-gray-800 shadow-xl">
+  <aside
+    class="hidden md:block w-64 bg-gray-900 text-white p-6 space-y-8 border-r border-gray-800 shadow-xl"
+  >
     <h2 class="text-2xl font-bold text-rose-500 neon-text mb-4">Panel Admin</h2>
     <nav class="space-y-4">
-      <a routerLink="/dashboard-admin/bitacora" routerLinkActive="bg-gray-800"
-         class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+      <a
+        routerLink="/dashboard-admin/bitacora"
+        routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all"
+      >
         📋 <span>Bitácora</span>
       </a>
-      <a routerLink="/dashboard-admin/eliminar-cliente" routerLinkActive="bg-gray-800"
-         class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+      <a
+        routerLink="/dashboard-admin/eliminar-cliente"
+        routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all"
+      >
         ❌ <span>Deshabilitar Cliente</span>
       </a>
-      <a routerLink="/dashboard-admin/clientes" routerLinkActive="bg-gray-800"
-         class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+      <a
+        routerLink="/dashboard-admin/clientes"
+        routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all"
+      >
         📄 <span>Listado de Clientes</span>
       </a>
-      <a routerLink="/dashboard-admin/todas-clases" routerLinkActive="bg-gray-800"
-         class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+      <a
+        routerLink="/dashboard-admin/todas-clases"
+        routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all"
+      >
         📋 <span>Ver todas las clases</span>
       </a>
-      <a routerLink="/dashboard-admin/asistencias-generales" routerLinkActive="bg-gray-800"
-         class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+      <a
+        routerLink="/dashboard-admin/asistencias-generales"
+        routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all"
+      >
         🕓 <span>Asistencias Generales</span>
       </a>
-      <a routerLink="/dashboard-admin/agenda-reservas" routerLinkActive="bg-gray-800"
-         class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+      <a
+        routerLink="/dashboard-admin/agenda-reservas"
+        routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all"
+      >
         📆 <span>Agenda de Reservas</span>
       </a>
-      <a routerLink="/dashboard-admin/crear-clase" routerLinkActive="bg-gray-800"
-         class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all text-rose-400 font-semibold">
+      <a
+        routerLink="/dashboard-admin/crear-clase"
+        routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all text-rose-400 font-semibold"
+      >
         ➕ <span>Crear Clase</span>
       </a>
+      <a routerLink="/dashboard-admin/gestionar-personal" routerLinkActive="bg-gray-800"
+        class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all">
+        👥 <span>Gestionar Personal</span>
+      </a>
+
+      <a routerLink="/dashboard-admin/admin-inventario" class="...">
+        📦 Gestionar Inventario
+      </a>
     </nav>
-    <button (click)="logout()"
-            class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-xl transition-all shadow hover:scale-105">
+    <button
+      (click)="logout()"
+      class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-xl transition-all shadow hover:scale-105"
+    >
       Cerrar Sesión
     </button>
   </aside>
 
   <!-- Sidebar móvil colapsable -->
-  <aside *ngIf="mostrarMenu"
-         class="md:hidden fixed inset-y-0 left-0 w-64 bg-gray-900 text-white p-6 z-50 border-r border-gray-800 shadow-xl">
+  <aside
+    *ngIf="mostrarMenu"
+    class="md:hidden fixed inset-y-0 left-0 w-64 bg-gray-900 text-white p-6 z-50 border-r border-gray-800 shadow-xl"
+  >
     <nav class="space-y-4">
-      <a (click)="mostrarMenu = false" routerLink="/dashboard-admin/bitacora"
-         class="block px-4 py-2 rounded hover:bg-rose-600/20">📋 Bitácora</a>
-      <a (click)="mostrarMenu = false" routerLink="/dashboard-admin/eliminar-cliente"
-         class="block px-4 py-2 rounded hover:bg-rose-600/20">❌ Deshabilitar Cliente</a>
-      <a (click)="mostrarMenu = false" routerLink="/dashboard-admin/clientes"
-         class="block px-4 py-2 rounded hover:bg-rose-600/20">📄 Listado de Clientes</a>
-      <a (click)="mostrarMenu = false" routerLink="/dashboard-admin/todas-clases"
-         class="block px-4 py-2 rounded hover:bg-rose-600/20">📋 Ver todas las clases</a>
-      <a (click)="mostrarMenu = false" routerLink="/dashboard-admin/asistencias-generales"
-         class="block px-4 py-2 rounded hover:bg-rose-600/20">🕓 Asistencias Generales</a>
-      <a (click)="mostrarMenu = false" routerLink="/dashboard-admin/agenda-reservas"
-         class="block px-4 py-2 rounded hover:bg-rose-600/20">📆 Agenda de Reservas</a>
-      <a (click)="mostrarMenu = false" routerLink="/dashboard-admin/crear-clase"
-         class="block px-4 py-2 rounded hover:bg-rose-600/20 text-rose-400 font-semibold">➕ Crear Clase</a>
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/bitacora"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20"
+        >📋 Bitácora</a
+      >
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/eliminar-cliente"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20"
+        >❌ Deshabilitar Cliente</a
+      >
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/clientes"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20"
+        >📄 Listado de Clientes</a
+      >
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/todas-clases"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20"
+        >📋 Ver todas las clases</a
+      >
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/asistencias-generales"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20"
+        >🕓 Asistencias Generales</a
+      >
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/agenda-reservas"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20"
+        >📆 Agenda de Reservas</a
+      >
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/crear-clase"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20 text-rose-400 font-semibold"
+        >➕ Crear Clase</a
+      >
     </nav>
-    <button (click)="logout()" class="mt-6 w-full bg-rose-600 hover:bg-rose-700 py-2 rounded-xl shadow hover:scale-105">
+    <button
+      (click)="logout()"
+      class="mt-6 w-full bg-rose-600 hover:bg-rose-700 py-2 rounded-xl shadow hover:scale-105"
+    >
       Cerrar Sesión
     </button>
   </aside>
 
   <!-- Contenido principal -->
-  <main class="flex-1 p-6 md:p-10 overflow-y-auto bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white">
+  <main
+    class="flex-1 p-6 md:p-10 overflow-y-auto bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+  >
     <router-outlet></router-outlet>
   </main>
 </div>
@@ -89,6 +167,6 @@
 <style>
   .neon-text {
     text-shadow: 0 0 10px rgba(239, 68, 68, 0.7),
-                 0 0 20px rgba(239, 68, 68, 0.4);
+      0 0 20px rgba(239, 68, 68, 0.4);
   }
 </style>

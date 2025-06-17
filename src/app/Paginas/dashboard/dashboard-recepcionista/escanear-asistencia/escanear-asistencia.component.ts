@@ -69,11 +69,17 @@ export class EscanearAsistenciaComponent implements OnInit {
         ? this.PersonalService.registrarEntrada(ci)
         : this.PersonalService.registrarSalida(ci);
 
-    fn.subscribe({
-      next: (res: any) => alert(res.mensaje),
-      error: (err) =>
-        alert(err?.error?.message ?? '❌ Error al registrar asistencia'),
-    });
+fn.subscribe({
+  next: (res: any) => {
+    console.log('✅ RESPUESTA OK:', res);
+    alert(res.mensaje);
+  },
+  error: (err) => {
+    console.error('❌ ERROR COMPLETO:', err);
+    alert(err?.error?.message || err?.message || '❌ Error inesperado');
+  },
+});
+
   }
 
   cambiarModo() {
