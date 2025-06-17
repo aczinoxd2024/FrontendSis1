@@ -1,0 +1,85 @@
+<h2 class="text-2xl font-semibold text-rose-400 mb-4">📦 Asignaciones de Materiales</h2>
+
+<!-- Filtros -->
+<div class="flex flex-col md:flex-row gap-2 mb-4">
+  <input type="text" [(ngModel)]="filtroCI" (input)="aplicarFiltros()"
+         placeholder="Filtrar por CI" class="p-2 rounded bg-gray-700 text-white w-full md:w-1/3" />
+
+  <input type="text" [(ngModel)]="filtroItem" (input)="aplicarFiltros()"
+         placeholder="Filtrar por ítem" class="p-2 rounded bg-gray-700 text-white w-full md:w-1/3" />
+  <button class="border border-red-600 text-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition"
+   (click)="exportarPDF()">
+  <i class="fas fa-file-pdf mr-2"></i> Exportar PDF 📄
+  </button>
+
+  <button class="border border-green-600 text-green-600 px-4 py-2 rounded hover:bg-green-600 hover:text-white transition"
+          (click)="exportarExcel()">
+    <i class="fas fa-file-excel mr-2"></i> Exportar Excel 📊
+  </button>
+</div>
+<<div class="bg-gray-900 p-4 rounded-lg text-white mb-4">
+  <h3 class="text-lg font-semibold mb-2 cursor-pointer select-none flex justify-between items-center"
+      (click)="mostrarFormulario = !mostrarFormulario">
+    📋 Asignar Material
+    <span class="text-sm text-gray-300">{{ mostrarFormulario ? '▲' : '▼' }}</span>
+  </h3>
+
+  <div *ngIf="mostrarFormulario" class="transition-all duration-300">
+    <input type="text" [(ngModel)]="ci" placeholder="CI Responsable"
+           class="p-2 mb-2 rounded w-full bg-gray-700" />
+
+    <input type="number" [(ngModel)]="idItem" placeholder="ID del Ítem"
+           class="p-2 mb-2 rounded w-full bg-gray-700" />
+
+    <input type="text" [(ngModel)]="observacion" placeholder="Observación"
+           class="p-2 mb-2 rounded w-full bg-gray-700" />
+
+    <button (click)="asignarMaterial()"
+            class="bg-rose-600 px-4 py-2 rounded hover:bg-rose-700">
+      Asignar
+    </button>
+  </div>
+</div>
+<!-- Tabla -->
+<div *ngIf="asignacionesFiltradas.length === 0" class="text-gray-400">No se encontraron asignaciones.</div>
+
+<table *ngIf="asignacionesFiltradas.length > 0" class="w-full text-sm bg-gray-800 rounded-lg overflow-hidden">
+  <thead class="bg-rose-600 text-white">
+    <tr>
+      <th class="p-2 text-left">#</th>
+      <th class="p-2 text-left">CI</th>
+      <th class="p-2 text-left">Ítem</th>
+      <th class="p-2 text-left">Descripción</th>
+      <th class="p-2 text-left">Fecha Asignación</th>
+      <th class="p-2 text-left">Observación</th>
+       <th class="p-2 text-left">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let asignacion of obtenerAsignacionesPaginadas(); let i = index"
+        class="border-b border-gray-700 hover:bg-gray-700/50">
+      <td class="p-2">{{ (paginaActual - 1) * elementosPorPagina + i + 1 }}</td>
+      <td class="p-2">{{ asignacion.CI }}</td>
+      <td class="p-2">{{ asignacion.item?.nombre }}</td>
+      <td class="p-2">{{ asignacion.item?.descripcion || 'Sin descripción' }}</td>
+      <td class="p-2">{{ asignacion.FechaAsignacion | date:'fullDate' }}</td>
+      <td class="p-2">{{ asignacion.Observacion || '-' }}</td>
+      <td class="p-2">
+  <button (click)="eliminarAsignacion(asignacion.CI, asignacion.item.idItem)"
+          class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded">
+    Eliminar
+  </button>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Paginación -->
+<div *ngIf="totalPaginas() > 1" class="mt-4 flex justify-center gap-2">
+  <button *ngFor="let pagina of [].constructor(totalPaginas()); let i = index"
+          (click)="cambiarPagina(i + 1)"
+          [class.bg-rose-600]="paginaActual === i + 1"
+          class="px-3 py-1 rounded bg-gray-700 text-white hover:bg-rose-500">
+    {{ i + 1 }}
+  </button>
+</div>
