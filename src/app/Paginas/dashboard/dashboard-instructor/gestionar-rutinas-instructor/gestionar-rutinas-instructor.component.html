@@ -1,4 +1,3 @@
-<!-- gestor-rutinas-instructor.component.html corregido -->
 <!-- Selector de plantilla + vista previa -->
 <div class="mb-6">
   <label class="block mb-1 text-sm font-medium text-white">Cargar desde plantilla:</label>
@@ -17,6 +16,7 @@
     </button>
   </div>
 
+  <!-- Vista previa -->
   <div *ngIf="vistaPreviaDetalles.length > 0" class="mt-4">
     <h4 class="text-white text-sm mb-1">Vista previa de ejercicios:</h4>
     <div class="overflow-auto rounded-lg border border-gray-500">
@@ -57,17 +57,23 @@
 
 <div class="mb-4">
   <label class="block mb-1 text-sm font-medium text-white">Nivel:</label>
-  <select [(ngModel)]="rutina.nivel" class="w-full px-4 py-2 rounded-lg text-white bg-gray-800 border border-gray-600">
-    <option [ngValue]="null" disabled>Seleccione el nivel</option>
-    <option *ngFor="let nivel of nivelRutinaList" [ngValue]="nivel">{{ nivel }}</option>
+  <select [(ngModel)]="rutina.nivel"
+          class="w-full px-4 py-2 rounded-lg text-white bg-gray-800 border border-gray-600">
+    <option value="" disabled selected>Seleccione el nivel</option>
+    <option value="Principiante">Principiante</option>
+    <option value="Intermedio">Intermedio</option>
+    <option value="Avanzado">Avanzado</option>
   </select>
 </div>
 
 <div class="mb-4">
   <label class="block mb-1 text-sm font-medium text-white">Género objetivo:</label>
-  <select [(ngModel)]="rutina.generoObjetivo" class="w-full px-4 py-2 rounded-lg text-white bg-gray-800 border border-gray-600">
-    <option [ngValue]="null" disabled>Seleccione género</option>
-    <option *ngFor="let genero of generoObjetivoList" [ngValue]="genero">{{ genero }}</option>
+  <select [(ngModel)]="rutina.generoObjetivo"
+          class="w-full px-4 py-2 rounded-lg text-white bg-gray-800 border border-gray-600">
+    <option value="" disabled selected>Seleccione género</option>
+    <option value="Hombre">Hombre</option>
+    <option value="Mujer">Mujer</option>
+    <option value="Ambos">Ambos</option>
   </select>
 </div>
 
@@ -83,8 +89,8 @@
   <select [(ngModel)]="rutina.tipo"
           class="w-full px-4 py-2 rounded-lg text-white bg-gray-800 border border-gray-600"
           (change)="prellenarEjemplo()">
-    <option [ngValue]="null" disabled>Seleccione tipo</option>
-    <option *ngFor="let tipo of tipoAccesoList" [ngValue]="tipo">{{ tipo }}</option>
+    <option value="" disabled selected>Seleccione tipo</option>
+    <option *ngFor="let tipo of tiposRutina" [value]="tipo">{{ tipo }}</option>
   </select>
 </div>
 
@@ -104,25 +110,36 @@
     <tbody>
       <tr *ngFor="let detalle of rutina.detalles; let i = index" class="text-center">
         <td>
-          <select [(ngModel)]="detalle.idEjercicio" class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full">
+          <select [(ngModel)]="detalle.idEjercicio"
+                  class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full">
             <option [ngValue]="0" disabled>Seleccione ejercicio</option>
-            <option *ngFor="let e of ejerciciosDisponibles" [ngValue]="e.id">{{ e.nombre }}</option>
+            <option *ngFor="let e of ejerciciosDisponibles" [ngValue]="e.id">
+              {{ e.nombre }}
+            </option>
           </select>
         </td>
         <td>
-          <select [(ngModel)]="detalle.idDia" class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full">
+          <select [(ngModel)]="detalle.idDia"
+                  class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full">
             <option [ngValue]="0" disabled>Seleccione día</option>
-            <option *ngFor="let d of diasDisponibles" [ngValue]="d.ID">{{ d.Dia }}</option>
+            <option *ngFor="let d of diasDisponibles" [ngValue]="d.ID">
+              {{ d.Dia }}
+            </option>
           </select>
         </td>
         <td>
-          <input type="number" [(ngModel)]="detalle.series" class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full" placeholder="3" />
+          <input type="number" [(ngModel)]="detalle.series"
+                 class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full placeholder-white"
+                 placeholder="3" />
         </td>
         <td>
-          <input type="number" [(ngModel)]="detalle.repeticiones" class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full" placeholder="12" />
+          <input type="number" [(ngModel)]="detalle.repeticiones"
+                 class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full placeholder-white"
+                 placeholder="12" />
         </td>
         <td>
-          <button (click)="eliminarDetalle(i)" class="text-red-500 hover:text-red-700 font-bold text-xl">×</button>
+          <button (click)="eliminarDetalle(i)"
+                  class="text-red-500 hover:text-red-700 font-bold text-xl">×</button>
         </td>
       </tr>
     </tbody>
@@ -143,34 +160,39 @@
     </thead>
     <tbody>
       <tr *ngFor="let rutina of rutinasDisponibles">
-        <td>{{ rutina.nombre }}</td>
-        <td>{{ rutina.tipoAcceso }}</td>
-        <td>{{ rutina.nivel }}</td>
-        <td>
-          <button (click)="cargarRutinaParaEditar(rutina)" class="bg-yellow-600 hover:bg-yellow-700 px-3 py-1 rounded text-white">
-            ✏️ Editar
-          </button>
-          <button (click)="eliminarRutinaConfirmada(rutina.id)" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white ml-2">
-            🗑️ Eliminar
-          </button>
-        </td>
-      </tr>
+  <td>{{ rutina.nombre }}</td>
+  <td>{{ rutina.tipoAcceso }}</td>
+  <td>
+    <button (click)="cargarRutinaParaEditar(rutina)"
+            class="bg-yellow-600 hover:bg-yellow-700 px-3 py-1 rounded text-white">
+      ✏️ Editar
+    </button>
+
+    <button (click)="eliminarRutinaConfirmada(rutina.id)"
+            class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white ml-2">
+      🗑️ Eliminar
+    </button>
+  </td>
+</tr>
+
     </tbody>
   </table>
 </div>
+
 
 <!-- Botones de acción -->
 <div class="mt-6 flex flex-wrap gap-4 justify-center">
   <button (click)="agregarDetalle()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg font-semibold shadow">
     ➕ Agregar ejercicio
   </button>
+
   <button (click)="mostrarResumenRutina()" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg font-semibold shadow">
     💾 Guardar
-
   </button>
-  <!--
 
-  <button *ngIf="editando" (click)="actualizarRutina()" class="bg-yellow-600 hover:bg-yellow-700 px-6 py-2 rounded-lg font-semibold shadow">
+  <button *ngIf="editando"
+          (click)="actualizarRutina()"
+          class="bg-yellow-600 hover:bg-yellow-700 px-6 py-2 rounded-lg font-semibold shadow">
     ✏️ Actualizar
-  </button>-->
+  </button>
 </div>
