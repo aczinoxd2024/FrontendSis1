@@ -142,6 +142,13 @@
         class="block px-4 py-2 rounded hover:bg-rose-600/20 text-rose-400 font-semibold"
         >➕ Crear Clase</a
       >
+      <a
+        (click)="mostrarMenu = false"
+        routerLink="/dashboard-admin/admin-inventario"
+        class="block px-4 py-2 rounded hover:bg-rose-600/20"
+      >
+        📦 Gestionar Inventario
+      </a>
     </nav>
     <button
       (click)="logout()"
