@@ -1,27 +1,25 @@
-<div class="p-6 text-white">
+<div class="p-4 md:p-6 text-white max-w-screen overflow-x-auto">
   <h2 class="text-2xl font-semibold mb-4">Inventario General</h2>
 
-  <!-- Mensaje de éxito -->
-  <div *ngIf="mensajeExito" class="bg-green-600 text-white p-3 rounded mb-4">
+  <!-- Mensajes -->
+  <div *ngIf="mensajeExito" class="bg-green-600 p-3 rounded mb-4">
     {{ mensajeExito }}
   </div>
-
-  <!-- Mensaje de error -->
-  <div *ngIf="mensajeError" class="bg-red-600 text-white p-3 rounded mb-4">
+  <div *ngIf="mensajeError" class="bg-red-600 p-3 rounded mb-4">
     {{ mensajeError }}
   </div>
 
   <!-- Filtros -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6">
     <input
       type="text"
       [(ngModel)]="filtros.nombre"
       placeholder="Nombre"
-      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600"
     />
     <select
       [(ngModel)]="filtros.estadoId"
-      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600"
     >
       <option value="">Todos los estados</option>
       <option *ngFor="let estado of estados" [value]="estado.id">
@@ -44,22 +42,23 @@
     />
   </div>
 
+  <!-- Botones -->
   <div class="flex flex-wrap gap-3 mb-6">
     <button
       (click)="obtenerInventario()"
-      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
+      class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
     >
       Aplicar filtros
     </button>
     <button
       (click)="limpiarFiltros()"
-      class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition"
+      class="bg-gray-500 hover:bg-gray-600 px-4 py-2 rounded"
     >
       Limpiar
     </button>
     <button
       (click)="crearItem()"
-      class="ml-auto bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition"
+      class="ml-auto bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
     >
       + Registrar Nuevo Ítem
     </button>
@@ -67,7 +66,9 @@
 
   <!-- Tabla -->
   <div class="overflow-x-auto">
-    <table class="min-w-full border border-gray-700 rounded text-sm">
+    <table
+      class="w-full md:min-w-full lg:min-w-[800px] text-sm border border-gray-700 rounded"
+    >
       <thead class="bg-red-600 text-white">
         <tr>
           <th class="px-4 py-2 text-left">Nombre</th>
@@ -86,7 +87,7 @@
           <td class="px-4 py-2">{{ item.descripcion }}</td>
           <td class="px-4 py-2 text-center">{{ item.cantidadActual }}</td>
           <td class="px-4 py-2 text-center">{{ item.estado.estado }}</td>
-          <td class="px-4 py-2 text-center">
+          <td class="px-4 py-2 text-center whitespace-nowrap min-w-[160px]">
             <button
               class="bg-yellow-500 hover:bg-yellow-400 text-black px-3 py-1 rounded mr-2"
               (click)="editarItem(item)"
@@ -106,7 +107,7 @@
   </div>
 </div>
 
-<!-- Modal para crear nuevo ítem -->
+<!-- MODAL CREAR -->
 <div
   *ngIf="modalCrearAbierto"
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -116,7 +117,7 @@
   >
     <h3 class="text-xl font-semibold mb-4">Registrar Nuevo Ítem</h3>
 
-    <form (ngSubmit)="guardarNuevoItem()">
+    <form (ngSubmit)="guardarNuevoItem()" #crearForm="ngForm">
       <input
         type="text"
         placeholder="Nombre"
@@ -125,6 +126,7 @@
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
       />
+
       <textarea
         placeholder="Descripción"
         [(ngModel)]="nuevoItem.descripcion"
@@ -132,15 +134,23 @@
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
       ></textarea>
+
       <input
         type="number"
         min="1"
         placeholder="Cantidad"
         [(ngModel)]="nuevoItem.cantidadActual"
         name="cantidadActual"
-        class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
+        class="w-full mb-1 p-2 rounded bg-gray-800 border border-gray-600"
         required
       />
+      <div
+        *ngIf="nuevoItem.cantidadActual < 1"
+        class="text-red-400 text-sm mb-2"
+      >
+        La cantidad debe ser mayor o igual a 1
+      </div>
+
       <select
         [ngModel]="nuevoItem.estadoId"
         (ngModelChange)="nuevoItem.estadoId = +$event"
@@ -164,6 +174,7 @@
         </button>
         <button
           type="submit"
+          [disabled]="nuevoItem.cantidadActual < 1"
           class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
         >
           Guardar
@@ -173,7 +184,7 @@
   </div>
 </div>
 
-<!-- Modal para editar ítem -->
+<!-- MODAL EDITAR -->
 <div
   *ngIf="modalEditarAbierto"
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -183,7 +194,7 @@
   >
     <h3 class="text-xl font-semibold mb-4">Editar Ítem</h3>
 
-    <form (ngSubmit)="guardarEdicion()">
+    <form (ngSubmit)="guardarEdicion()" #editarForm="ngForm">
       <input
         type="text"
         placeholder="Nombre"
@@ -192,6 +203,7 @@
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
       />
+
       <textarea
         placeholder="Descripción"
         [(ngModel)]="itemAEditar.descripcion"
@@ -199,15 +211,23 @@
         class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
         required
       ></textarea>
+
       <input
         type="number"
         min="1"
         placeholder="Cantidad"
         [(ngModel)]="itemAEditar.cantidadActual"
         name="editarCantidad"
-        class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
+        class="w-full mb-1 p-2 rounded bg-gray-800 border border-gray-600"
         required
       />
+      <div
+        *ngIf="itemAEditar.cantidadActual < 1"
+        class="text-red-400 text-sm mb-2"
+      >
+        La cantidad debe ser mayor o igual a 1
+      </div>
+
       <select
         [ngModel]="itemAEditar.estado?.id"
         (ngModelChange)="itemAEditar.estado.id = +$event"
@@ -231,6 +251,7 @@
         </button>
         <button
           type="submit"
+          [disabled]="itemAEditar.cantidadActual < 1"
           class="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded"
         >
           Guardar Cambios
