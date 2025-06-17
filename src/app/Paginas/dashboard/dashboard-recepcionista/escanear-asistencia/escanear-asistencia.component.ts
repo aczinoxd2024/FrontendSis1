@@ -53,7 +53,7 @@ export class EscanearAsistenciaComponent implements OnInit {
 
       // Solicitar permiso, pero NO llamar a reset() aquí
       setTimeout(() => {
-        this.scanner?.askForPermission().then((granted) => {
+        this.scanner?.askForPermission().then((granted: boolean) => {
           this.hasPermission = granted;
           console.log('📸 Cámara con permiso:', granted);
         });

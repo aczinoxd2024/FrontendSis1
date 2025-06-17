@@ -148,6 +148,26 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/dashboard/dashboard-instructor/mis-clases/mis-clases.component').then((m) => m.MisClasesComponent),
       },
+
+      {
+  path: 'gestionar-rutinas',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-instructor/gestionar-rutinas-instructor/gestionar-rutinas-instructor.component')
+      .then((m) => m.GestionarRutinasInstructorComponent),
+},
+
+{
+  path: 'crear-rutina',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-instructor/crear-rutina-clase/crear-rutina-clase.component')
+      .then((m) => m.CrearRutinaClaseComponent),
+},
+
+
+
+
+
+
     ],
   },
 
