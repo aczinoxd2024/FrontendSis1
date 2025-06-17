@@ -158,6 +158,13 @@ export const routes: Routes = [
             './Paginas/dashboard/dashboard-admin/admin-inventario/admin-inventario.component'
           ).then((m) => m.AdminInventarioComponent),
       },
+      {
+       path: 'asignar-material',
+       loadComponent: () =>
+        import('./Paginas/Administrador/inventario-responsable/gestion.component').then(
+       (m) => m.AsignacionMaterialesComponent
+      ),
+     },
     ],
   },
 
