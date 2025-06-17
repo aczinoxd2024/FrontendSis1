@@ -118,4 +118,12 @@ export class AuthService {
   resetPassword(token: string, newPassword: string) {
     return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
   }
+
+    /**
+   * Obtiene el CI del usuario autenticado (si existe en localStorage)
+   */
+  getCIUsuario(): string | null {
+    return localStorage.getItem('ci');
+  }
+
 }

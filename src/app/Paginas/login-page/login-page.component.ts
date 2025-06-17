@@ -46,6 +46,9 @@ export class LoginComponent {
           const rolNormalizado = user.rol.trim().toLowerCase();
           localStorage.setItem('rol', rolNormalizado);
 
+          // ✅ Guardar el CI del usuario para futuras operaciones
+         localStorage.setItem('ci', user.ci);
+
           // ✅ Guardar todos los datos del usuario en localStorage
           localStorage.setItem('user', JSON.stringify({
             id: user.id,

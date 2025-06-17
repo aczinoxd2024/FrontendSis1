@@ -87,6 +87,7 @@
       <th class="p-2 text-left">Hora Entrada</th>
       <th class="p-2 text-left">Hora Salida</th>
       <th class="p-2 text-left">Estado</th>
+      <th class="p-2 text-left">Registrado por</th> <!-- ✅ NUEVA COLUMNA -->
     </tr>
   </thead>
   <tbody>
@@ -107,6 +108,10 @@
           {{ asistencia.estado }}
         </span>
       </td>
+      <td class="p-2">
+  {{ asistencia.responsable?.idPersona?.Nombre }} {{ asistencia.responsable?.idPersona?.Apellido }}
+</td>
+
     </tr>
   </tbody>
 </table>

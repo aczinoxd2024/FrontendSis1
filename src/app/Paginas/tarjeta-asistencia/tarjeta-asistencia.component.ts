@@ -28,9 +28,10 @@ export class TarjetaAsistenciaRecepcionistaComponent implements OnInit {
       next: (res: any) => {
         console.log('✅ Datos recibidos:', res);
         this.datos = res;
-        QRCode.toDataURL(res.ci)
-          .then((url: string) => (this.qrUrl = url))
-          .catch(() => (this.qrUrl = ''));
+       QRCode.toDataURL(res.qrData)
+  .then((url: string) => (this.qrUrl = url))
+  .catch(() => (this.qrUrl = ''));
+
       },
       error: (err) => {
         console.error('❌ Error al obtener la tarjeta:', err);

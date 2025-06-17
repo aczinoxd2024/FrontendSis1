@@ -6,6 +6,8 @@ import { recepcionistaGuard } from './guards/recepcionista.guard';
 // ✅ Rutas con componentes standalone
 import { ReservasHistoricoComponent } from './Paginas/reservas-historico/reservas-historico.component';
 import { AgendaReservasAdminComponent } from './Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component';
+import { SeguimientoClienteComponent } from './Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component';
+import { DashboardClienteComponent } from './Paginas/dashboard/dashboard-cliente/dashboard-cliente/dashboard-cliente.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +26,66 @@ export const routes: Routes = [
   },
 
   // 🧾 ADMINISTRADOR
+
+ // 🧾 ADMINISTRADOR
+{
+  path: 'dashboard-admin',
+  loadComponent: () =>
+    import('./Paginas/Administrador/dashboard-inicio/dashboard-inicio.component').then((m) => m.DashboardComponent),
+  canActivate: [AdminGuard],
+  children: [
+    {
+      path: 'todas-clases',
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-admin/todas-clases/todas-clases.component').then((m) => m.TodasClasesComponent),
+    },
+    {
+      path: 'crear-clase',
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-admin/crear-clase/crear-clase.component').then((m) => m.CrearClaseComponent),
+    },
+    {
+      path: 'editar-clase/:id',
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-admin/editar-clase/editar-clase.component').then((m) => m.EditarClaseComponent),
+    },
+    {
+      path: 'eliminar-cliente',
+      loadComponent: () =>
+        import('./Paginas/Administrador/eliminar-cliente/eliminar-cliente.component').then((m) => m.EliminarClienteComponent),
+    },
+    {
+      path: 'clientes',
+      loadComponent: () =>
+        import('./Paginas/Clientes/clientes-lista/clientes-lista.component').then((m) => m.ClientesListaComponent),
+    },
+    {
+      path: 'bitacora',
+      loadComponent: () =>
+        import('./Paginas/Administrador/bitacora/bitacora.component').then((m) => m.BitacoraComponent),
+    },
+    {
+      path: 'gestionar-personal',
+      loadComponent: () =>
+        import('./Paginas/Administrador/gestion-personal/gestion-personal.component')
+        .then((m) => m.GestionPersonalComponent),
+    },
+
+    {
+      path: 'asistencias-generales',
+      loadComponent: () =>
+        import('./Paginas/Administrador/asistencias-generales/asistencias-generales.component').then((m) => m.AsistenciasGeneralesComponent),
+    },
+    {
+      path: 'agenda-reservas',  // ✅ AGREGADO
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component')
+          .then((m) => m.AgendaReservasAdminComponent),
+    },
+  ],
+},
+
+
   // 🧾 ADMINISTRADOR
   {
     path: 'dashboard-admin',
@@ -208,11 +270,70 @@ export const routes: Routes = [
             './Paginas/dashboard/dashboard-instructor/mis-clases/mis-clases.component'
           ).then((m) => m.MisClasesComponent),
       },
+
+      {
+  path: 'gestionar-rutinas',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-instructor/gestionar-rutinas-instructor/gestionar-rutinas-instructor.component')
+      .then((m) => m.GestionarRutinasInstructorComponent),
+},
+
+{
+  path: 'crear-rutina',
+  loadComponent: () =>
+    import('./Paginas/dashboard/dashboard-instructor/crear-rutina-clase/crear-rutina-clase.component')
+      .then((m) => m.CrearRutinaClaseComponent),
+},
+
+
+
+
+
+
     ],
   },
 
   // 🧾 CLIENTE
   {
+  path: 'dashboard-cliente',
+  component: DashboardClienteComponent,
+  children: [
+    {
+      path: 'historial',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/historial/historial.component').then(m => m.HistorialReservasComponent),
+    },
+    {
+      path: 'nueva',
+      loadComponent: () =>
+        import('./Paginas/reservas-cliente/nueva-reserva/nueva-reserva.component').then(m => m.NuevaReservaComponent),
+    },
+    {
+      path: 'mis-reservas',
+      loadComponent: () =>
+        import('./Paginas/Clientes/mis-reservas/mis-reservas-cliente.component').then(m => m.MisReservasClienteComponent),
+    },
+    {
+      path: 'seguimiento',
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component')
+          .then(m => m.SeguimientoClienteComponent),
+    },
+    {
+      path: 'seleccionar-clase',
+      loadComponent: () =>
+        import('./Paginas/dashboard/dashboard-cliente/seleccionar-clase/seleccionar-clase.component')
+          .then(m => m.SeleccionarClaseComponent),
+    },
+    {
+      path: 'asistencia',
+      loadComponent: () =>
+        import('./Paginas/asistencia/asistencia.component')
+          .then(m => m.AsistenciaComponent),
+    },
+  ]
+},
+ /* {               --paque no digan que lo cague ahi estan las otras rutas por si no funciona sus metodos
     path: 'dashboard-cliente',
     loadComponent: () =>
       import(
@@ -241,6 +362,13 @@ export const routes: Routes = [
           ).then((m) => m.MisReservasClienteComponent),
       },
       {
+        path: 'dashboard-cliente',
+        component: DashboardClienteComponent,
+        children: [
+          { path: 'seguimiento', loadComponent: () => import('./Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component').then(m => m.SeguimientoClienteComponent) },
+        ]
+      },
+      {
         path: 'seleccionar-clase',
         loadComponent: () =>
           import(
@@ -254,9 +382,10 @@ export const routes: Routes = [
             (m) => m.AsistenciaComponent
           ),
       },
+
     ],
   },
-
+*/
   // 📌 MEMBRESÍAS
   {
     path: 'menbresias',

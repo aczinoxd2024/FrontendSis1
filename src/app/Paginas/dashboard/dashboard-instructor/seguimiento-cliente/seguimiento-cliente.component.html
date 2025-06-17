@@ -1,16 +1,16 @@
 <div class="p-4 text-white">
   <!-- Buscar por CI -->
-  <div class="mb-4">
-    <label class="block mb-2">CI del Cliente:</label>
-    <input [(ngModel)]="ciCliente" placeholder="Ingrese CI" class="p-2 bg-gray-800 rounded w-full" />
-    <button (click)="buscarSeguimiento()" class="bg-red-600 mt-2 px-4 py-2 rounded hover:bg-red-700">Buscar</button>
-  </div>
+  <div class="mb-4" *ngIf="usuarioRol !== 'cliente'">
+  <label class="block mb-2">CI del Cliente:</label>
+  <input [(ngModel)]="ciCliente" placeholder="Ingrese CI" class="p-2 bg-gray-800 rounded w-full" />
+  <button (click)="buscarSeguimiento()" class="bg-red-600 mt-2 px-4 py-2 rounded hover:bg-red-700">Buscar</button>
+</div>
 
   <!-- Buscar por fecha exacta -->
- <div class="mb-4">
-  <label class="block mb-2">Buscar seguimiento por fecha exacta:</label>
-  <input [(ngModel)]="ciBusquedaFecha" placeholder="CI del Cliente" class="p-2 bg-gray-800 rounded w-full" />
-  <input [(ngModel)]="busquedaFecha" type="datetime-local" class="p-2 bg-gray-800 rounded w-full" />
+   <input *ngIf="usuarioRol !== 'cliente'" [(ngModel)]="ciBusquedaFecha" placeholder="CI del Cliente"
+    class="p-2 bg-gray-800 rounded w-full" />
+
+  <input [(ngModel)]="busquedaFecha" type="date" class="p-2 bg-gray-800 rounded w-full" />
   <button (click)="buscarPorFecha()" class="bg-blue-600 mt-2 px-4 py-2 rounded hover:bg-blue-700 text-white">
     🔎 Buscar Seguimiento
   </button>
@@ -19,72 +19,106 @@
 
   <div *ngIf="cargando" class="text-sm text-gray-400">Cargando...</div>
 
-  <!-- Tabla de resultados -->
-  <div class="overflow-x-auto" *ngIf="historial.length > 0">
-    <table class="min-w-full bg-gray-900 text-sm text-white">
-      <thead>
-        <tr>
-          <th class="p-2">Fecha</th>
-          <th class="p-2">Peso</th>
-          <th class="p-2">Altura</th>
-          <th class="p-2">IMC</th>
-          <th class="p-2">Pecho</th>
-          <th class="p-2">Abdomen</th>
-          <th class="p-2">Cintura</th>
-          <th class="p-2">Cadera</th>
-          <th class="p-2">Pierna</th>
-          <th class="p-2">Bíceps</th>
-          <th class="p-2">Espalda</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of historial" class="hover:bg-gray-800 transition">
-          <td class="p-2">{{ item.Fecha | date: 'short' }}</td>
-          <td class="p-2">{{ item.Peso }}</td>
-          <td class="p-2">{{ item.Altura }}</td>
-          <td class="p-2">{{ item.IMC }}</td>
-          <td class="p-2">{{ item.Pecho }}</td>
-          <td class="p-2">{{ item.Abdomen }}</td>
-          <td class="p-2">{{ item.Cintura }}</td>
-          <td class="p-2">{{ item.Cadera }}</td>
-          <td class="p-2">{{ item.Pierna }}</td>
-          <td class="p-2">{{ item.Biceps }}</td>
-          <td class="p-2">{{ item.Espalda }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+ <!-- Tabla de resultados -->
+<div class="overflow-x-auto" *ngIf="historial.length > 0">
+  <table class="min-w-full bg-gray-900 text-sm text-white">
+    <thead>
+      <tr>
+        <th class="p-2">Fecha</th>
+        <th class="p-2">Peso</th>
+        <th class="p-2">Altura</th>
+        <th class="p-2">IMC</th>
+        <th class="p-2">Pecho</th>
+        <th class="p-2">Abdomen</th>
+        <th class="p-2">Cintura</th>
+        <th class="p-2">Cadera</th>
+        <th class="p-2">Pierna</th>
+        <th class="p-2">Bíceps</th>
+        <th class="p-2">Espalda</th>
+        <!--  NUEVO -->
+      <th class="p-2" *ngIf="!esCliente">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of historial" class="hover:bg-gray-800 transition">
+      <!-- <td class="p-2">{{ item.Fecha | date: 'short' }}</td>-->
+    <td class="p-2">{{ item.Fecha | date:'short':'UTC' }}</td>
+        <td class="p-2">{{ item.Peso }}</td>
+        <td class="p-2">{{ item.Altura }}</td>
+        <td class="p-2">{{ item.IMC }}</td>
+        <td class="p-2">{{ item.Pecho }}</td>
+        <td class="p-2">{{ item.Abdomen }}</td>
+        <td class="p-2">{{ item.Cintura }}</td>
+        <td class="p-2">{{ item.Cadera }}</td>
+        <td class="p-2">{{ item.Pierna }}</td>
+        <td class="p-2">{{ item.Biceps }}</td>
+        <td class="p-2">{{ item.Espalda }}</td>
+        <!--  NUEVO botón -->
+     <td class="p-2" *ngIf="!esCliente">
+  <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs"
+          (click)="editarSeguimiento(item)">✏️ Editar</button>
+
+  <button class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs"
+          (click)="eliminar(item)">🗑 Eliminar</button>
+</td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
   <!-- Botones CRUD SIEMPRE visibles -->
-  <div class="flex gap-4 mt-4">
-    <button class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white" (click)="abrirNuevo()">
-      ➕ Nuevo Seguimiento
-    </button>
+ <div class="flex gap-4 mt-4" *ngIf="!esCliente">
+  <button class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white" (click)="abrirNuevo()">
+    ➕ Nuevo Seguimiento
+  </button>
 
-    <button class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded text-white" (click)="guardarSeguimiento()">
-      ✏️ Actualizar Seguimiento
-    </button>
+  <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white" (click)="eliminar(formulario)">
+    🗑 Eliminar Seguimiento
+  </button>
+</div>
 
-    <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white" (click)="eliminar(formulario)">
-      🗑 Eliminar Seguimiento
-    </button>
-  </div>
 
   <!-- FORMULARIO -->
   <div *ngIf="modoFormulario" class="mt-8 bg-gray-800 p-4 rounded">
     <h3 class="text-lg font-semibold mb-4">{{ modoEditar ? 'Editar Seguimiento' : 'Nuevo Seguimiento' }}</h3>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div><label>Peso (kg)</label><input [(ngModel)]="formulario.peso" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Altura (m)</label><input [(ngModel)]="formulario.altura" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>IMC (opcional)</label><input [(ngModel)]="formulario.imc" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Pecho (cm)</label><input [(ngModel)]="formulario.pecho" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Abdomen (cm)</label><input [(ngModel)]="formulario.abdomen" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Cintura (cm)</label><input [(ngModel)]="formulario.cintura" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Cadera (cm)</label><input [(ngModel)]="formulario.cadera" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Pierna (cm)</label><input [(ngModel)]="formulario.pierna" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Bíceps (cm)</label><input [(ngModel)]="formulario.biceps" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
-      <div><label>Espalda (cm)</label><input [(ngModel)]="formulario.espalda" type="number" class="w-full p-2 bg-gray-700 rounded" /></div>
+      <!-- CI del Cliente -->
+      <div class="md:col-span-2">
+        <label>CI del Cliente</label>
+        <input [(ngModel)]="ciCliente" type="text" placeholder="Ej. 895235610" class="w-full p-2 bg-gray-700 rounded" />
+      </div>
+
+
+
+      <!-- Campos físicos -->
+      <div><label>Peso (kg)</label><input [(ngModel)]="formulario.peso" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Altura (m)</label><input [(ngModel)]="formulario.altura" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>IMC (opcional)</label><input [(ngModel)]="formulario.imc" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Pecho (cm)</label><input [(ngModel)]="formulario.pecho" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Abdomen (cm)</label><input [(ngModel)]="formulario.abdomen" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Cintura (cm)</label><input [(ngModel)]="formulario.cintura" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Cadera (cm)</label><input [(ngModel)]="formulario.cadera" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Pierna (cm)</label><input [(ngModel)]="formulario.pierna" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Bíceps (cm)</label><input [(ngModel)]="formulario.biceps" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
+      <div><label>Espalda (cm)</label><input [(ngModel)]="formulario.espalda" type="number"
+          class="w-full p-2 bg-gray-700 rounded" /></div>
     </div>
-  </div>
-</div>
+
+    <!-- Botón para guardar -->
+    <div class="mt-6 text-right">
+      <button (click)="guardarSeguimiento()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+        💾 Registrar Seguimiento
+      </button>
+    </div>

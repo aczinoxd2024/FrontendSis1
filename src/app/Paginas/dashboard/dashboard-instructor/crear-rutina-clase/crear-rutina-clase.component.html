@@ -1,0 +1,68 @@
+<div class="p-6 text-white">
+  <h2 class="text-2xl font-bold mb-4 text-rose-500">📘 Crear nueva rutina de clase</h2>
+
+  <form (ngSubmit)="crearRutina()" class="space-y-4">
+    <input type="text" [(ngModel)]="nuevaRutina.nombre" name="nombre" placeholder="Nombre"
+           class="w-full p-2 bg-gray-800 rounded text-white" required />
+
+    <input type="text" [(ngModel)]="nuevaRutina.objetivo" name="objetivo" placeholder="Objetivo"
+           class="w-full p-2 bg-gray-800 rounded text-white" required />
+
+    <select [(ngModel)]="nuevaRutina.nivel" name="nivel" class="w-full p-2 bg-gray-800 rounded text-white" required>
+      <option value="" disabled selected>Selecciona nivel</option>
+      <option value="principiante">Principiante</option>
+      <option value="intermedio">Intermedio</option>
+      <option value="avanzado">Avanzado</option>
+    </select>
+
+    <select [(ngModel)]="nuevaRutina.generoObjetivo" name="generoObjetivo"
+            class="w-full p-2 bg-gray-800 rounded text-white" required>
+      <option value="" disabled selected>Género objetivo</option>
+      <option value="Hombre">Hombre</option>
+      <option value="Mujer">Mujer</option>
+      <option value="Ambos">Ambos</option>
+    </select>
+
+    <input type="text" [(ngModel)]="nuevaRutina.descripcion" name="descripcion" placeholder="Descripción (opcional)"
+           class="w-full p-2 bg-gray-800 rounded text-white" />
+
+    <select [(ngModel)]="nuevaRutina.IDClase" name="IDClase"
+            (change)="onClaseSeleccionadaPorID(nuevaRutina.IDClase)"
+            class="w-full p-2 bg-gray-800 rounded text-white" required>
+      <option [ngValue]="null" disabled selected>Seleccione una clase</option>
+      <option *ngFor="let clase of clasesInstructor" [ngValue]="clase.IDClase">
+        {{ clase.Nombre }} - {{ clase.Horarios?.[0]?.dia || '' }} {{ clase.Horarios?.[0]?.horaInicio || '' }}
+      </option>
+    </select>
+
+    <!-- Detalle de ejercicios -->
+    <div class="overflow-auto mt-4">
+      <table class="w-full text-sm text-white bg-gray-800 rounded">
+        <thead class="bg-gray-700 text-red-400">
+          <tr>
+            <th class="p-2">Ejercicio</th>
+            <th class="p-2">Día</th>
+            <th class="p-2">Series</th>
+            <th class="p-2">Reps</th>
+            <th class="p-2">❌</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detalle of nuevaRutina.detalles; let i = index">
+            <td><input [(ngModel)]="detalle.ejercicio" name="ejercicio{{i}}" class="w-full p-1 rounded text-black" /></td>
+            <td><input [(ngModel)]="detalle.dia" name="dia{{i}}" class="w-full p-1 rounded text-black" /></td>
+            <td><input type="number" [(ngModel)]="detalle.series" name="series{{i}}" class="w-full p-1 rounded text-black" /></td>
+            <td><input type="number" [(ngModel)]="detalle.repeticiones" name="reps{{i}}" class="w-full p-1 rounded text-black" /></td>
+            <td><button type="button" (click)="eliminarDetalleDetalle(i)" class="text-red-500 font-bold">×</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex gap-4 mt-4">
+      <button type="button" (click)="agregarDetalle()"
+              class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl">➕ Agregar ejercicio</button>
+      <button type="submit" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-xl">💾 Guardar Rutina</button>
+    </div>
+  </form>
+</div>
