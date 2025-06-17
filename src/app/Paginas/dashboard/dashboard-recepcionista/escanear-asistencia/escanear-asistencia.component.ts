@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PersonalService } from '../../../../services/personal.service';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   standalone: true,
   selector: 'app-escanear-asistencia',

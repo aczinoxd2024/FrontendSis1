@@ -1,11 +1,9 @@
 <div class="min-h-screen bg-gray-900 text-white p-6 md:p-10">
   <h2 class="text-3xl font-bold text-rose-500 mb-8 neon-text">🧑‍💼 Gestión de Personal</h2>
 
-  <!-- Formulario de Registro / Edición -->
   <form (ngSubmit)="guardarPersonal()" #personalForm="ngForm"
         class="bg-gray-800 rounded-2xl shadow-xl p-6 grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
 
-    <!-- CI -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">CI</label>
       <input type="text" [(ngModel)]="nuevoPersonal.CI" name="CI" required #CI="ngModel"
@@ -14,7 +12,6 @@
       <div *ngIf="CI.invalid && CI.touched" class="text-red-400 text-sm mt-1">⚠️ Campo obligatorio</div>
     </div>
 
-    <!-- Nombre -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Nombre</label>
       <input type="text" [(ngModel)]="nuevoPersonal.Nombre" name="Nombre" required #Nombre="ngModel"
@@ -22,7 +19,6 @@
       <div *ngIf="Nombre.invalid && Nombre.touched" class="text-red-400 text-sm mt-1">⚠️ Campo obligatorio</div>
     </div>
 
-    <!-- Apellido -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Apellido</label>
       <input type="text" [(ngModel)]="nuevoPersonal.Apellido" name="Apellido" required #Apellido="ngModel"
@@ -30,14 +26,12 @@
       <div *ngIf="Apellido.invalid && Apellido.touched" class="text-red-400 text-sm mt-1">⚠️ Campo obligatorio</div>
     </div>
 
-    <!-- Teléfono -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Teléfono</label>
       <input type="text" [(ngModel)]="nuevoPersonal.Telefono" name="Telefono"
              class="w-full p-3 rounded-xl bg-gray-700 text-white border focus:ring-2 focus:ring-rose-500" />
     </div>
 
-    <!-- Dirección -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Dirección</label>
       <input type="text" [(ngModel)]="nuevoPersonal.Direccion" name="Direccion" required #Direccion="ngModel"
@@ -45,7 +39,6 @@
       <div *ngIf="Direccion.invalid && Direccion.touched" class="text-red-400 text-sm mt-1">⚠️ Campo obligatorio</div>
     </div>
 
-    <!-- Correo -->
     <div *ngIf="!editando">
       <label class="block mb-2 font-semibold text-sm text-gray-300">Correo Electrónico</label>
       <input type="email" [(ngModel)]="nuevoPersonal.correo" name="correo" required #correo="ngModel"
@@ -58,35 +51,30 @@
       <div class="w-full p-3 rounded-xl bg-gray-700 text-white border">{{ nuevoPersonal.correo || '-' }}</div>
     </div>
 
-    <!-- Fecha de Nacimiento -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Fecha de Nacimiento</label>
       <input type="date" [(ngModel)]="nuevoPersonal.FechaNacimiento" name="FechaNacimiento" required
              class="w-full p-3 rounded-xl bg-gray-700 text-white border focus:ring-2 focus:ring-rose-500" />
     </div>
 
-    <!-- Fecha de Contratación -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Fecha de Contratación</label>
       <input type="date" [(ngModel)]="nuevoPersonal.FechaContratacion" name="FechaContratacion" required
              class="w-full p-3 rounded-xl bg-gray-700 text-white border focus:ring-2 focus:ring-rose-500" />
     </div>
 
-    <!-- Área -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Área</label>
       <input type="text" [(ngModel)]="nuevoPersonal.AreaP" name="AreaP" required
              class="w-full p-3 rounded-xl bg-gray-700 text-white border focus:ring-2 focus:ring-rose-500" />
     </div>
 
-    <!-- Sueldo -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Sueldo (Bs)</label>
       <input type="number" step="0.01" [(ngModel)]="nuevoPersonal.Sueldo" name="Sueldo" required
              class="w-full p-3 rounded-xl bg-gray-700 text-white border focus:ring-2 focus:ring-rose-500" />
     </div>
 
-    <!-- Cargo -->
     <div>
       <label class="block mb-2 font-semibold text-sm text-gray-300">Cargo</label>
       <select [(ngModel)]="nuevoPersonal.Cargo" name="Cargo" required
@@ -97,8 +85,55 @@
       </select>
     </div>
 
-    <!-- Botones -->
-    <div class="flex items-end gap-3">
+    <div class="col-span-full"> <h3 class="text-lg font-semibold text-gray-300 mt-6 mb-3">Horarios de Trabajo (Opcional)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 items-end">
+        <div>
+          <label for="dia" class="block text-sm font-medium text-gray-300">Día de la Semana</label>
+          <select id="dia" name="dia" [(ngModel)]="nuevoHorario.idDia"
+        class="mt-1 block w-full border border-gray-600 rounded-xl shadow-sm py-2 px-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm">
+  <option [ngValue]="null" disabled selected>Seleccione un día</option>
+  <option *ngFor="let dia of diasSemana" [ngValue]="dia.ID">{{ dia.Dia }}</option>
+</select>
+        </div>
+
+        <div>
+          <label for="horaInicio" class="block text-sm font-medium text-gray-300">Hora de Inicio</label>
+          <input type="time" id="horaInicio" name="horaInicio" [(ngModel)]="nuevoHorario.horaInicio"
+                 class="mt-1 block w-full border border-gray-600 rounded-xl shadow-sm py-2 px-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm">
+        </div>
+
+        <div>
+          <label for="horaFin" class="block text-sm font-medium text-gray-300">Hora de Fin</label>
+          <input type="time" id="horaFin" name="horaFin" [(ngModel)]="nuevoHorario.horaFin"
+                 class="mt-1 block w-full border border-gray-600 rounded-xl shadow-sm py-2 px-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm">
+        </div>
+
+        <div class="col-span-full md:col-span-1 flex justify-end md:justify-start">
+          <button type="button" (click)="agregarHorario()"
+                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition hover:scale-105">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Añadir Horario
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="nuevoPersonal.horariosTrabajo.length > 0" class="mb-6">
+        <h4 class="text-md font-semibold text-gray-300 mb-2">Horarios Asignados:</h4>
+        <ul class="border border-gray-600 rounded-xl divide-y divide-gray-700">
+          <li *ngFor="let horario of nuevoPersonal.horariosTrabajo; let i = index" class="p-3 flex justify-between items-center bg-gray-800">
+            <span class="text-gray-200">
+              {{ getNombreDia(horario.idDia) }}: {{ horario.horaInicio }} - {{ horario.horaFin }}
+            </span>
+            <button type="button" (click)="eliminarHorario(i)"
+                    class="ml-3 inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition hover:scale-105">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex items-end gap-3 col-span-full justify-end mt-4">
       <button *ngIf="!editando" type="submit"
               [disabled]="personalForm.invalid"
               class="bg-rose-600 hover:bg-rose-700 px-4 py-2 rounded-xl shadow text-white font-semibold transition hover:scale-105">
@@ -107,18 +142,17 @@
 
       <div *ngIf="editando" class="flex gap-3">
         <button type="submit"
-                class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-xl text-black font-semibold shadow">
+                class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-xl text-black font-semibold shadow transition hover:scale-105">
           Actualizar
         </button>
         <button type="button" (click)="resetFormulario()"
-                class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-xl text-white font-semibold shadow">
+                class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-xl text-white font-semibold shadow transition hover:scale-105">
           Cancelar
         </button>
       </div>
     </div>
   </form>
 
-  <!-- Tabla con scroll -->
   <div class="relative bg-gray-800 rounded-2xl shadow-lg p-4 max-h-[400px] overflow-y-auto">
     <h3 class="text-xl font-semibold text-rose-400 mb-4">📄 Personal Registrado</h3>
     <table class="min-w-full table-auto text-white text-sm">
@@ -175,5 +209,28 @@
     right: 0;
     height: 1px;
     background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Estilos personalizados para el scrollbar */
+  .relative.bg-gray-800::-webkit-scrollbar {
+    width: 10px; /* Ancho del scrollbar vertical */
+    height: 10px; /* Alto del scrollbar horizontal (si lo hubiera) */
+  }
+
+  .relative.bg-gray-800::-webkit-scrollbar-track {
+    background: #2d3748; /* Color de fondo del track (un gris oscuro similar al del contenedor) */
+    border-radius: 5px; /* Bordes redondeados para el track */
+  }
+
+  .relative.bg-gray-800::-webkit-scrollbar-thumb {
+    background-color: #ffffff; /* Color blanco para el "pulgar" del scrollbar */
+    border-radius: 5px; /* Bordes redondeados para el pulgar */
+    border: 2px solid #2d3748; /* Borde del mismo color que el track para que el pulgar "flote" */
+  }
+
+  /* Estilos para Firefox */
+  .relative.bg-gray-800 {
+    scrollbar-width: thin; /* Hace el scrollbar más delgado */
+    scrollbar-color: #ffffff #2d3748; /* Color del pulgar y luego color del track */
   }
 </style>
