@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PersonalService } from '../../../../services/personal.service';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   standalone: true,
   selector: 'app-escanear-asistencia',
@@ -61,8 +62,17 @@ export class EscanearAsistenciaComponent implements OnInit {
     }
   }
 
-  onCodeResult(ci: string) {
-    this.resultadoQR = ci;
+onCodeResult(qrTexto: string) {
+  this.resultadoQR = qrTexto;
+
+  try {
+    // ✅ Decodificamos el contenido del QR
+    const datosQR = JSON.parse(qrTexto);
+    const ci = datosQR.ci;
+
+    console.log('🆔 CI extraído del QR:', ci);
+    console.log('🙋‍♂️ Nombre:', datosQR.nombre);
+    console.log('💼 Cargo:', datosQR.cargo);
 
     const fn =
       this.modo === 'entrada'
@@ -70,11 +80,24 @@ export class EscanearAsistenciaComponent implements OnInit {
         : this.PersonalService.registrarSalida(ci);
 
     fn.subscribe({
-      next: (res: any) => alert(res.mensaje),
-      error: (err) =>
-        alert(err?.error?.message ?? '❌ Error al registrar asistencia'),
+      next: (res: any) => {
+        console.log('✅ RESPUESTA OK:', res);
+        alert(
+          `${res.mensaje}\n\nNombre: ${datosQR.nombre}\nCargo: ${datosQR.cargo}`
+        );
+      },
+      error: (err) => {
+        console.error('❌ ERROR COMPLETO:', err);
+        alert(err?.error?.message || err?.message || '❌ Error inesperado');
+      },
     });
+
+  } catch (e) {
+    console.error('❌ QR inválido o no contiene JSON:', e);
+    alert('❌ El código QR escaneado no tiene el formato esperado.');
   }
+}
+
 
   cambiarModo() {
     this.modo = this.modo === 'entrada' ? 'salida' : 'entrada';

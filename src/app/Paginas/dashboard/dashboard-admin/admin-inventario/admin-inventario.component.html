@@ -1,0 +1,262 @@
+<div class="p-4 md:p-6 text-white max-w-screen overflow-x-auto">
+  <h2 class="text-2xl font-semibold mb-4">Inventario General</h2>
+
+  <!-- Mensajes -->
+  <div *ngIf="mensajeExito" class="bg-green-600 p-3 rounded mb-4">
+    {{ mensajeExito }}
+  </div>
+  <div *ngIf="mensajeError" class="bg-red-600 p-3 rounded mb-4">
+    {{ mensajeError }}
+  </div>
+
+  <!-- Filtros -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <input
+      type="text"
+      [(ngModel)]="filtros.nombre"
+      placeholder="Nombre"
+      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600"
+    />
+    <select
+      [(ngModel)]="filtros.estadoId"
+      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600"
+    >
+      <option value="">Todos los estados</option>
+      <option *ngFor="let estado of estados" [value]="estado.id">
+        {{ estado.estado }}
+      </option>
+    </select>
+    <input
+      type="number"
+      min="1"
+      [(ngModel)]="filtros.cantidadMin"
+      placeholder="Cantidad mínima"
+      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600"
+    />
+    <input
+      type="number"
+      min="1"
+      [(ngModel)]="filtros.cantidadMax"
+      placeholder="Cantidad máxima"
+      class="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600"
+    />
+  </div>
+
+  <!-- Botones -->
+  <div class="flex flex-wrap gap-3 mb-6">
+    <button
+      (click)="obtenerInventario()"
+      class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+    >
+      Aplicar filtros
+    </button>
+    <button
+      (click)="limpiarFiltros()"
+      class="bg-gray-500 hover:bg-gray-600 px-4 py-2 rounded"
+    >
+      Limpiar
+    </button>
+    <button
+      (click)="crearItem()"
+      class="ml-auto bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
+    >
+      + Registrar Nuevo Ítem
+    </button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="overflow-x-auto">
+    <table
+      class="w-full md:min-w-full lg:min-w-[800px] text-sm border border-gray-700 rounded"
+    >
+      <thead class="bg-red-600 text-white">
+        <tr>
+          <th class="px-4 py-2 text-left">Nombre</th>
+          <th class="px-4 py-2 text-left">Descripción</th>
+          <th class="px-4 py-2 text-center">Cantidad</th>
+          <th class="px-4 py-2 text-center">Estado</th>
+          <th class="px-4 py-2 text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of inventario"
+          class="border-t border-gray-700 hover:bg-gray-800 transition"
+        >
+          <td class="px-4 py-2">{{ item.nombre }}</td>
+          <td class="px-4 py-2">{{ item.descripcion }}</td>
+          <td class="px-4 py-2 text-center">{{ item.cantidadActual }}</td>
+          <td class="px-4 py-2 text-center">{{ item.estado.estado }}</td>
+          <td class="px-4 py-2 text-center whitespace-nowrap min-w-[160px]">
+            <button
+              class="bg-yellow-500 hover:bg-yellow-400 text-black px-3 py-1 rounded mr-2"
+              (click)="editarItem(item)"
+            >
+              Editar
+            </button>
+            <button
+              class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+              (click)="darDeBaja(item)"
+            >
+              Dar de Baja
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL CREAR -->
+<div
+  *ngIf="modalCrearAbierto"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div
+    class="bg-gray-900 text-white p-6 rounded-lg w-full max-w-md shadow-lg border border-gray-700"
+  >
+    <h3 class="text-xl font-semibold mb-4">Registrar Nuevo Ítem</h3>
+
+    <form (ngSubmit)="guardarNuevoItem()" #crearForm="ngForm">
+      <input
+        type="text"
+        placeholder="Nombre"
+        [(ngModel)]="nuevoItem.nombre"
+        name="nombre"
+        class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      />
+
+      <textarea
+        placeholder="Descripción"
+        [(ngModel)]="nuevoItem.descripcion"
+        name="descripcion"
+        class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      ></textarea>
+
+      <input
+        type="number"
+        min="1"
+        placeholder="Cantidad"
+        [(ngModel)]="nuevoItem.cantidadActual"
+        name="cantidadActual"
+        class="w-full mb-1 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      />
+      <div
+        *ngIf="nuevoItem.cantidadActual < 1"
+        class="text-red-400 text-sm mb-2"
+      >
+        La cantidad debe ser mayor o igual a 1
+      </div>
+
+      <select
+        [ngModel]="nuevoItem.estadoId"
+        (ngModelChange)="nuevoItem.estadoId = +$event"
+        name="estadoId"
+        class="w-full mb-4 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      >
+        <option [value]="''" disabled selected>Selecciona un estado</option>
+        <option *ngFor="let estado of estadosFiltrados" [value]="estado.id">
+          {{ estado.estado }}
+        </option>
+      </select>
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          (click)="modalCrearAbierto = false"
+          class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="nuevoItem.cantidadActual < 1"
+          class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div
+  *ngIf="modalEditarAbierto"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div
+    class="bg-gray-900 text-white p-6 rounded-lg w-full max-w-md shadow-lg border border-gray-700"
+  >
+    <h3 class="text-xl font-semibold mb-4">Editar Ítem</h3>
+
+    <form (ngSubmit)="guardarEdicion()" #editarForm="ngForm">
+      <input
+        type="text"
+        placeholder="Nombre"
+        [(ngModel)]="itemAEditar.nombre"
+        name="editarNombre"
+        class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      />
+
+      <textarea
+        placeholder="Descripción"
+        [(ngModel)]="itemAEditar.descripcion"
+        name="editarDescripcion"
+        class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      ></textarea>
+
+      <input
+        type="number"
+        min="1"
+        placeholder="Cantidad"
+        [(ngModel)]="itemAEditar.cantidadActual"
+        name="editarCantidad"
+        class="w-full mb-1 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      />
+      <div
+        *ngIf="itemAEditar.cantidadActual < 1"
+        class="text-red-400 text-sm mb-2"
+      >
+        La cantidad debe ser mayor o igual a 1
+      </div>
+
+      <select
+        [ngModel]="itemAEditar.estado?.id"
+        (ngModelChange)="itemAEditar.estado.id = +$event"
+        name="editarEstado"
+        class="w-full mb-4 p-2 rounded bg-gray-800 border border-gray-600"
+        required
+      >
+        <option [value]="''" disabled>Selecciona un estado</option>
+        <option *ngFor="let estado of estadosFiltrados" [value]="estado.id">
+          {{ estado.estado }}
+        </option>
+      </select>
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          (click)="modalEditarAbierto = false"
+          class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="itemAEditar.cantidadActual < 1"
+          class="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded"
+        >
+          Guardar Cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
