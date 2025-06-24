@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { PagoService } from '../../../services/pagos.service';
 import { AuthService } from '../../../services/auth.service';
 
@@ -14,6 +14,7 @@ import { AuthService } from '../../../services/auth.service';
 export class RenovarMembresiaComponent implements OnInit {
   correoCliente: string = '';
   procesando: boolean = false;
+  ciDesdeURL: string | null = null;
 
   tipos = [
     {
@@ -39,13 +40,20 @@ export class RenovarMembresiaComponent implements OnInit {
   constructor(
     private pagoService: PagoService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     const user = this.authService.getUser();
     if (user && user.correo) {
       this.correoCliente = user.correo;
+    }
+
+    // Capturar ?ci=... desde el enlace del correo
+    const ciParam = this.route.snapshot.queryParamMap.get('ci');
+    if (ciParam) {
+      this.ciDesdeURL = ciParam;
     }
   }
 
@@ -54,9 +62,9 @@ export class RenovarMembresiaComponent implements OnInit {
     this.procesando = true;
 
     const user = this.authService.getUser();
-    const ci = this.authService.getCIUsuario();
+    const ci = this.authService.getCIUsuario() || this.ciDesdeURL;
 
-    if (!user || !user.correo || !ci) {
+    if ((!user || !user.correo) && !this.ciDesdeURL) {
       alert('No se pudo obtener tus datos de sesión. Intenta iniciar sesión nuevamente.');
       this.procesando = false;
       return;
@@ -70,9 +78,9 @@ export class RenovarMembresiaComponent implements OnInit {
     };
     const info = precios[tipo];
 
-    // ✅ Para Gold y Disciplina redirigimos a seleccionar clase
+    // Gold o Disciplina redirige a seleccionar clase
     if (tipo === 'gold' || tipo === 'disciplina') {
-      this.pagoService.previsualizarCambioMembresia(ci, tipoNuevoID).subscribe({
+      this.pagoService.previsualizarCambioMembresia(ci!, tipoNuevoID).subscribe({
         next: (resultado) => {
           sessionStorage.setItem('mensajeRenovacion', resultado.mensaje);
           this.router.navigate(['/dashboard-cliente/seleccionar-clase'], {
@@ -87,13 +95,13 @@ export class RenovarMembresiaComponent implements OnInit {
         },
       });
     } else {
-      // ✅ Para básica se inicia el flujo completo de pago
+      // Básica: flujo normal de pago
       this.pagoService.iniciarProcesoPago(
-        ci,
+        ci!,
         tipoNuevoID,
         info.amount,
         info.descripcion,
-        user.correo
+        user?.correo || 'noreply@gofit.com'
       );
       this.procesando = false;
     }

@@ -32,7 +32,7 @@
               <th class="py-3 px-4 border">Fecha Fin</th>
               <th class="py-3 px-4 border">Tipo</th>
               <th class="py-3 px-4 border">Días Restantes</th>
-              <th class="py-3 px-4 border">Acciones</th>
+
             </tr>
           </thead>
           <tbody>
@@ -68,12 +68,7 @@
                   }">
                 {{ m.diasRestantes }}
               </td>
-              <td class="py-2 px-4 border text-center">
-                <button (click)="irARenovar(m.CICliente)" [disabled]="!m.CICliente"
-                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded">
-                  🔄 Renovar
-                </button>
-              </td>
+
             </tr>
           </tbody>
         </table>
