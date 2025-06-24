@@ -182,7 +182,7 @@ export class CrearRutinaClaseComponent implements OnInit {
   }
 
   agregarDetalle(): void {
-    this.nuevaRutina.detalles.push({ ejercicio: '', dia: '', series: 0, repeticiones: 0 });
+    this.nuevaRutina.detalles.push({ ejercicio: '', dia: '', series: 0, repeticiones: 0, descanso : 0 });
   }
 
   eliminarDetalleDetalle(index: number): void {

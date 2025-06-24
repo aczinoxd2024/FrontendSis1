@@ -15,7 +15,7 @@ import { RouterModule } from '@angular/router'; // ✅ Importar esto
           estés listo.
         </p>
         <a
-          routerLink="/menbresias"
+          routerLink="/membresias"
           class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full"
         >
           Volver a Membresías

@@ -394,14 +394,14 @@ export const routes: Routes = [
 */
   // 📌 MEMBRESÍAS
   {
-    path: 'menbresias',
-    loadComponent: () =>
-      import('./Paginas/ver-menbresias/menbresias.component').then(
-        (m) => m.MenbresiasComponent
-      ),
-  },
+  path: 'membresias',
+  loadComponent: () =>
+    import('./Paginas/ver-membresias/membresias.component').then(
+      (m) => m.MembresiasComponent
+    ),
+},
   {
-    path: 'adquirir-menbresia/:id',
+    path: 'adquirir-membresia/:id',
     loadComponent: () =>
       import('./Paginas/adquirir-membresia/adquirir-membresia.component').then(
         (m) => m.AdquirirMembresiaComponent
