@@ -4,18 +4,6 @@
       📊 <span>Gráfica de Clases Totales</span>
     </h2>
 
-    <!-- Filtro de clases activas -->
-  <div class="flex items-center gap-4">
-  <label class="text-white font-medium">
-    <input
-      type="checkbox"
-      [(ngModel)]="mostrarSoloActivas"
-      (change)="onToggleFiltroActivas()"
-      class="mr-2"
-    />
-    Mostrar solo clases activas
-  </label>
-</div>
 
 
     <!-- Botones de exportación -->
@@ -29,22 +17,81 @@
       </button>
     </div>
 
-    <!-- Gráfico de barras -->
-    <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
-      <ngx-charts-bar-vertical
-        [view]="view"
-        [scheme]="'vivid'"
-        [results]="chartData"
-        [gradient]="false"
-        [xAxis]="true"
-        [yAxis]="true"
-        [legend]="false"
-        [showXAxisLabel]="true"
-        [showYAxisLabel]="true"
-        [xAxisLabel]="'Clases'"
-        [yAxisLabel]="'Inscritos'"
-        [animations]="true"
-      ></ngx-charts-bar-vertical>
-    </div>
+      <!-- Filtro de clases activas -->
+<div class="flex flex-wrap items-center gap-6 bg-gray-800 p-4 rounded-lg shadow text-sm">
+  <label class="text-white font-medium flex items-center gap-2">
+    <input
+      type="checkbox"
+      [(ngModel)]="mostrarSoloActivas"
+      (change)="onToggleFiltroActivas()"
+      class="mr-2"
+    />
+    Mostrar solo clases activas
+  </label>
+
+  <!-- Tipo de gráfico -->
+  <div class="flex flex-col">
+    <label for="tipoGrafico" class="text-gray-300 mb-1">Tipo de Gráfico:</label>
+    <select
+      id="tipoGrafico"
+      [(ngModel)]="tipoGrafico"
+      class="bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-rose-400"
+    >
+      <option value="barra">Barras</option>
+      <option value="torta">Torta</option>
+      <option value="linea">Líneas</option>
+    </select>
+  </div>
+</div>
+
+
+<!-- Gráfico -->
+<div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+  <!-- Barras -->
+  <ngx-charts-bar-vertical
+    *ngIf="tipoGrafico === 'barra'"
+    [view]="view"
+    [scheme]="'vivid'"
+    [results]="chartData"
+    [gradient]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="'Clases'"
+    [yAxisLabel]="'Inscritos'"
+    [animations]="true"
+  ></ngx-charts-bar-vertical>
+
+  <!-- Torta -->
+  <ngx-charts-pie-chart
+    *ngIf="tipoGrafico === 'torta'"
+    [view]="view"
+    [scheme]="'vivid'"
+    [results]="chartData"
+    [legend]="true"
+    [labels]="true"
+    [doughnut]="false"
+    [explodeSlices]="false"
+    [animations]="true"
+  ></ngx-charts-pie-chart>
+
+  <!-- Líneas -->
+  <ngx-charts-line-chart
+    *ngIf="tipoGrafico === 'linea'"
+    [view]="view"
+    [scheme]="'vivid'"
+    [results]="[ { name: 'Inscritos', series: chartData } ]"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="'Clases'"
+    [yAxisLabel]="'Inscritos'"
+    [animations]="true"
+  ></ngx-charts-line-chart>
+</div>
   </div>
 </div>

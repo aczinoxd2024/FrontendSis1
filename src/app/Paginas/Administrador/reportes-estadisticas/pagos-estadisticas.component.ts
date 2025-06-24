@@ -23,6 +23,8 @@ export class PagosEstadisticasComponent implements OnInit {
   filtroPromocion: string = '';
   fechaInicio: string = '';
   fechaFin: string = '';
+  tipoGrafico: string = 'barra';
+
 
   @ViewChild('graficoRef', { static: false }) graficoRef!: ElementRef;
 

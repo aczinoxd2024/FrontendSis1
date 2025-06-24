@@ -19,6 +19,7 @@ export class DisciplinasEstadisticasComponent implements OnInit {
   todasLasClases: any[] = [];
   chartData: any[] = [];
   mostrarSoloActivas: boolean = false;
+  tipoGrafico: string = 'barra';
 
   view: [number, number] = [window.innerWidth < 768 ? 300 : 700, 400];
 

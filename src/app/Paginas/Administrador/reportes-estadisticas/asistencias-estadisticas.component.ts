@@ -22,6 +22,7 @@ export class AsistenciasEstadisticasComponent implements OnInit {
   filtroCargo: string = 'instructor';
   fechaInicio: string = '';
   fechaFin: string = '';
+   tipoGrafico: string = 'barra';
 
   @ViewChild('graficoRef', { static: false }) graficoRef!: ElementRef;
 
