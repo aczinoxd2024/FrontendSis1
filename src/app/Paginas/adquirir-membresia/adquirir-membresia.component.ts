@@ -107,17 +107,20 @@ export class AdquirirMembresiaComponent implements OnInit {
   this.enviando = true;
 
   const datosCliente = {
-    ci: this.adquirirForm.value.ci,
-    nombre: this.adquirirForm.value.nombre,
-    apellido: this.adquirirForm.value.apellido,
-    fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
-    telefono: this.adquirirForm.value.telefono,
-    direccion: this.adquirirForm.value.direccion,
-    observacion: this.adquirirForm.value.observacion,
-    correo: this.adquirirForm.value.correo,
-    tipoMembresiaId: this.tipoMembresiaId,
-    metodoPagoId: +this.adquirirForm.value.metodoPago,
-  };
+  ci: this.adquirirForm.value.ci,
+  nombre: this.adquirirForm.value.nombre,
+  apellido: this.adquirirForm.value.apellido,
+  fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
+  telefono: this.adquirirForm.value.telefono,
+  direccion: this.adquirirForm.value.direccion,
+  observacion: this.adquirirForm.value.observacion,
+  correo: this.adquirirForm.value.correo,
+  tipoMembresiaId: this.tipoMembresiaId,
+  metodoPagoId: +this.adquirirForm.value.metodoPago,
+  ...(this.requiereClase && this.adquirirForm.value.idClase
+    ? { idClase: +this.adquirirForm.value.idClase } // 👈 Aquí lo forzamos a número
+    : {})
+};
 
   this.clienteService.adquirirMembresia(datosCliente).subscribe({
     next: () => {
