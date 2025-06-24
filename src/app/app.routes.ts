@@ -25,7 +25,6 @@ export const routes: Routes = [
       ),
   },
 
-  // 🧾 ADMINISTRADOR
 
  // 🧾 ADMINISTRADOR
 {
@@ -228,6 +227,13 @@ export const routes: Routes = [
           ).then((m) => m.TarjetaAsistenciaRecepcionistaComponent),
         canActivate: [recepcionistaGuard],
       },
+      {
+    path: 'vencimientos', // ✅ NUEVA RUTA
+    loadComponent: () =>
+      import(
+        './Paginas/dashboard/dashboard-recepcionista/vencimiento-membresias/vencimiento-membresias.component'
+      ).then((m) => m.VencimientoMembresiasComponent),
+  },
 
       {
         path: 'agenda',

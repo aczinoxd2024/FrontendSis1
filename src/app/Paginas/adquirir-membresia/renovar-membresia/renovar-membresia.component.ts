@@ -9,10 +9,11 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './renovar-membresia.component.html',
-  styleUrls: ['./renovar-membresia.component.css']
+  styleUrls: ['./renovar-membresia.component.css'],
 })
 export class RenovarMembresiaComponent implements OnInit {
   correoCliente: string = '';
+  procesando: boolean = false;
 
   tipos = [
     {
@@ -43,29 +44,58 @@ export class RenovarMembresiaComponent implements OnInit {
 
   ngOnInit(): void {
     const user = this.authService.getUser();
-    if (user) {
+    if (user && user.correo) {
       this.correoCliente = user.correo;
     }
   }
 
   redirigirAPago(tipo: 'basica' | 'gold' | 'disciplina') {
+    if (this.procesando) return;
+    this.procesando = true;
+
+    const user = this.authService.getUser();
+    const ci = this.authService.getCIUsuario();
+
+    if (!user || !user.correo || !ci) {
+      alert('No se pudo obtener tus datos de sesión. Intenta iniciar sesión nuevamente.');
+      this.procesando = false;
+      return;
+    }
+
+    const tipoNuevoID = tipo === 'basica' ? 1 : tipo === 'gold' ? 2 : 3;
+    const precios = {
+      basica: { amount: 20, descripcion: 'Básica' },
+      gold: { amount: 35, descripcion: 'Gold' },
+      disciplina: { amount: 15, descripcion: 'Disciplina' },
+    };
+    const info = precios[tipo];
+
+    // ✅ Para Gold y Disciplina redirigimos a seleccionar clase
     if (tipo === 'gold' || tipo === 'disciplina') {
-      // Redirigir a seleccionar clase
-      this.router.navigate(['/dashboard-cliente/seleccionar-clase'], {
-        queryParams: { tipo }
+      this.pagoService.previsualizarCambioMembresia(ci, tipoNuevoID).subscribe({
+        next: (resultado) => {
+          sessionStorage.setItem('mensajeRenovacion', resultado.mensaje);
+          this.router.navigate(['/dashboard-cliente/seleccionar-clase'], {
+            queryParams: { tipo },
+          });
+          this.procesando = false;
+        },
+        error: (err) => {
+          console.error('❌ Error al previsualizar:', err);
+          alert('No se pudo verificar tu membresía actual. Intenta nuevamente.');
+          this.procesando = false;
+        },
       });
     } else {
-      // Básica: ir directo a Stripe
-      const precios: any = {
-        basica: { amount: 20, descripcion: 'Básica' }
-      };
-      const info = precios[tipo];
-
-      this.pagoService.crearSesion(info.amount, info.descripcion, this.correoCliente)
-        .subscribe({
-          next: (resp: { url: string }) => (window.location.href = resp.url),
-          error: () => alert('Error al redirigir a Stripe'),
-        });
+      // ✅ Para básica se inicia el flujo completo de pago
+      this.pagoService.iniciarProcesoPago(
+        ci,
+        tipoNuevoID,
+        info.amount,
+        info.descripcion,
+        user.correo
+      );
+      this.procesando = false;
     }
   }
 }

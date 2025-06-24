@@ -109,68 +109,81 @@
   </aside>
 
   <!-- Sidebar móvil colapsable -->
-  <aside
-    *ngIf="mostrarMenu"
-    class="md:hidden fixed inset-y-0 left-0 w-64 bg-gray-900 text-white p-6 z-50 border-r border-gray-800 shadow-xl"
+ <!-- Sidebar móvil colapsable -->
+<aside
+  *ngIf="mostrarMenu"
+  class="md:hidden fixed inset-y-0 left-0 w-64 bg-gray-900 text-white p-6 z-50 border-r border-gray-800 shadow-xl"
+>
+  <nav class="space-y-4">
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/bitacora"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >📋 Bitácora</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/eliminar-cliente"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >❌ Deshabilitar Cliente</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/clientes"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >📄 Listado de Clientes</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/todas-clases"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >📋 Ver todas las clases</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/asistencias-generales"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >🕓 Asistencias Generales</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/agenda-reservas"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >📆 Agenda de Reservas</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/asignar-material"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >🛠️ Asignar Material</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/crear-clase"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20 text-rose-400 font-semibold"
+    >➕ Crear Clase</a>
+
+    <!-- ✅ NUEVO: Gestionar Personal en menú móvil -->
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/gestionar-personal"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >👥 Gestionar Personal</a>
+
+    <a
+      (click)="mostrarMenu = false"
+      routerLink="/dashboard-admin/admin-inventario"
+      class="block px-4 py-2 rounded hover:bg-rose-600/20"
+    >📦 Gestionar Inventario</a>
+  </nav>
+
+  <button
+    (click)="logout()"
+    class="mt-6 w-full bg-rose-600 hover:bg-rose-700 py-2 rounded-xl shadow hover:scale-105"
   >
-    <nav class="space-y-4">
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/bitacora"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20"
-        >📋 Bitácora</a
-      >
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/eliminar-cliente"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20"
-        >❌ Deshabilitar Cliente</a
-      >
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/clientes"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20"
-        >📄 Listado de Clientes</a
-      >
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/todas-clases"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20"
-        >📋 Ver todas las clases</a
-      >
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/asistencias-generales"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20"
-        >🕓 Asistencias Generales</a
-      >
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/agenda-reservas"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20"
-        >📆 Agenda de Reservas</a
-      >
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/crear-clase"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20 text-rose-400 font-semibold"
-        >➕ Crear Clase</a
-      >
-      <a
-        (click)="mostrarMenu = false"
-        routerLink="/dashboard-admin/admin-inventario"
-        class="block px-4 py-2 rounded hover:bg-rose-600/20"
-      >
-        📦 Gestionar Inventario
-      </a>
-    </nav>
-    <button
-      (click)="logout()"
-      class="mt-6 w-full bg-rose-600 hover:bg-rose-700 py-2 rounded-xl shadow hover:scale-105"
-    >
-      Cerrar Sesión
-    </button>
-  </aside>
+    Cerrar Sesión
+  </button>
+</aside>
 
   <!-- Contenido principal -->
   <main
