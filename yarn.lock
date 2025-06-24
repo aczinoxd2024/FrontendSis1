@@ -117,7 +117,7 @@
     ora "5.4.1"
     rxjs "7.8.1"
 
-"@angular/animations@^19.2.8", "@angular/animations@19.2.14":
+"@angular/animations@^19.2.8", "@angular/animations@17.x || 18.x || 19.x", "@angular/animations@19.2.14":
   version "19.2.14"
   resolved "https://registry.npmjs.org/@angular/animations/-/animations-19.2.14.tgz"
   integrity sha512-xhl8fLto5HHJdVj8Nb6EoBEiTAcXuWDYn1q5uHcGxyVH3kiwENWy/2OQXgCr2CuWo2e6hNUGzSLf/cjbsMNqEA==
@@ -189,7 +189,7 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^11.2.11 || ^12.0.4 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "@angular/common@^19.2.0", "@angular/common@>=16.0.0-0", "@angular/common@19.2.14":
+"@angular/common@^11.2.11 || ^12.0.4 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "@angular/common@^19.0.0 || ^20.0.0", "@angular/common@^19.2.0", "@angular/common@>=16.0.0-0", "@angular/common@17.x || 18.x || 19.x", "@angular/common@19.2.14":
   version "19.2.14"
   resolved "https://registry.npmjs.org/@angular/common/-/common-19.2.14.tgz"
   integrity sha512-NcNklcuyqaTjOVGf7aru8APX9mjsnZ01gFZrn47BxHozhaR0EMRrotYQTdi8YdVjPkeYFYanVntSLfhyobq/jg==
@@ -217,28 +217,28 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/core@^11.2.11 || ^12.0.4 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "@angular/core@^19.2.0", "@angular/core@>=16.0.0-0", "@angular/core@19.2.14":
+"@angular/core@^11.2.11 || ^12.0.4 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "@angular/core@^19.0.0 || ^20.0.0", "@angular/core@^19.2.0", "@angular/core@>=16.0.0-0", "@angular/core@17.x || 18.x || 19.x", "@angular/core@19.2.14":
   version "19.2.14"
   resolved "https://registry.npmjs.org/@angular/core/-/core-19.2.14.tgz"
   integrity sha512-EVErpW9tGqJ/wNcAN3G/ErH8pHCJ8mM1E6bsJ8UJIpDTZkpqqYjBMtZS9YWH5n3KwUd1tAkAB2w8FK125AjDUQ==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/forms@^11.2.11 || ^12.0.4 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "@angular/forms@^19.2.0":
+"@angular/forms@^11.2.11 || ^12.0.4 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "@angular/forms@^19.2.0", "@angular/forms@17.x || 18.x || 19.x":
   version "19.2.14"
   resolved "https://registry.npmjs.org/@angular/forms/-/forms-19.2.14.tgz"
   integrity sha512-hWtDOj2B0AuRTf+nkMJeodnFpDpmEK9OIhIv1YxcRe73ooaxrIdjgugkElO8I9Tj0E4/7m117ezhWDUkbqm1zA==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/platform-browser-dynamic@^19.2.0":
+"@angular/platform-browser-dynamic@^19.2.0", "@angular/platform-browser-dynamic@17.x || 18.x || 19.x":
   version "19.2.14"
   resolved "https://registry.npmjs.org/@angular/platform-browser-dynamic/-/platform-browser-dynamic-19.2.14.tgz"
   integrity sha512-Hfz0z1KDQmIdnFXVFCwCPykuIsHPkr1uW2aY396eARwZ6PK8i0Aadcm1ZOnpd3MR1bMyDrJo30VRS5kx89QWvA==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/platform-browser@^19.2.0", "@angular/platform-browser@>=16.0.0-0", "@angular/platform-browser@19.2.14":
+"@angular/platform-browser@^19.2.0", "@angular/platform-browser@>=16.0.0-0", "@angular/platform-browser@17.x || 18.x || 19.x", "@angular/platform-browser@19.2.14":
   version "19.2.14"
   resolved "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-19.2.14.tgz"
   integrity sha512-hzkT5nmA64oVBQl6PRjdL4dIFT1n7lfM9rm5cAoS+6LUUKRgiE2d421Kpn/Hz3jaCJfo+calMIdtSMIfUJBmww==
@@ -1098,6 +1098,31 @@
   resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.25.4.tgz"
   integrity sha512-nOT2vZNw6hJ+z43oP1SPea/G/6AbN6X+bGNhNuq8NtRHy4wsMhw765IKLNmnjek7GvjWBYQ8Q5VBoYTFg9y1UQ==
 
+"@fast-csv/format@4.3.5":
+  version "4.3.5"
+  resolved "https://registry.npmjs.org/@fast-csv/format/-/format-4.3.5.tgz"
+  integrity sha512-8iRn6QF3I8Ak78lNAa+Gdl5MJJBM5vRHivFtMRUWINdevNo00K7OXxS2PshawLKTejVwieIlPmK5YlLu6w4u8A==
+  dependencies:
+    "@types/node" "^14.0.1"
+    lodash.escaperegexp "^4.1.2"
+    lodash.isboolean "^3.0.3"
+    lodash.isequal "^4.5.0"
+    lodash.isfunction "^3.0.9"
+    lodash.isnil "^4.0.0"
+
+"@fast-csv/parse@4.3.6":
+  version "4.3.6"
+  resolved "https://registry.npmjs.org/@fast-csv/parse/-/parse-4.3.6.tgz"
+  integrity sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==
+  dependencies:
+    "@types/node" "^14.0.1"
+    lodash.escaperegexp "^4.1.2"
+    lodash.groupby "^4.6.0"
+    lodash.isfunction "^3.0.9"
+    lodash.isnil "^4.0.0"
+    lodash.isundefined "^3.0.1"
+    lodash.uniq "^4.5.0"
+
 "@inquirer/checkbox@^4.1.2":
   version "4.1.8"
   resolved "https://registry.npmjs.org/@inquirer/checkbox/-/checkbox-4.1.8.tgz"
@@ -1320,6 +1345,11 @@
   version "1.6.0"
   resolved "https://registry.npmjs.org/@jsonjoy.com/util/-/util-1.6.0.tgz"
   integrity sha512-sw/RMbehRhN68WRtcKCpQOPfnH6lLP4GJfqzi3iYej8tnzpZUDr6UkZYJjcjjC0FWEJOJbyM3PTIwxucUmDG2A==
+
+"@kurkle/color@^0.3.0":
+  version "0.3.4"
+  resolved "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
+  integrity sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.5"
@@ -1607,6 +1637,27 @@
   version "7.3.1"
   resolved "https://registry.npmjs.org/@stripe/stripe-js/-/stripe-js-7.3.1.tgz"
   integrity sha512-pTzb864TQWDRQBPLgSPFRoyjSDUqpCkbEgTzpsjiTjGz1Z5SxZNXJek28w1s6Dyry4CyW4/Izj5jHE/J9hCJYQ==
+
+"@swimlane/ngx-charts@^22.0.0":
+  version "22.0.0"
+  resolved "https://registry.npmjs.org/@swimlane/ngx-charts/-/ngx-charts-22.0.0.tgz"
+  integrity sha512-ibWGGhzyA1RmNEFaQjDw0eXoLJN4gtngha0oZnZCDdqg1hPpWa/di9UXXTfRvotvzcfP4DdDJRbHvy0dnQrOWQ==
+  dependencies:
+    d3-array "^3.2.0"
+    d3-brush "^3.0.0"
+    d3-color "^3.1.0"
+    d3-ease "^3.0.1"
+    d3-format "^3.1.0"
+    d3-hierarchy "^3.1.2"
+    d3-interpolate "^3.0.1"
+    d3-sankey "^0.12.3"
+    d3-scale "^4.0.2"
+    d3-selection "^3.0.0"
+    d3-shape "^3.2.0"
+    d3-time-format "^4.1.0"
+    d3-transition "^3.0.1"
+    gradient-path "^2.3.0"
+    tslib "^2.3.1"
 
 "@tailwindcss/node@4.1.8":
   version "4.1.8"
@@ -4864,6 +4915,13 @@ license-webpack-plugin@4.0.2:
   dependencies:
     webpack-sources "^3.0.0"
 
+lie@~3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/lie/-/lie-3.3.0.tgz"
+  integrity sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==
+  dependencies:
+    immediate "~3.0.5"
+
 lightningcss-win32-x64-msvc@1.30.1:
   version "1.30.1"
   resolved "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.30.1.tgz"
@@ -6957,6 +7015,17 @@ tapable@^2.1.1, tapable@^2.2.0, tapable@^2.2.1:
   resolved "https://registry.npmjs.org/tapable/-/tapable-2.2.2.tgz"
   integrity sha512-Re10+NauLTMCudc7T5WLFLAwDhQ0JWdrMK+9B2M8zR5hRExKmsRDCBA7/aV/pNJFltmBFO5BAMlQFi/vq3nKOg==
 
+tar-stream@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/tar-stream/-/tar-stream-2.2.0.tgz"
+  integrity sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==
+  dependencies:
+    bl "^4.0.3"
+    end-of-stream "^1.4.1"
+    fs-constants "^1.0.0"
+    inherits "^2.0.3"
+    readable-stream "^3.1.1"
+
 tar@^6.1.11:
   version "6.2.1"
   resolved "https://registry.npmjs.org/tar/-/tar-6.2.1.tgz"
@@ -7018,6 +7087,11 @@ thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.npmjs.org/thunky/-/thunky-1.1.0.tgz"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
+
+tinycolor2@^1.0.0:
+  version "1.6.0"
+  resolved "https://registry.npmjs.org/tinycolor2/-/tinycolor2-1.6.0.tgz"
+  integrity sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==
 
 tinyglobby@^0.2.12:
   version "0.2.14"
@@ -7182,6 +7256,22 @@ unpipe@~1.0.0, unpipe@1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
+
+unzipper@^0.10.11:
+  version "0.10.14"
+  resolved "https://registry.npmjs.org/unzipper/-/unzipper-0.10.14.tgz"
+  integrity sha512-ti4wZj+0bQTiX2KmKWuwj7lhV+2n//uXEotUmGuQqrbVZSEGFMbI68+c6JCQ8aAmUWYvtHEz2A8K6wXvueR/6g==
+  dependencies:
+    big-integer "^1.6.17"
+    binary "~0.3.0"
+    bluebird "~3.4.1"
+    buffer-indexof-polyfill "~1.0.0"
+    duplexer2 "~0.1.4"
+    fstream "^1.0.12"
+    graceful-fs "^4.2.2"
+    listenercount "~1.0.1"
+    readable-stream "~2.3.6"
+    setimmediate "~1.0.4"
 
 update-browserslist-db@^1.1.3:
   version "1.1.3"

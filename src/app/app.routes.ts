@@ -26,7 +26,7 @@ export const routes: Routes = [
       ),
   },
 
-
+/*
  // 🧾 ADMINISTRADOR
 {
   path: 'dashboard-admin',
