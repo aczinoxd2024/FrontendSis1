@@ -9,7 +9,12 @@
       <h3 class="titulo">Membresía Básica</h3>
       <p class="descripcion">Acceso total a máquinas, pesas y cardio.</p>
       <p class="precio">$20 / mes</p>
-      <button (click)="redirigirAPago('basica')" class="btn-adquirir">Adquirir</button>
+      <button
+        (click)="redirigirAPago('basica')"
+        class="btn-adquirir"
+        [disabled]="procesando">
+        {{ procesando ? 'Procesando...' : 'Adquirir' }}
+      </button>
     </div>
 
     <!-- Membresía Disciplina -->
@@ -17,7 +22,12 @@
       <h3 class="titulo">Solo Disciplina</h3>
       <p class="descripcion">Acceso a una clase específica.</p>
       <p class="precio">$15 / mes</p>
-      <button (click)="redirigirAPago('disciplina')" class="btn-adquirir">Adquirir</button>
+      <button
+        (click)="redirigirAPago('disciplina')"
+        class="btn-adquirir"
+        [disabled]="procesando">
+        {{ procesando ? 'Procesando...' : 'Adquirir' }}
+      </button>
     </div>
 
     <!-- Membresía Gold -->
@@ -25,7 +35,12 @@
       <h3 class="titulo">Membresía Gold</h3>
       <p class="descripcion">Todo lo anterior + clases dirigidas.</p>
       <p class="precio">$35 / mes</p>
-      <button (click)="redirigirAPago('gold')" class="btn-adquirir">Adquirir</button>
+      <button
+        (click)="redirigirAPago('gold')"
+        class="btn-adquirir"
+        [disabled]="procesando">
+        {{ procesando ? 'Procesando...' : 'Adquirir' }}
+      </button>
     </div>
   </div>
 </div>

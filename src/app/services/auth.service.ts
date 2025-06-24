@@ -27,7 +27,13 @@ export class AuthService {
       localStorage.setItem('rol', response.user.rol);
 
       // ✅ Guardar el CI de la persona logueada (Instructor, Cliente, etc.)
-      const ci = response.user.ci || response.user.idPersona;
+    const ci =
+        response.user.ci ||                      // cuando el CI viene directo
+        response.user.CI ||                      // por si viene en mayúsculas
+        response.user.idPersona?.CI ||           // cuando viene como objeto anidado
+        response.user.id;                        // fallback (usado antes incorrectamente)
+
+
       if (ci) {
         localStorage.setItem('ci', ci);
       }

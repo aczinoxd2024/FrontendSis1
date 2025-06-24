@@ -1,0 +1,124 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-4 sm:p-6">
+  <div class="max-w-6xl mx-auto space-y-6">
+    <h1 class="text-3xl font-bold text-center text-pink-400 sm:text-4xl">📆 Membresías Próximas a Vencer</h1>
+
+    <div class="flex justify-end mt-6">
+      <button
+        (click)="enviarNotificaciones()"
+        [disabled]="loading"
+        class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
+      >
+        <span *ngIf="!loading">✉️ Notificar a Todos</span>
+        <span *ngIf="loading">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Enviando...
+        </span>
+      </button>
+    </div>
+
+    <div *ngIf="mensaje" class="bg-blue-800 text-blue-100 p-3 rounded-lg text-center font-semibold animate-fade-in">
+      {{ mensaje }}
+    </div>
+
+    <div *ngIf="loading && membresias.length === 0" class="text-center text-gray-400 mt-4">Cargando membresías...</div>
+    <div *ngIf="!loading && membresias.length === 0" class="text-center text-gray-400 mt-8">
+      No hay membresías próximas a vencer.
+    </div>
+
+    <div class="overflow-x-auto rounded-lg shadow-lg">
+      <table *ngIf="membresias.length > 0" class="min-w-full table-auto border-collapse text-sm">
+        <thead class="bg-gray-700">
+          <tr>
+            <th class="py-3 px-4 border border-gray-600 text-left">#</th>
+            <th class="py-3 px-4 border border-gray-600 text-left">CI Cliente</th>
+            <th class="py-3 px-4 border border-gray-600 text-left">Fecha Fin</th>
+            <th class="py-3 px-4 border border-gray-600 text-left">Tipo</th>
+            <th class="py-3 px-4 border border-gray-600 text-left">Días Restantes</th>
+            <th class="py-3 px-4 border border-gray-600 text-left">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of membresias; let i = index" class="bg-gray-800 hover:bg-gray-700 transition duration-150 ease-in-out">
+            <td class="py-2.5 px-4 border border-gray-700 text-center">{{ i + 1 }}</td>
+            <td class="py-2.5 px-4 border border-gray-700 text-center">{{ m.CICliente || '—' }}</td>
+            <td class="py-2.5 px-4 border border-gray-700 text-center">{{ m.FechaFin | date: 'dd/MM/yyyy' }}</td>
+            <td class="py-2.5 px-4 border border-gray-700 text-center">
+              <span
+                class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full"
+                [ngClass]="{
+                  'bg-yellow-200 text-yellow-900': m.tipoNombre === 'Básica',
+                  'bg-emerald-200 text-emerald-900': m.tipoNombre === 'Gold',
+                  'bg-indigo-200 text-indigo-900': m.tipoNombre === 'Disciplina',
+                  'bg-gray-300 text-gray-800': !m.tipoNombre || m.tipoNombre === 'Desconocido'
+                }"
+              >
+                <ng-container [ngSwitch]="m.tipoNombre">
+                  <span *ngSwitchCase="'Gold'">💎 Gold</span>
+                  <span *ngSwitchCase="'Básica'">🟡 Básica</span>
+                  <span *ngSwitchCase="'Disciplina'">🏋️ Disciplina</span>
+                  <span *ngSwitchDefault>❓ Desconocido</span>
+                </ng-container>
+              </span>
+            </td>
+            <td
+              class="py-2.5 px-4 border border-gray-700 text-center font-bold"
+              [ngClass]="{
+                'text-red-400': m.diasRestantes <= 0,
+                'text-yellow-400': m.diasRestantes <= 3 && m.diasRestantes > 0,
+                'text-green-400': m.diasRestantes > 3
+              }"
+            >
+              {{ m.diasRestantes }}
+            </td>
+            <td class="py-2.5 px-4 border border-gray-700 text-center">
+              <button
+                class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-1.5 px-3 rounded shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50"
+                (click)="irARenovar(m.CICliente)"
+                [disabled]="!m.CICliente"
+                title="Renovar Membresía"
+              >
+                🔄 Renovar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-gray-700 my-8">
+
+    <div *ngIf="notificationSummaryMessage" class="bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h3 class="text-xl font-bold text-pink-300 mb-4">{{ notificationSummaryMessage }}</h3>
+
+      <div *ngIf="notificationDetails.length > 0" class="overflow-x-auto rounded-lg mt-4">
+        <table class="min-w-full table-auto border-collapse text-sm">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="py-3 px-4 border border-gray-600 text-left">Destinatario</th>
+              <th class="py-3 px-4 border border-gray-600 text-left">Estado</th>
+              <th class="py-3 px-4 border border-gray-600 text-left">Mensaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detail of notificationDetails"
+                [ngClass]="{'bg-green-900 bg-opacity-30': detail.status === 'success', 'bg-red-900 bg-opacity-30': detail.status === 'failed'}">
+              <td class="py-2.5 px-4 border border-gray-700">{{ detail.recipient }}</td>
+              <td class="py-2.5 px-4 border border-gray-700">
+                <span [ngStyle]="{'color': detail.status === 'success' ? '#81C784' : '#EF5350'}">
+                  {{ detail.status === 'success' ? '✔️ Éxito' : '❌ Fallido' }}
+                </span>
+              </td>
+              <td class="py-2.5 px-4 border border-gray-700">{{ detail.message }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="notificationDetails.length === 0" class="text-gray-400 text-center mt-4">
+        No se encontraron detalles de envío.
+      </div>
+    </div>
+  </div>
+</div>

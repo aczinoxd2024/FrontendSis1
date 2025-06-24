@@ -1,0 +1,36 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid #4b5563; /* Gray-700 */
+  padding: 0.75rem;
+  text-align: center;
+}
+
+th {
+  background-color: #374151; /* Gray-800 */
+  color: #f9fafb;
+}
+
+tr:hover {
+  background-color: #1f2937; /* Gray-900 */
+}
+
+button {
+  cursor: pointer;
+}
+
+.text-green-400 {
+  color: #34d399;
+}
+.text-yellow-400 {
+  color: #facc15;
+}
+.text-red-400 {
+  color: #f87171;
+}

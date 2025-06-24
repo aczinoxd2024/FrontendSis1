@@ -1,0 +1,52 @@
+<div class="p-6 bg-gray-900 min-h-screen text-gray-100 font-sans">
+  <div class="max-w-4xl mx-auto space-y-6">
+    <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+      📊 <span>Clases por Instructor</span>
+    </h2>
+
+    <!-- Filtro de instructor -->
+    <div class="flex items-center gap-4">
+      <label for="instructor" class="font-medium text-gray-300">Instructor:</label>
+      <select
+        id="instructor"
+        [(ngModel)]="filtroInstructor"
+        (change)="onInstructorChange()"
+        class="bg-gray-800 border border-gray-600 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring focus:ring-rose-400 w-64"
+      >
+        <option value="">-- Todos --</option>
+        <option *ngFor="let instructor of instructores" [value]="instructor">
+          {{ instructor }}
+        </option>
+      </select>
+    </div>
+
+       <!-- Botones -->
+    <div class="flex gap-4 my-4">
+      <button (click)="exportarPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+        📄 Descargar PDF
+      </button>
+
+      <button (click)="exportarExcel()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+        📊 Descargar Excel
+      </button>
+    </div>
+
+    <!-- Gráfico de barras -->
+    <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+      <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="'vivid'"
+        [results]="chartData"
+        [gradient]="false"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="'Clases'"
+        [yAxisLabel]="'Inscritos'"
+        [animations]="true"
+      ></ngx-charts-bar-vertical>
+    </div>
+  </div>
+</div>

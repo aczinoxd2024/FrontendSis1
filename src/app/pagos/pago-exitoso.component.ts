@@ -21,8 +21,11 @@ export class PagoExitosoComponent implements OnInit {
     private http: HttpClient,
     private router: Router
   ) {}
-
+mensajeRenovacion: string = ''; // ✅ NUEVO
   ngOnInit(): void {
+      this.mensajeRenovacion = sessionStorage.getItem('mensajeRenovacion') || '';
+  sessionStorage.removeItem('mensajeRenovacion'); // Limpiamos para no repetir
+
     const sessionId = this.route.snapshot.queryParamMap.get('session_id');
     if (sessionId) {
       this.http
@@ -44,19 +47,40 @@ export class PagoExitosoComponent implements OnInit {
     }
   }
 
-  descargarComprobante() {
+  descargarComprobante(): void {
   if (!this.nroPago) {
     alert('No se encontró el número de comprobante.');
     return;
   }
 
-  const link = document.createElement('a');
-  link.href = `https://web-production-d581.up.railway.app/api/pagos/comprobante/${this.nroPago}`;
-  link.target = '_blank';
-  link.click();
+  const token = localStorage.getItem('token');
+
+  this.http.get(
+    `https://web-production-d581.up.railway.app/api/pagos/comprobante/${this.nroPago}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: 'blob', // Necesario para descargar PDF
+    }
+  ).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `comprobante_pago_${this.nroPago}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    error: (err) => {
+      console.error('Error al descargar comprobante:', err);
+      alert('No se pudo descargar el comprobante. Reintente.');
+    }
+  });
+}
+irAlLogin(): void {
+  this.router.navigate(['/login']);
 }
 
-  irAlLogin() {
-    this.router.navigate(['/login']);
-  }
+
 }

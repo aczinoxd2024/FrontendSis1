@@ -1,0 +1,82 @@
+<div class="p-6 bg-gray-900 min-h-screen text-gray-100 font-sans">
+  <div class="max-w-5xl mx-auto space-y-6">
+    <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+      📊 <span>Gráfica de Reservas por Clase</span>
+    </h2>
+
+    <!-- Filtros -->
+    <div class="flex flex-wrap gap-6 items-center bg-gray-800 p-4 rounded-lg shadow text-sm">
+      <!-- Estado -->
+      <div class="flex flex-col">
+        <label for="estado" class="text-gray-300 mb-1">Estado:</label>
+        <select
+          id="estado"
+          [(ngModel)]="filtroEstado"
+          (change)="actualizarGrafico()"
+          class="bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-rose-400"
+        >
+          <option value="Todas">Todas</option>
+          <option value="Confirmada">Confirmada</option>
+          <option value="Cancelada">Cancelada</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="No asistió">No asistió</option>
+          <option value="Asistió">Asistió</option>
+        </select>
+      </div>
+
+      <!-- Fecha inicio -->
+      <div class="flex flex-col">
+        <label for="fechaInicio" class="text-gray-300 mb-1">Desde:</label>
+        <input
+          type="date"
+          id="fechaInicio"
+          [(ngModel)]="fechaInicio"
+          (change)="actualizarGrafico()"
+          class="bg-gray-700 text-white border border-gray-600 px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-rose-400"
+        />
+      </div>
+
+      <!-- Fecha fin -->
+      <div class="flex flex-col">
+        <label for="fechaFin" class="text-gray-300 mb-1">Hasta:</label>
+        <input
+          type="date"
+          id="fechaFin"
+          [(ngModel)]="fechaFin"
+          (change)="actualizarGrafico()"
+          class="bg-gray-700 text-white border border-gray-600 px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-rose-400"
+        />
+      </div>
+    </div>
+
+   <!-- Botones -->
+    <div class="flex gap-4 my-4">
+      <button (click)="exportarPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+        📄 Descargar PDF
+      </button>
+
+      <button (click)="exportarExcel()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+        📊 Descargar Excel
+      </button>
+    </div>
+
+
+    <!-- Gráfico -->
+    <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+      <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="'vivid'"
+        [results]="chartData"
+        [gradient]="false"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="'Clases'"
+        [yAxisLabel]="'Reservas'"
+        [animations]="true"
+      ></ngx-charts-bar-vertical>
+    </div>
+  </div>
+</div>

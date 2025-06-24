@@ -6,7 +6,6 @@
   <!-- Header -->
   <header class="flex justify-between items-center px-4 py-3 bg-gray-900 shadow-md z-10">
     <div class="flex items-center gap-4">
-      <!-- Botón menú móvil -->
       <button class="md:hidden focus:outline-none" (click)="mostrarMenu = !mostrarMenu">
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2"
              viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -30,70 +29,30 @@
     </div>
   </header>
 
-  <!-- Contenido principal -->
   <div class="flex flex-1">
-    <!-- Sidebar desktop -->
-    <aside class="hidden md:block w-64 bg-gray-900 p-6 space-y-4 border-r border-gray-700">
+    <!-- Sidebar -->
+    <aside *ngIf="mostrarMenu || screenWidth >= 768" class="w-64 bg-gray-900 p-6 space-y-4 border-r border-gray-700">
       <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú Principal</h2>
       <nav class="space-y-2 text-sm">
-        <a routerLink="registrar-cliente" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">➕ Registrar Cliente</a>
-        <a routerLink="actualizar-cliente" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">✏️ Actualizar Cliente</a>
-        <a routerLink="clientes" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Listado de Clientes</a>
-        <a routerLink="agenda" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">📆 Agenda de Reservas</a>
-        <a routerLink="asistencias-hoy" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">📅 Asistencias Hoy</a>
-        <a routerLink="comprobantes" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">📄 Ver Comprobantes</a>
-        <a routerLink="escanear-asistencia" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">📷 Escanear Asistencia</a>
-        <a routerLink="tarjeta-asistencia" routerLinkActive="bg-rose-600 text-white font-bold"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">🪪 Mi Tarjeta Asistencia</a>
+        <a routerLink="registrar-cliente" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">➕ Registrar Cliente</a>
+        <a routerLink="actualizar-cliente" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">✏️ Actualizar Cliente</a>
+        <a routerLink="clientes" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Listado de Clientes</a>
+        <a routerLink="agenda" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">📆 Agenda de Reservas</a>
+        <a routerLink="asistencias-hoy" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">📅 Asistencias Hoy</a>
+        <a routerLink="comprobantes" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">📄 Ver Comprobantes</a>
+        <a routerLink="escanear-asistencia" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">📷 Escanear Asistencia</a>
+        <a routerLink="tarjeta-asistencia" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">🪪 Mi Tarjeta Asistencia</a>
+        <a routerLink="vencimientos" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">⏳ Vencimiento Membresías</a>
       </nav>
     </aside>
 
-    <!-- Sidebar móvil -->
-    <aside *ngIf="mostrarMenu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-gray-900 p-6 space-y-4 z-50 shadow-xl border-r border-gray-700">
-      <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú</h2>
-      <nav class="space-y-2 text-sm">
-        <a routerLink="registrar-cliente" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">➕ Registrar Cliente</a>
-        <a routerLink="actualizar-cliente" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">✏️ Actualizar Cliente</a>
-        <a routerLink="clientes" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Listado de Clientes</a>
-        <a routerLink="agenda" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📆 Agenda de Reservas</a>
-        <a routerLink="asistencias-hoy" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📅 Asistencias Hoy</a>
-        <a routerLink="comprobantes" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📄 Ver Comprobantes</a>
-        <a routerLink="escanear-asistencia" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📷 Escanear Asistencia</a>
-        <a routerLink="tarjeta-asistencia" routerLinkActive="bg-rose-600 text-white font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">🪪 Mi Tarjeta Asistencia</a>
-      </nav>
-    </aside>
-
-    <!-- Área de contenido dinámico -->
+    <!-- Contenido dinámico por navegación -->
     <main class="flex-1 p-4 md:p-6 overflow-y-auto">
       <router-outlet></router-outlet>
     </main>
   </div>
 </div>
 
-<!-- Animación Tailwind personalizada -->
 <style>
   @keyframes gradientFlow {
     0% { background-position: 0% 50%; }

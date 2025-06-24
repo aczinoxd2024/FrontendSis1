@@ -9,11 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ClienteService } from '../../interfaces/cliente.service';
-import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe(
-  'pk_test_51RR6tw4YytpeVr09IUybzpCVQhIDrIriY483kbdeocLqoYfmrRyNizyyEBovayLAHuDXROSJwmbFpQjYjuIJInMm00ZhT8LYcB'
-);
+import { PagoService } from '../../services/pagos.service';
 
 @Component({
   selector: 'app-adquirir-membresia',
@@ -37,7 +33,8 @@ export class AdquirirMembresiaComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private http: HttpClient,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private pagoService: PagoService
   ) {
     this.adquirirForm = this.fb.group({
       ci: ['', Validators.required],
@@ -56,7 +53,7 @@ export class AdquirirMembresiaComponent implements OnInit {
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id')!;
     this.tipoMembresiaId = id;
-    
+
 
     // 🔍 Detectar si requiere clase por tipo de nombre
    this.http.get<any>(`https://web-production-d581.up.railway.app/api/tipo_membresia/${id}`)
@@ -68,7 +65,7 @@ export class AdquirirMembresiaComponent implements OnInit {
       const nombre = tipo.NombreTipo?.toLowerCase() || '';
       const nombresValidos = ['gold', 'disciplina', 'elite', 'vip', 'entrenador', 'personal'];
       this.requiereClase = nombresValidos.some(palabra => nombre.includes(palabra));
-      
+
       if (this.requiereClase) {
         this.http
           .get<any[]>('https://web-production-d581.up.railway.app/api/clases')
@@ -130,7 +127,7 @@ export class AdquirirMembresiaComponent implements OnInit {
 
         amount: this.precio, // ✅ Este campo es obligatorio para Stripe
 
-        
+
       };
       console.log('Clase seleccionada:', this.adquirirForm.value.idClase);
 
