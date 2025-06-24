@@ -1,0 +1,62 @@
+<div class="contenedor" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2>📢 Enviar Promociones con Imagen</h2>
+
+  <!-- Carga de imagen -->
+  <label for="imagen"><strong>📷 Selecciona una imagen:</strong></label>
+  <input
+    id="imagen"
+    type="file"
+    accept="image/*"
+    (change)="onFileSelected($event)"
+    style="margin-bottom: 15px;"
+  />
+
+  <!-- Mensaje personalizado -->
+  <label for="mensaje"><strong>📝 Mensaje para los clientes:</strong></label>
+  <textarea
+    id="mensaje"
+    [(ngModel)]="mensajePromocional"
+    rows="4"
+    placeholder="Escribe el mensaje que deseas enviar..."
+    style="width: 100%; margin-bottom: 15px;"
+  ></textarea>
+
+  <!-- Nuevo selector de tipo de membresía -->
+  <label for="tipo" style="display: block; margin-bottom: 8px;"><strong>🎯 Filtrar por tipo de membresía (opcional):</strong></label>
+  <select
+    id="tipo"
+    [(ngModel)]="tipoSeleccionado"
+    style="width: 100%; padding: 8px; margin-bottom: 15px;"
+  >
+    <option value="">Todos los tipos</option>
+    <option *ngFor="let tipo of tiposDisponibles" [value]="tipo">{{ tipo }}</option>
+  </select>
+
+  <!-- Botón de envío -->
+  <button
+    (click)="enviarPromocion()"
+    [disabled]="loading"
+    style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer;"
+  >
+    {{ loading ? 'Enviando...' : 'Enviar Promoción' }}
+  </button>
+
+  <!-- Mensaje de estado -->
+  <p *ngIf="mensaje" style="margin-top: 10px;">{{ mensaje }}</p>
+
+  <!-- Lista de clientes -->
+  <h3 style="margin-top: 30px;">👥 Clientes con membresía vigente:</h3>
+  <div style="max-height: 250px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+    <ul *ngIf="clientesVigentes.length > 0; else noClientes">
+      <li *ngFor="let cliente of clientesVigentes" style="margin-bottom: 10px;">
+        <strong>{{ cliente.Nombre }} {{ cliente.Apellido }}</strong><br />
+        📧 {{ cliente.Correo }}<br />
+        🏋️ {{ cliente.TipoMembresia }}<br />
+        📅 {{ cliente.FechaInicio }} → {{ cliente.FechaFin }}
+      </li>
+    </ul>
+    <ng-template #noClientes>
+      <p style="color: gray;">No hay clientes vigentes.</p>
+    </ng-template>
+  </div>
+</div>

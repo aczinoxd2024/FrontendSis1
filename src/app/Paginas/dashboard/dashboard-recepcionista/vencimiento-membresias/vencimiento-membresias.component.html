@@ -1,124 +1,203 @@
+<!-- ✅ Vista unificada para vencimientos y promociones -->
 <div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-4 sm:p-6">
-  <div class="max-w-6xl mx-auto space-y-6">
-    <h1 class="text-3xl font-bold text-center text-pink-400 sm:text-4xl">📆 Membresías Próximas a Vencer</h1>
+  <div class="max-w-6xl mx-auto space-y-12">
 
-    <div class="flex justify-end mt-6">
-      <button
-        (click)="enviarNotificaciones()"
-        [disabled]="loading"
-        class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
-      >
-        <span *ngIf="!loading">✉️ Notificar a Todos</span>
-        <span *ngIf="loading">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          Enviando...
-        </span>
-      </button>
-    </div>
+    <!-- Sección de Membresías por Vencer -->
+    <section>
+      <h1 class="text-3xl font-bold text-center text-pink-400 sm:text-4xl">📆 Membresías Próximas a Vencer</h1>
 
-    <div *ngIf="mensaje" class="bg-blue-800 text-blue-100 p-3 rounded-lg text-center font-semibold animate-fade-in">
-      {{ mensaje }}
-    </div>
+      <div class="flex justify-end mt-6">
+        <button
+          (click)="enviarNotificaciones()"
+          [disabled]="loading"
+          class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-xl"
+        >
+          {{ loading ? 'Enviando...' : '✉️ Notificar a Todos' }}
+        </button>
+      </div>
 
-    <div *ngIf="loading && membresias.length === 0" class="text-center text-gray-400 mt-4">Cargando membresías...</div>
-    <div *ngIf="!loading && membresias.length === 0" class="text-center text-gray-400 mt-8">
-      No hay membresías próximas a vencer.
-    </div>
+      <div *ngIf="mensaje" class="bg-blue-800 text-blue-100 p-3 rounded-lg text-center font-semibold mt-4">
+        {{ mensaje }}
+      </div>
 
-    <div class="overflow-x-auto rounded-lg shadow-lg">
-      <table *ngIf="membresias.length > 0" class="min-w-full table-auto border-collapse text-sm">
-        <thead class="bg-gray-700">
-          <tr>
-            <th class="py-3 px-4 border border-gray-600 text-left">#</th>
-            <th class="py-3 px-4 border border-gray-600 text-left">CI Cliente</th>
-            <th class="py-3 px-4 border border-gray-600 text-left">Fecha Fin</th>
-            <th class="py-3 px-4 border border-gray-600 text-left">Tipo</th>
-            <th class="py-3 px-4 border border-gray-600 text-left">Días Restantes</th>
-            <th class="py-3 px-4 border border-gray-600 text-left">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let m of membresias; let i = index" class="bg-gray-800 hover:bg-gray-700 transition duration-150 ease-in-out">
-            <td class="py-2.5 px-4 border border-gray-700 text-center">{{ i + 1 }}</td>
-            <td class="py-2.5 px-4 border border-gray-700 text-center">{{ m.CICliente || '—' }}</td>
-            <td class="py-2.5 px-4 border border-gray-700 text-center">{{ m.FechaFin | date: 'dd/MM/yyyy' }}</td>
-            <td class="py-2.5 px-4 border border-gray-700 text-center">
-              <span
-                class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full"
-                [ngClass]="{
-                  'bg-yellow-200 text-yellow-900': m.tipoNombre === 'Básica',
-                  'bg-emerald-200 text-emerald-900': m.tipoNombre === 'Gold',
-                  'bg-indigo-200 text-indigo-900': m.tipoNombre === 'Disciplina',
-                  'bg-gray-300 text-gray-800': !m.tipoNombre || m.tipoNombre === 'Desconocido'
-                }"
-              >
-                <ng-container [ngSwitch]="m.tipoNombre">
-                  <span *ngSwitchCase="'Gold'">💎 Gold</span>
-                  <span *ngSwitchCase="'Básica'">🟡 Básica</span>
-                  <span *ngSwitchCase="'Disciplina'">🏋️ Disciplina</span>
-                  <span *ngSwitchDefault>❓ Desconocido</span>
-                </ng-container>
-              </span>
-            </td>
-            <td
-              class="py-2.5 px-4 border border-gray-700 text-center font-bold"
-              [ngClass]="{
-                'text-red-400': m.diasRestantes <= 0,
-                'text-yellow-400': m.diasRestantes <= 3 && m.diasRestantes > 0,
-                'text-green-400': m.diasRestantes > 3
-              }"
-            >
-              {{ m.diasRestantes }}
-            </td>
-            <td class="py-2.5 px-4 border border-gray-700 text-center">
-              <button
-                class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-1.5 px-3 rounded shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50"
-                (click)="irARenovar(m.CICliente)"
-                [disabled]="!m.CICliente"
-                title="Renovar Membresía"
-              >
-                🔄 Renovar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <div *ngIf="loading && membresias.length === 0" class="text-center text-gray-400 mt-4">Cargando membresías...</div>
+      <div *ngIf="!loading && membresias.length === 0" class="text-center text-gray-400 mt-8">No hay membresías próximas a vencer.</div>
 
-    <hr class="border-gray-700 my-8">
-
-    <div *ngIf="notificationSummaryMessage" class="bg-gray-800 p-6 rounded-lg shadow-lg">
-      <h3 class="text-xl font-bold text-pink-300 mb-4">{{ notificationSummaryMessage }}</h3>
-
-      <div *ngIf="notificationDetails.length > 0" class="overflow-x-auto rounded-lg mt-4">
-        <table class="min-w-full table-auto border-collapse text-sm">
+      <div class="overflow-x-auto rounded-lg shadow-lg mt-6">
+        <table *ngIf="membresias.length > 0" class="min-w-full table-auto border-collapse text-sm">
           <thead class="bg-gray-700">
             <tr>
-              <th class="py-3 px-4 border border-gray-600 text-left">Destinatario</th>
-              <th class="py-3 px-4 border border-gray-600 text-left">Estado</th>
-              <th class="py-3 px-4 border border-gray-600 text-left">Mensaje</th>
+              <th class="py-3 px-4 border">#</th>
+              <th class="py-3 px-4 border">CI Cliente</th>
+              <th class="py-3 px-4 border">Fecha Fin</th>
+              <th class="py-3 px-4 border">Tipo</th>
+              <th class="py-3 px-4 border">Días Restantes</th>
+              <th class="py-3 px-4 border">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let detail of notificationDetails"
-                [ngClass]="{'bg-green-900 bg-opacity-30': detail.status === 'success', 'bg-red-900 bg-opacity-30': detail.status === 'failed'}">
-              <td class="py-2.5 px-4 border border-gray-700">{{ detail.recipient }}</td>
-              <td class="py-2.5 px-4 border border-gray-700">
-                <span [ngStyle]="{'color': detail.status === 'success' ? '#81C784' : '#EF5350'}">
-                  {{ detail.status === 'success' ? '✔️ Éxito' : '❌ Fallido' }}
+            <tr *ngFor="let m of membresias; let i = index" class="bg-gray-800 hover:bg-gray-700">
+              <td class="py-2 px-4 border text-center">{{ i + 1 }}</td>
+              <td class="py-2 px-4 border text-center">{{ m.CICliente || '—' }}</td>
+              <td class="py-2 px-4 border text-center">{{ m.FechaFin | date: 'dd/MM/yyyy' }}</td>
+              <td class="py-2 px-4 border text-center">
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                  [ngClass]="{
+                    'bg-yellow-800 text-yellow-200': m.tipoNombre?.trim().toLowerCase() === 'básica',
+                    'bg-rose-700 text-rose-100': m.tipoNombre?.toLowerCase().includes('gold'),
+                    'bg-blue-800 text-blue-100': m.tipoNombre?.trim().toLowerCase() === 'disciplina',
+                    'bg-indigo-800 text-indigo-100': m.tipoNombre?.trim().toLowerCase() === 'elite'
+                  }"
+                >
+                  <ng-container [ngSwitch]="m.tipoNombre?.trim().toLowerCase()">
+                    <span *ngSwitchCase="'básica'">🥉 Básica</span>
+                    <span *ngSwitchCase="'gold'">🏆 Gold</span>
+                    <span *ngSwitchCase="'disciplina'">🧘‍♂️ Disciplina</span>
+                    <span *ngSwitchCase="'elite'">👑 Elite</span>
+                    <span *ngSwitchCase="'membresía gold con promo'">🎁 Gold + Promo</span>
+                    <span *ngSwitchDefault>{{ m.tipoNombre || '—' }}</span>
+                  </ng-container>
                 </span>
               </td>
-              <td class="py-2.5 px-4 border border-gray-700">{{ detail.message }}</td>
+              <td class="py-2 px-4 border text-center"
+                  [ngClass]="{
+                    'text-red-400': m.diasRestantes <= 0,
+                    'text-yellow-400': m.diasRestantes <= 3 && m.diasRestantes > 0,
+                    'text-green-400': m.diasRestantes > 3
+                  }">
+                {{ m.diasRestantes }}
+              </td>
+              <td class="py-2 px-4 border text-center">
+                <button (click)="irARenovar(m.CICliente)" [disabled]="!m.CICliente"
+                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded">
+                  🔄 Renovar
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div *ngIf="notificationDetails.length === 0" class="text-gray-400 text-center mt-4">
-        No se encontraron detalles de envío.
+
+      <!-- Detalles de notificación -->
+      <div *ngIf="notificationSummaryMessage" class="bg-gray-800 p-6 rounded-lg shadow-lg mt-8">
+        <h3 class="text-xl font-bold text-pink-300 mb-4">{{ notificationSummaryMessage }}</h3>
+        <table *ngIf="notificationDetails.length > 0" class="min-w-full table-auto border-collapse text-sm">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="py-3 px-4 border">Destinatario</th>
+              <th class="py-3 px-4 border">Estado</th>
+              <th class="py-3 px-4 border">Mensaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detail of notificationDetails"
+                [ngClass]="{
+                  'bg-green-900 bg-opacity-30': detail.status === 'success',
+                  'bg-red-900 bg-opacity-30': detail.status === 'failed'
+                }">
+              <td class="py-2 px-4 border">{{ detail.recipient }}</td>
+              <td class="py-2 px-4 border">
+                <span [ngStyle]="{'color': detail.status === 'success' ? '#81C784' : '#EF5350'}">
+                  {{ detail.status === 'success' ? '✔️ Éxito' : '❌ Fallido' }}
+                </span>
+              </td>
+              <td class="py-2 px-4 border">{{ detail.message }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Sección de Promociones -->
+<section class="bg-gray-800 rounded-xl shadow-md p-6">
+  <h2 class="text-lg md:text-xl font-bold text-rose-400 mb-4">📢 Enviar Promociones a Clientes Vigentes</h2>
+
+  <div class="space-y-4">
+    <textarea
+      [(ngModel)]="mensajePromocional"
+      rows="3"
+      placeholder="Escribe el mensaje promocional aquí..."
+      class="w-full p-3 bg-gray-900 border border-gray-700 rounded text-white placeholder-gray-400"
+    ></textarea>
+
+    <input
+      type="file"
+      accept="image/*"
+      (change)="onFileSelected($event)"
+      class="block w-full text-sm text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rose-600 file:text-white hover:file:bg-rose-700"
+    />
+
+    <button
+      (click)="enviarPromocion()"
+      [disabled]="loading"
+      class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded w-full sm:w-auto"
+    >
+      {{ loading ? 'Enviando Promoción...' : '📨 Enviar Promoción' }}
+    </button>
+
+    <p *ngIf="mensajePromocionConfirmacion" class="text-sm mt-2 text-green-400 text-center">
+      {{ mensajePromocionConfirmacion }}
+    </p>
+
+    <!-- 🔍 Filtro por tipo de membresía -->
+    <div *ngIf="clientesVigentes.length > 0" class="mt-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
+        <h3 class="text-md font-semibold text-rose-300">👥 Clientes Vigentes:</h3>
+        <label class="text-sm font-semibold text-white">
+          Filtrar por tipo:
+          <select [(ngModel)]="tipoSeleccionado" class="ml-2 bg-gray-900 border border-gray-700 text-white rounded px-3 py-1">
+            <option value="">— Todos —</option>
+            <option *ngFor="let tipo of tiposDisponibles" [value]="tipo">{{ tipo }}</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="overflow-x-auto rounded-lg shadow-lg">
+        <table class="min-w-full text-sm border-collapse">
+          <thead class="bg-gray-700 text-white">
+            <tr>
+              <th class="py-2 px-3 border">#</th>
+              <th class="py-2 px-3 border">Nombre</th>
+              <th class="py-2 px-3 border">Apellido</th>
+              <th class="py-2 px-3 border">Correo</th>
+              <th class="py-2 px-3 border">Tipo Membresía</th>
+              <th class="py-2 px-3 border">Fecha Inicio</th>
+              <th class="py-2 px-3 border">Fecha Fin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of clientesVigentesFiltrados(); let i = index" class="bg-gray-800 hover:bg-gray-700">
+              <td class="py-2 px-3 border text-center">{{ i + 1 }}</td>
+              <td class="py-2 px-3 border text-center">{{ c.Nombre }}</td>
+              <td class="py-2 px-3 border text-center">{{ c.Apellido }}</td>
+              <td class="py-2 px-3 border text-center">{{ c.Correo }}</td>
+              <td class="py-2 px-3 border text-center">
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                  [ngClass]="{
+                    'bg-yellow-800 text-yellow-200': c.TipoMembresia?.trim().toLowerCase() === 'básica',
+                    'bg-rose-700 text-rose-100': c.TipoMembresia?.toLowerCase().includes('gold'),
+                    'bg-blue-800 text-blue-100': c.TipoMembresia?.trim().toLowerCase() === 'disciplina',
+                    'bg-indigo-800 text-indigo-100': c.TipoMembresia?.trim().toLowerCase() === 'elite'
+                  }"
+                >
+                  <ng-container [ngSwitch]="c.TipoMembresia?.trim().toLowerCase()">
+                    <span *ngSwitchCase="'básica'">🥉 Básica</span>
+                    <span *ngSwitchCase="'gold'">🏆 Gold</span>
+                    <span *ngSwitchCase="'disciplina'">🧘‍♂️ Disciplina</span>
+                    <span *ngSwitchCase="'elite'">👑 Elite</span>
+                    <span *ngSwitchCase="'membresía gold con promo'">🎁 Gold + Promo</span>
+                    <span *ngSwitchDefault>{{ c.TipoMembresia || '—' }}</span>
+                  </ng-container>
+                </span>
+              </td>
+              <td class="py-2 px-3 border text-center">{{ c.FechaInicio | date:'yyyy-MM-dd' }}</td>
+              <td class="py-2 px-3 border text-center">{{ c.FechaFin | date:'yyyy-MM-dd' }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-</div>
+</section>

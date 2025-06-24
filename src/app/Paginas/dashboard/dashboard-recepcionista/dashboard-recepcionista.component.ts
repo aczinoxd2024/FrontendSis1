@@ -78,4 +78,37 @@ export class DashboardRecepcionistaComponent implements OnInit {
     const token = localStorage.getItem('token') || '';
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
+  imagen: File | null = null;
+
+onFileSelected(event: Event): void {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  this.imagen = file ?? null;
+}
+
+enviarPromocion(): void {
+  if (!this.imagen) {
+    this.mensaje = 'Por favor, selecciona una imagen.';
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('imagen', this.imagen);
+
+  this.loading = true;
+  const headers = this.getAuthHeaders();
+
+  this.http.post(`${environment.apiUrl}/promociones/enviar-con-imagen`, formData, { headers })
+    .subscribe({
+      next: (res: any) => {
+        this.mensaje = res.mensaje || '✅ Promociones enviadas con éxito.';
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('❌ Error al enviar promociones', err);
+        this.mensaje = '❌ Error al enviar promociones.';
+        this.loading = false;
+      }
+    });
+}
+
 }
