@@ -43,6 +43,25 @@
         <a routerLink="escanear-asistencia" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">📷 Escanear Asistencia</a>
         <a routerLink="tarjeta-asistencia" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">🪪 Mi Tarjeta Asistencia</a>
         <a routerLink="vencimientos" routerLinkActive="bg-rose-600 text-white font-bold" class="block px-4 py-2 rounded hover:bg-gray-700 transition">⏳ Vencimiento Membresías</a>
+        <!-- Submenú Membresías -->
+<div>
+  <button (click)="submenuMembresias = !submenuMembresias" class="w-full text-left px-4 py-2 rounded hover:bg-gray-700 transition">
+    🧾 Membresías
+  </button>
+  <ul *ngIf="submenuMembresias" class="ml-4 mt-2 space-y-1 text-sm text-gray-300">
+    <li>
+      <a routerLink="/dashboard-recepcionista/gestionar-membresias" routerLinkActive="underline" class="block hover:text-rose-400">
+        ➕ Crear Membresía
+      </a>
+    </li>
+    <li>
+      <a routerLink="/dashboard-recepcionista/listado-membresias" routerLinkActive="underline" class="block hover:text-rose-400">
+        🛠 Gestionar Tipos
+      </a>
+    </li>
+  </ul>
+</div>
+
       </nav>
     </aside>
 

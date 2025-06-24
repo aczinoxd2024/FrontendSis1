@@ -30,6 +30,7 @@ export class DashboardRecepcionistaComponent implements OnInit {
     const user = this.authService.getUser();
     this.nombreUsuario = user?.nombre ?? 'Recepcionista';
   }
+submenuMembresias = false;
 
   ngOnInit(): void {
     this.obtenerVencimientos();

@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+   submenuMembresias: boolean = false;
   submenuVisible = false;
 
 toggleSubmenu() {

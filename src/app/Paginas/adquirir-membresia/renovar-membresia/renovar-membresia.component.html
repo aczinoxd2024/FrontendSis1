@@ -4,39 +4,14 @@
   </h2>
 
   <div class="flex flex-col md:flex-row justify-center items-center gap-8 flex-wrap">
-    <!-- Membresía Básica -->
-    <div class="card-membresia">
-      <h3 class="titulo">Membresía Básica</h3>
-      <p class="descripcion">Acceso total a máquinas, pesas y cardio.</p>
-      <p class="precio">$20 / mes</p>
-      <button
-        (click)="redirigirAPago('basica')"
-        class="btn-adquirir"
-        [disabled]="procesando">
-        {{ procesando ? 'Procesando...' : 'Adquirir' }}
-      </button>
-    </div>
+    <!-- Tarjetas de membresía generadas dinámicamente -->
+    <div *ngFor="let m of membresias" class="card-membresia">
+      <h3 class="titulo">{{ m.NombreTipo }}</h3>
+      <p class="descripcion">{{ m.Beneficios || m.Descripcion || 'Sin descripción disponible.' }}</p>
+      <p class="precio">Bs. {{ m.Precio }} / {{ m.DuracionDias }} días</p>
 
-    <!-- Membresía Disciplina -->
-    <div class="card-membresia">
-      <h3 class="titulo">Solo Disciplina</h3>
-      <p class="descripcion">Acceso a una clase específica.</p>
-      <p class="precio">$15 / mes</p>
       <button
-        (click)="redirigirAPago('disciplina')"
-        class="btn-adquirir"
-        [disabled]="procesando">
-        {{ procesando ? 'Procesando...' : 'Adquirir' }}
-      </button>
-    </div>
-
-    <!-- Membresía Gold -->
-    <div class="card-membresia">
-      <h3 class="titulo">Membresía Gold</h3>
-      <p class="descripcion">Todo lo anterior + clases dirigidas.</p>
-      <p class="precio">$35 / mes</p>
-      <button
-        (click)="redirigirAPago('gold')"
+        (click)="adquirir(m)"
         class="btn-adquirir"
         [disabled]="procesando">
         {{ procesando ? 'Procesando...' : 'Adquirir' }}

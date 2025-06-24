@@ -213,8 +213,27 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./Paginas/Administrador/reportes-estadisticas/pagos-estadisticas.component')
       .then(m => m.PagosEstadisticasComponent)
-}
+},
 
+{
+  path: 'gestionar-membresias',
+  loadComponent: () => import('./Paginas/Administrador/gestionar-membresias/gestionar-membresias.component')
+    .then(m => m.GestionarMembresiasComponent)
+},
+
+{
+  path: 'editar-membresia/:id',
+  loadComponent: () =>
+    import('./Paginas/Administrador/gestionar-membresias/editar-membresia.component')
+      .then(m => m.EditarMembresiaComponent)
+},
+
+{
+  path: 'listado-membresias',
+  loadComponent: () =>
+    import('./Paginas/Administrador/gestionar-membresias/listado-membresias.component')
+      .then(m => m.ListadoMembresiasComponent)
+}
 
 
     ],
@@ -297,7 +316,30 @@ export const routes: Routes = [
             './Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component'
           ).then((m) => m.AgendaReservasAdminComponent),
       },
+
+      {
+      path: 'gestionar-membresias',
+      loadComponent: () =>
+        import('./Paginas/Administrador/gestionar-membresias/gestionar-membresias.component')
+          .then((m) => m.GestionarMembresiasComponent),
+    },
+    {
+      path: 'listado-membresias',
+      loadComponent: () =>
+        import('./Paginas/Administrador/gestionar-membresias/listado-membresias.component')
+          .then((m) => m.ListadoMembresiasComponent),
+    },
+    {
+      path: 'editar-membresia/:id',
+      loadComponent: () =>
+        import('./Paginas/Administrador/gestionar-membresias/editar-membresia.component')
+          .then((m) => m.EditarMembresiaComponent),
+    },
+
+
     ],
+
+
   },
 
   // 🧾 INSTRUCTOR

@@ -99,6 +99,27 @@
       <a routerLink="/dashboard-admin/admin-inventario" class="...">
         📦 Gestionar Inventario
       </a>
+      <!-- 📦 Membresías Submenú -->
+<li>
+  <button (click)="submenuMembresias = !submenuMembresias" class="sidebar-item w-full text-left px-4 py-2 hover:bg-red-500/20">
+    🧾 Membresías
+  </button>
+  <ul *ngIf="submenuMembresias" class="ml-6 text-sm text-gray-200 space-y-1">
+    <li>
+      <a routerLink="/dashboard-admin/gestionar-membresias" class="hover:underline">
+        ➕ Crear Membresía
+      </a>
+    </li>
+    <li>
+      <a routerLink="/dashboard-admin/listado-membresias" class="hover:underline">
+        🛠 Gestionar Tipos
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+
             <li>
   <button (click)="toggleSubmenu()" class="sidebar-item w-full text-left px-4 py-2 hover:bg-red-500/20">
     🧾 Reportes y Estadísticas
@@ -191,6 +212,24 @@
         📦 Gestionar Inventario
       </a>
 
+    <a
+  (click)="mostrarMenu = false"
+  routerLink="/dashboard-admin/gestionar-membresias"
+  class="block px-4 py-2 rounded hover:bg-rose-600/20"
+>
+  ➕ Crear Membresía
+</a>
+
+<a
+  (click)="mostrarMenu = false"
+  routerLink="/dashboard-admin/listado-membresias"
+  class="block px-4 py-2 rounded hover:bg-rose-600/20"
+>
+  🛠 Gestionar Tipos
+</a>
+
+
+
       <a
   routerLink="/dashboard-admin/reportes-estadisticas"
   routerLinkActive="bg-gray-800"
@@ -209,8 +248,8 @@
   </aside>
 
   <!-- Contenido principal -->
-  <main
-    class="flex-1 p-6 md:p-10 overflow-y-auto bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+  <<main class="flex-1 p-6 md:p-10 overflow-y-auto bg-gray-900 text-white">
+
   >
     <router-outlet></router-outlet>
   </main>

@@ -49,6 +49,7 @@ export class AdquirirMembresiaComponent implements OnInit {
       idClase: [null], // se habilita solo si es necesario
     });
   }
+tipo: any = null;
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id')!;
@@ -59,21 +60,19 @@ export class AdquirirMembresiaComponent implements OnInit {
    this.http.get<any>(`https://web-production-d581.up.railway.app/api/tipo_membresia/${id}`)
   .subscribe({
     next: (tipo) => {
+       this.tipo = tipo;
       this.precio = tipo.Precio; // ✅ <-- AÑADE ESTO
       this.nombreTipoMembresia = tipo.NombreTipo || '';
 
-      const nombre = tipo.NombreTipo?.toLowerCase() || '';
-      const nombresValidos = ['gold', 'disciplina', 'elite', 'vip', 'entrenador', 'personal'];
-      this.requiereClase = nombresValidos.some(palabra => nombre.includes(palabra));
+    // Verificar si hay clases asociadas en el campo 'Clases'
+this.requiereClase = tipo.Clases && tipo.Clases.length > 0;
 
-      if (this.requiereClase) {
-        this.http
-          .get<any[]>('https://web-production-d581.up.railway.app/api/clases')
-          .subscribe({
-            next: (data) => (this.clases = data),
-            error: () => this.mensaje = 'Error al cargar clases disponibles.',
-          });
-      }
+      this.requiereClase = tipo.clasesIncluidas && tipo.clasesIncluidas.length > 0;
+
+if (this.requiereClase) {
+  this.clases = tipo.clasesIncluidas; // ✅ solo las clases permitidas por la membresía
+}
+
     },
     error: () => this.mensaje = 'Error al obtener tipo de membresía.'
   });

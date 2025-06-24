@@ -1,0 +1,53 @@
+<h2 class="text-xl font-bold mb-4">📋 Listado de Tipos de Membresía</h2>
+
+<!-- ✅ Toggle para ver inactivas -->
+<div class="mb-4">
+  <label class="inline-flex items-center gap-2">
+    <input type="checkbox" [(ngModel)]="verInactivas" (change)="obtenerMembresias()" />
+    Ver membresías inactivas
+  </label>
+</div>
+
+<!-- ✅ Mensaje -->
+<p *ngIf="mensaje" class="mb-3 text-green-400">{{ mensaje }}</p>
+
+<!-- ✅ Tabla -->
+<table class="w-full table-auto border border-gray-700">
+  <thead class="bg-gray-800">
+    <tr>
+      <th class="p-2 border">ID</th>
+      <th class="p-2 border">Nombre</th>
+      <th class="p-2 border">Duración</th>
+      <th class="p-2 border">Precio</th>
+      <th class="p-2 border">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of membresias" class="border-t border-gray-700 hover:bg-gray-800/50">
+      <td class="p-2 text-center">{{ m.ID }}</td>
+      <td class="p-2">{{ m.NombreTipo }}</td>
+      <td class="p-2 text-center">{{ m.DuracionDias }} días</td>
+      <td class="p-2 text-right">$ {{ m.Precio }}</td>
+      <td class="p-2 text-center space-x-2">
+
+        <!-- ✅ Mostrar Restaurar si estamos viendo inactivas -->
+        <ng-container *ngIf="verInactivas; else accionesActivas">
+          <button (click)="restaurar(m.ID)" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white text-sm">
+            🔄 Restaurar
+          </button>
+        </ng-container>
+
+        <!-- ✅ Acciones normales -->
+        <ng-template #accionesActivas>
+          <button (click)="editar(m.ID)" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white text-sm">
+            ✏️ Editar
+          </button>
+          <button (click)="eliminar(m.ID)" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white text-sm">
+            🗑 Eliminar
+          </button>
+        </ng-template>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
