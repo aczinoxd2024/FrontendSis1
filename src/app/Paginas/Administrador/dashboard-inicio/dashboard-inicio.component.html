@@ -230,13 +230,19 @@
 
 
 
-      <a
-  routerLink="/dashboard-admin/reportes-estadisticas"
-  routerLinkActive="bg-gray-800"
-  class="flex items-center gap-3 px-4 py-2 rounded hover:bg-rose-600/20 transition-all"
->
-  📈 <span>Reportes y Estadísticas</span>
-</a>
+
+          <li>
+  <button (click)="toggleSubmenu()" class="sidebar-item w-full text-left px-4 py-2 hover:bg-red-500/20">
+    🧾 Reportes y Estadísticas
+  </button>
+  <ul *ngIf="submenuVisible" class="ml-6 text-sm text-gray-200 space-y-1">
+    <li><a routerLink="/dashboard-admin/reportes/reservas-clase" class="hover:underline">📊 Reservas por Clase</a></li>
+<li><a routerLink="/dashboard-admin/reportes/clases-instructor" class="hover:underline">🧘‍♂️ Clases por Instructor</a></li>
+<li><a routerLink="/dashboard-admin/reportes/clases-activas" class="hover:underline">📈 Clases Totales</a></li>
+<li><a routerLink="/dashboard-admin/reportes/asistencias-personal" class="hover:underline">📈 Asistencias Personal</a></li>
+<li><a routerLink="/dashboard-admin/reportes/pagos" class="hover:underline">📈 Pagos</a></li>
+  </ul>
+</li>
 
     </nav>
     <button
