@@ -26,8 +26,11 @@ export class AdquirirMembresiaComponent implements OnInit {
   metodoPagos: any[] = [];
   clases: any[] = [];
   tipoMembresiaId!: number;
+  requiereClase: boolean = false;
   mensaje: string = '';
   enviando: boolean = false;
+   precio: number = 0;
+   nombreTipoMembresia: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -46,121 +49,121 @@ export class AdquirirMembresiaComponent implements OnInit {
       observacion: ['Registrado por Web'],
       correo: ['', [Validators.required, Validators.email]],
       metodoPago: ['', Validators.required],
-      idClase: [null], // <-- nueva propiedad
+      idClase: [null], // se habilita solo si es necesario
     });
   }
 
   ngOnInit() {
-    this.tipoMembresiaId = +this.route.snapshot.paramMap.get('id')!;
+    const id = +this.route.snapshot.paramMap.get('id')!;
+    this.tipoMembresiaId = id;
+    
 
+    // 🔍 Detectar si requiere clase por tipo de nombre
+   this.http.get<any>(`https://web-production-d581.up.railway.app/api/tipo_membresia/${id}`)
+  .subscribe({
+    next: (tipo) => {
+      this.precio = tipo.Precio; // ✅ <-- AÑADE ESTO
+      this.nombreTipoMembresia = tipo.NombreTipo || '';
+
+      const nombre = tipo.NombreTipo?.toLowerCase() || '';
+      const nombresValidos = ['gold', 'disciplina', 'elite', 'vip', 'entrenador', 'personal'];
+      this.requiereClase = nombresValidos.some(palabra => nombre.includes(palabra));
+      
+      if (this.requiereClase) {
+        this.http
+          .get<any[]>('https://web-production-d581.up.railway.app/api/clases')
+          .subscribe({
+            next: (data) => (this.clases = data),
+            error: () => this.mensaje = 'Error al cargar clases disponibles.',
+          });
+      }
+    },
+    error: () => this.mensaje = 'Error al obtener tipo de membresía.'
+  });
+
+
+    // Métodos de pago
     this.http
       .get<any[]>('https://web-production-d581.up.railway.app/api/metodos-pago')
       .subscribe({
         next: (data) => {
           const permitidos = ['Tarjeta', 'Transferencia', 'Pago en línea'];
-          this.metodoPagos = data
-            .filter((metodo) => permitidos.includes(metodo.metodoPago))
-            .sort(
-              (a, b) =>
-                permitidos.indexOf(a.metodoPago) -
-                permitidos.indexOf(b.metodoPago)
-            );
+          this.metodoPagos = data.filter(m => permitidos.includes(m.metodoPago));
         },
-        error: () => {
-          this.mensaje = 'Error al cargar métodos de pago. Intente nuevamente.';
-        },
+        error: () => this.mensaje = 'Error al cargar métodos de pago.',
       });
+  }
 
-    // Cargar clases si es Gold o Disciplina
-    if (this.tipoMembresiaId === 2 || this.tipoMembresiaId === 3) {
+ enviarSolicitud() {
+  if (
+    this.adquirirForm.invalid ||
+    this.enviando ||
+    (this.requiereClase && !this.adquirirForm.value.idClase)
+  ) {
+    this.mensaje = 'Por favor complete todos los campos requeridos.';
+    return;
+  }
+
+  this.enviando = true;
+
+  const datosCliente = {
+    ci: this.adquirirForm.value.ci,
+    nombre: this.adquirirForm.value.nombre,
+    apellido: this.adquirirForm.value.apellido,
+    fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
+    telefono: this.adquirirForm.value.telefono,
+    direccion: this.adquirirForm.value.direccion,
+    observacion: this.adquirirForm.value.observacion,
+    correo: this.adquirirForm.value.correo,
+    tipoMembresiaId: this.tipoMembresiaId,
+    metodoPagoId: +this.adquirirForm.value.metodoPago,
+  };
+
+  this.clienteService.adquirirMembresia(datosCliente).subscribe({
+    next: () => {
+      const body: any = {
+        email: datosCliente.correo,
+        description: this.nombreTipoMembresia, // Por ejemplo: 'Disciplina'
+
+        amount: this.precio, // ✅ Este campo es obligatorio para Stripe
+
+        
+      };
+      console.log('Clase seleccionada:', this.adquirirForm.value.idClase);
+
+      if (this.requiereClase) {
+        body.idClase = this.adquirirForm.value.idClase;
+      }
+
+      console.log('Precio enviado a Stripe:', this.precio);
+
       this.http
-        .get<any[]>('https://web-production-d581.up.railway.app/api/clases')
+        .post<{ url: string }>(
+          'https://web-production-d581.up.railway.app/api/stripe/checkout',
+          body
+        )
         .subscribe({
-          next: (data) => (this.clases = data),
-          error: () => {
-            this.mensaje = 'Error al cargar clases disponibles.';
+          next: (resp) => {
+            window.location.href = resp.url;
+            this.enviando = false;
+          },
+          error: (err) => {
+            console.error('❌ Error al redirigir a Stripe:', err);
+            this.mensaje =
+              'Hubo un problema al conectar con el sistema de pago.';
+            this.enviando = false;
           },
         });
-    }
-  }
+    },
+    error: (err) => {
+      this.mensaje =
+        err?.error?.message || 'Hubo un problema al adquirir la membresía.';
+      this.enviando = false;
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+    },
+  });
+}
 
-  enviarSolicitud() {
-    if (this.adquirirForm.invalid || this.enviando) {
-      this.mensaje = 'Por favor complete todos los campos correctamente.';
-      return;
-    }
-
-    this.enviando = true;
-
-    const datosCliente = {
-      ci: this.adquirirForm.value.ci,
-      nombre: this.adquirirForm.value.nombre,
-      apellido: this.adquirirForm.value.apellido,
-      fechaNacimiento: this.adquirirForm.value.fechaNacimiento,
-      telefono: this.adquirirForm.value.telefono,
-      direccion: this.adquirirForm.value.direccion,
-      observacion: this.adquirirForm.value.observacion,
-      correo: this.adquirirForm.value.correo,
-      tipoMembresiaId: this.tipoMembresiaId,
-      metodoPagoId: +this.adquirirForm.value.metodoPago,
-    };
-
-    this.clienteService.adquirirMembresia(datosCliente).subscribe({
-      next: (res) => {
-        console.log('✅ Registro exitoso', res);
-
-        const amount =
-          this.tipoMembresiaId === 1
-            ? 15
-            : this.tipoMembresiaId === 2
-            ? 29
-            : 20;
-
-        const description =
-          this.tipoMembresiaId === 1
-            ? 'Básica'
-            : this.tipoMembresiaId === 2
-            ? 'Gold'
-            : 'Disciplina';
-
-        const body: any = {
-          amount,
-          description,
-          email: datosCliente.correo,
-        };
-
-        if (this.tipoMembresiaId === 2 || this.tipoMembresiaId === 3) {
-          body.idClase = this.adquirirForm.value.idClase;
-        }
-
-        console.log('📤 Datos enviados al backend (stripe):', body);
-
-        this.http
-          .post<{ url: string }>(
-            'https://web-production-d581.up.railway.app/api/stripe/checkout',
-            body
-          )
-          .subscribe({
-            next: (resp) => {
-              window.location.href = resp.url;
-              this.enviando = false;
-            },
-            error: (err) => {
-              console.error('❌ Error al redirigir a Stripe:', err);
-              this.mensaje =
-                'Hubo un problema al conectar con el sistema de pago.';
-              this.enviando = false;
-            },
-          });
-      },
-      error: (err) => {
-        this.mensaje =
-          err?.error?.message || 'Hubo un problema al adquirir la membresía.';
-        this.enviando = false;
-        setTimeout(() => {
-          this.mensaje = '';
-        }, 5000);
-      },
-    });
-  }
 }

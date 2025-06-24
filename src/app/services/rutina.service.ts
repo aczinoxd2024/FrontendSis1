@@ -44,6 +44,6 @@ export class RutinaService {
     });
 
     // Asumiendo que en el backend tienes PUT /rutinas/:id/desactivar
-    return this.http.put(`${this.apiUrl}/${id}/desactivar`, {}, { headers });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
   }
 }

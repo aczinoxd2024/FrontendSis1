@@ -42,18 +42,18 @@
     </option>
   </select>
 
-  <!-- Mostrar selector de clases solo para Gold o Disciplina -->
-  <div *ngIf="tipoMembresiaId === 2 || tipoMembresiaId === 3">
-    <label style="margin-bottom: 8px; display: block"
-      >Selecciona una clase</label
-    >
-    <select formControlName="idClase" class="form-control">
-      <option [value]="null">-- Elige una clase --</option>
-      <option *ngFor="let clase of clases" [value]="clase.IDClase">
-        {{ clase.Nombre }}
-      </option>
-    </select>
-  </div>
+<!-- Mostrar selector de clases si la membresía lo requiere -->
+<div *ngIf="requiereClase" class="mb-4">
+  <label style="margin-bottom: 8px; display: block"
+    >Selecciona una clase</label
+  >
+  <select formControlName="idClase" class="form-control">
+    <option [value]="null">-- Elige una clase --</option>
+    <option *ngFor="let clase of clases" [value]="clase.IDClase">
+      {{ clase.Nombre }}
+    </option>
+  </select>
+</div>
 
   <button
     type="submit"
