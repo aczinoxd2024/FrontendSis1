@@ -1,0 +1,105 @@
+<div class="p-6 bg-gray-900 min-h-screen text-gray-100 font-sans">
+  <div class="max-w-4xl mx-auto space-y-6">
+    <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+      📊 <span>Clases por Instructor</span>
+    </h2>
+
+
+
+
+
+       <!-- Botones -->
+    <div class="flex gap-4 my-4">
+      <button (click)="exportarPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+        📄 Descargar PDF
+      </button>
+
+      <button (click)="exportarExcel()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+        📊 Descargar Excel
+      </button>
+    </div>
+
+    <!-- Filtro de instructor -->
+<div class="flex flex-wrap items-center gap-6 bg-gray-800 p-4 rounded-lg shadow text-sm">
+  <div class="flex flex-col">
+    <label for="instructor" class="font-medium text-gray-300 mb-1">Instructor:</label>
+    <select
+      id="instructor"
+      [(ngModel)]="filtroInstructor"
+      (change)="onInstructorChange()"
+      class="bg-gray-800 border border-gray-600 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring focus:ring-rose-400 w-64"
+    >
+      <option value="">-- Todos --</option>
+      <option *ngFor="let instructor of instructores" [value]="instructor">
+        {{ instructor }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Tipo de gráfico -->
+  <div class="flex flex-col">
+    <label for="tipoGrafico" class="text-gray-300 mb-1">Tipo de Gráfico:</label>
+    <select
+      id="tipoGrafico"
+      [(ngModel)]="tipoGrafico"
+      class="bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-rose-400"
+    >
+      <option value="barra">Barras</option>
+      <option value="torta">Torta</option>
+      <option value="linea">Líneas</option>
+    </select>
+  </div>
+</div>
+
+
+   <!-- Gráfico dinámico -->
+<div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+  <!-- Barras -->
+  <ngx-charts-bar-vertical
+    *ngIf="tipoGrafico === 'barra'"
+    [view]="view"
+    [scheme]="'vivid'"
+    [results]="chartData"
+    [gradient]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="'Clases'"
+    [yAxisLabel]="'Inscritos'"
+    [animations]="true"
+  ></ngx-charts-bar-vertical>
+
+  <!-- Torta -->
+  <ngx-charts-pie-chart
+    *ngIf="tipoGrafico === 'torta'"
+    [view]="view"
+    [scheme]="'vivid'"
+    [results]="chartData"
+    [legend]="true"
+    [labels]="true"
+    [doughnut]="false"
+    [explodeSlices]="false"
+    [animations]="true"
+  ></ngx-charts-pie-chart>
+
+  <!-- Línea -->
+  <ngx-charts-line-chart
+    *ngIf="tipoGrafico === 'linea'"
+    [view]="view"
+    [scheme]="'vivid'"
+    [results]="[ { name: 'Inscritos', series: chartData } ]"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="'Clases'"
+    [yAxisLabel]="'Inscritos'"
+    [animations]="true"
+  ></ngx-charts-line-chart>
+</div>
+
+  </div>
+</div>
