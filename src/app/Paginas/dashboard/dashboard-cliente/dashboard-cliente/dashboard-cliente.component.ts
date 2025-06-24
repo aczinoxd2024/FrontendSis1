@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
-import { PagoService } from '../../../../services/pagos.service'; // ✅ Importamos el servicio de pagos
 
 @Component({
   selector: 'app-dashboard-cliente',
@@ -13,8 +12,8 @@ import { PagoService } from '../../../../services/pagos.service'; // ✅ Importa
 })
 export class DashboardClienteComponent implements OnInit {
   usuarioRol: string | null = null;
-  mostrarMembresias: boolean = false;
   correoCliente: string = '';
+  mostrarMembresias: boolean = false;
 
   tipos = [
     {
@@ -39,8 +38,7 @@ export class DashboardClienteComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private router: Router,
-    private pagoService: PagoService // ✅ Inyectamos el servicio de pagos
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +47,15 @@ export class DashboardClienteComponent implements OnInit {
     const user = this.auth.getUser();
     if (user) {
       this.correoCliente = user.correo;
+    }
+
+    // ✅ Mostrar mensaje post-pago solo si se está en una ruta que contiene 'success'
+    const mensaje = sessionStorage.getItem('mensajeRenovacion');
+    const success = this.router.url.includes('success');
+
+    if (mensaje && success) {
+      alert(mensaje);
+      sessionStorage.removeItem('mensajeRenovacion');
     }
   }
 
@@ -62,19 +69,9 @@ export class DashboardClienteComponent implements OnInit {
   }
 
   redirigirAPago(tipo: 'basica' | 'gold' | 'disciplina') {
-    const precios: any = {
-      basica: { amount: 20, descripcion: 'Básica' },
-      gold: { amount: 35, descripcion: 'Gold' },
-      disciplina: { amount: 15, descripcion: 'Disciplina' },
-    };
-
-    const info = precios[tipo];
-
-    this.pagoService
-      .crearSesion(info.amount, info.descripcion, this.correoCliente)
-      .subscribe({
-        next: (resp) => (window.location.href = resp.url),
-        error: () => alert('Error al redirigir a Stripe'),
-      });
+    // ✅ Recomendación: en lugar de lanzar pago directo, redirigir a componente de renovación
+    this.router.navigate(['/dashboard-cliente/renovar-membresia'], {
+      queryParams: { tipo },
+    });
   }
 }

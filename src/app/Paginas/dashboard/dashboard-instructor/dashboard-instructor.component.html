@@ -1,18 +1,5 @@
 <!-- Fondo degradado -->
 <div class="fixed inset-0 -z-10 bg-gradient-to-br from-gray-900 via-gray-800 to-black bg-[length:300%_300%] animate-gradientFlow"></div>
-
-<<<<<<< HEAD
-  <!-- Sidebar izquierdo -->
-  <div class="w-64 bg-slate-900 text-white p-6">
-    <h2 class="text-xl font-bold mb-6 text-red-500">Menú Principal</h2>
-    <ul class="space-y-3">
-      <li><a routerLink="seguimiento" class="hover:text-red-400">📋 Seguimiento Físico</a></li>
-      <li><a routerLink="mis-clases" class="hover:text-red-400">🧘 Mis Clases</a></li>
-      <li><a routerLink="gestionar-rutinas" class="block p-2 hover:bg-gray-700">🏋️ Gestionar Rutinas</a></li>
-      <li><a routerLink="crear-rutina de clases"class="block px-4 py-2 rounded hover:bg-rose-700">➕ Nueva Rutina de clases</a></li>
-
-    </ul>
-  </div>
 <!-- Contenedor principal -->
 <div class="flex flex-col min-h-screen text-white">
 
@@ -47,32 +34,39 @@
 
     <!-- Sidebar -->
     <aside class="hidden md:block w-64 bg-slate-900 p-6 space-y-4 border-r border-gray-700">
-      <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú Principal</h2>
-      <nav class="space-y-2 text-sm">
-        <a routerLink="seguimiento" routerLinkActive="text-rose-400 font-bold"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Seguimiento Físico</a>
-        <a routerLink="mis-clases" routerLinkActive="text-rose-400 font-bold"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">🧘 Mis Clases</a>
-        <a (click)="refrescarTarjeta()" class="block px-4 py-2 rounded hover:bg-gray-700 transition cursor-pointer">
-          🪪 Mi Tarjeta Asistencia
-        </a>
-      </nav>
-    </aside>
+  <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú Principal</h2>
+  <nav class="space-y-2 text-sm">
+    <a routerLink="seguimiento" routerLinkActive="text-rose-400 font-bold"
+       class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Seguimiento Físico</a>
+    <a routerLink="mis-clases" routerLinkActive="text-rose-400 font-bold"
+       class="block px-4 py-2 rounded hover:bg-gray-700 transition">🧘 Mis Clases</a>
+    <a routerLink="gestionar-rutinas" routerLinkActive="text-rose-400 font-bold"
+       class="block px-4 py-2 rounded hover:bg-gray-700 transition">🏋️ Gestionar Rutinas</a>
+    <a (click)="refrescarTarjeta()" class="block px-4 py-2 rounded hover:bg-gray-700 transition cursor-pointer">
+      🪪 Mi Tarjeta Asistencia
+    </a>
+  </nav>
+</aside>
+
 
     <!-- Sidebar móvil -->
     <aside *ngIf="mostrarMenu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-gray-900 p-6 space-y-4 z-50 shadow-xl border-r border-gray-700">
-      <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú</h2>
-      <nav class="space-y-2 text-sm">
-        <a routerLink="seguimiento" routerLinkActive="text-rose-400 font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Seguimiento Físico</a>
-        <a routerLink="mis-clases" routerLinkActive="text-rose-400 font-bold"
-           (click)="mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition">🧘 Mis Clases</a>
-        <a (click)="refrescarTarjeta(); mostrarMenu = false"
-           class="block px-4 py-2 rounded hover:bg-gray-700 transition cursor-pointer">🪪 Mi Tarjeta Asistencia</a>
-      </nav>
-    </aside>
+  <h2 class="text-lg font-semibold text-rose-400 border-b border-gray-700 pb-2">Menú</h2>
+  <nav class="space-y-2 text-sm">
+    <a routerLink="seguimiento" routerLinkActive="text-rose-400 font-bold"
+       (click)="mostrarMenu = false"
+       class="block px-4 py-2 rounded hover:bg-gray-700 transition">📋 Seguimiento Físico</a>
+    <a routerLink="mis-clases" routerLinkActive="text-rose-400 font-bold"
+       (click)="mostrarMenu = false"
+       class="block px-4 py-2 rounded hover:bg-gray-700 transition">🧘 Mis Clases</a>
+    <a routerLink="gestionar-rutinas" routerLinkActive="text-rose-400 font-bold"
+       (click)="mostrarMenu = false"
+       class="block px-4 py-2 rounded hover:bg-gray-700 transition">🏋️ Gestionar Rutinas</a>
+    <a (click)="refrescarTarjeta(); mostrarMenu = false"
+       class="block px-4 py-2 rounded hover:bg-gray-700 transition cursor-pointer">🪪 Mi Tarjeta Asistencia</a>
+  </nav>
+</aside>
+
 
     <!-- Contenido dinámico -->
     <main class="flex-1 p-4 md:p-6 overflow-y-auto">

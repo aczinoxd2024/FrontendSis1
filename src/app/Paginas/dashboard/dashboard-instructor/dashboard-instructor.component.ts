@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // ✅ necesario para *ngIf y *ngFor
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard-instructor',
   standalone: true,
-  imports: [RouterModule],
+  imports: [CommonModule, RouterModule], // ✅ agregado CommonModule aquí
   templateUrl: './dashboard-instructor.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

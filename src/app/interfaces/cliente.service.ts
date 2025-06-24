@@ -72,9 +72,11 @@ export class ClienteService {
   }
 
   // ✅ Obtener perfil del cliente autenticado (corregido)
-  obtenerPerfilCliente(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/perfil`, {
-      headers: this.getHeaders(),
-    });
-  }
+ obtenerPerfilCliente(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/perfil`, {
+    headers: this.getHeaders(), // ✅ solo esto
+  });
+}
+
+
 }

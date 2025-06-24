@@ -27,6 +27,7 @@
             <th class="p-2">Día</th>
             <th class="p-2">Series</th>
             <th class="p-2">Reps</th>
+            <th class="p-2">Descanso (min)</th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@
             <td class="p-2">{{ d.dia }}</td>
             <td class="p-2">{{ d.series }}</td>
             <td class="p-2">{{ d.repeticiones }}</td>
+            <td class="p-2">{{ d.descanso }}</td>
           </tr>
         </tbody>
       </table>
@@ -104,6 +106,7 @@
         <th class="p-2">Día</th>
         <th class="p-2">Series</th>
         <th class="p-2">Reps</th>
+        <th class="p-2">Descanso (min)</th>
         <th class="p-2">❌</th>
       </tr>
     </thead>
@@ -138,9 +141,18 @@
                  placeholder="12" />
         </td>
         <td>
+          <input type="number" min="1"[(ngModel)]="detalle.descanso"
+         class="px-2 py-1 rounded text-white bg-gray-800 border border-gray-600 w-full placeholder-white"
+         placeholder="2" />
+        </td>
+        <td>
           <button (click)="eliminarDetalle(i)"
                   class="text-red-500 hover:text-red-700 font-bold text-xl">×</button>
         </td>
+        <button (click)="cargarParaEditar(rutina)" class="text-yellow-400 hover:text-yellow-600 font-semibold text-sm">
+  ✏️ Editar
+</button>
+
       </tr>
     </tbody>
   </table>

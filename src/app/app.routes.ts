@@ -26,8 +26,7 @@ export const routes: Routes = [
       ),
   },
 
-  // 🧾 ADMINISTRADOR
-/*
+
  // 🧾 ADMINISTRADOR
 {
   path: 'dashboard-admin',
@@ -276,6 +275,13 @@ export const routes: Routes = [
           ).then((m) => m.TarjetaAsistenciaRecepcionistaComponent),
         canActivate: [recepcionistaGuard],
       },
+      {
+    path: 'vencimientos', // ✅ NUEVA RUTA
+    loadComponent: () =>
+      import(
+        './Paginas/dashboard/dashboard-recepcionista/vencimiento-membresias/vencimiento-membresias.component'
+      ).then((m) => m.VencimientoMembresiasComponent),
+  },
 
       {
         path: 'agenda',
@@ -436,14 +442,14 @@ export const routes: Routes = [
 */
   // 📌 MEMBRESÍAS
   {
-    path: 'menbresias',
-    loadComponent: () =>
-      import('./Paginas/ver-menbresias/menbresias.component').then(
-        (m) => m.MenbresiasComponent
-      ),
-  },
+  path: 'membresias',
+  loadComponent: () =>
+    import('./Paginas/ver-membresias/membresias.component').then(
+      (m) => m.MembresiasComponent
+    ),
+},
   {
-    path: 'adquirir-menbresia/:id',
+    path: 'adquirir-membresia/:id',
     loadComponent: () =>
       import('./Paginas/adquirir-membresia/adquirir-membresia.component').then(
         (m) => m.AdquirirMembresiaComponent

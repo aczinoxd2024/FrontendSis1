@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MembresiaService } from '../../../../services/menbresia.service';
+import { MembresiaService } from '../../../../services/membresia.service';
 import { MetodoPagoService } from '../../../../metodo-pago/metodo-pago.service';
 
 @Component({
