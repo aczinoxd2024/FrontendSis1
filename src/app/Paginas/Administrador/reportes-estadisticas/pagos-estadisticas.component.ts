@@ -14,9 +14,11 @@ import { saveAs } from 'file-saver';
   imports: [NgxChartsModule, FormsModule],
   templateUrl: './pagos-estadisticas.component.html'
 })
+
 export class PagosEstadisticasComponent implements OnInit {
   pagos: any[] = [];
   chartData: any[] = [];
+  totalGanancia: number = 0; // NUEVO: total de ganancias
   view: [number, number] = [window.innerWidth < 768 ? 300 : 700, 400];
 
   filtroMembresia: string = '';
@@ -24,7 +26,6 @@ export class PagosEstadisticasComponent implements OnInit {
   fechaInicio: string = '';
   fechaFin: string = '';
   tipoGrafico: string = 'barra';
-
 
   @ViewChild('graficoRef', { static: false }) graficoRef!: ElementRef;
 
@@ -53,6 +54,7 @@ export class PagosEstadisticasComponent implements OnInit {
 
   actualizarGrafico(): void {
     const agrupado: { [key: string]: { total: number; cantidad: number } } = {};
+    this.totalGanancia = 0; // Reiniciar total
 
     this.pagos.forEach(p => {
       const tipo = p.tipoMembresia || 'Sin tipo';
@@ -62,6 +64,7 @@ export class PagosEstadisticasComponent implements OnInit {
       }
       agrupado[tipo].total += monto;
       agrupado[tipo].cantidad += 1;
+      this.totalGanancia += monto; // Sumar al total
     });
 
     this.chartData = Object.entries(agrupado)
@@ -84,9 +87,12 @@ export class PagosEstadisticasComponent implements OnInit {
     doc.text(`Membresía: ${m} | Promoción: ${p}`, 14, 18);
     doc.text(`Desde: ${fi}  Hasta: ${ff}`, 14, 26);
 
+    const bodyData = this.chartData.map(item => [item.name, item.value.toFixed(2)]);
+    bodyData.push(['TOTAL', this.totalGanancia.toFixed(2)]); // Fila total
+
     autoTable(doc, {
       head: [['Membresía (cantidad)', 'Ganancia $']],
-      body: this.chartData.map(item => [item.name, item.value.toFixed(2)]),
+      body: bodyData,
       startY: 32,
     });
 
@@ -113,6 +119,8 @@ export class PagosEstadisticasComponent implements OnInit {
     this.chartData.forEach(item => {
       worksheet.addRow([item.name, item.value]);
     });
+
+    worksheet.addRow(['TOTAL', this.totalGanancia]); // Fila total
 
     workbook.xlsx.writeBuffer().then(buffer => {
       saveAs(new Blob([buffer]), `ganancias-${m.toLowerCase()}.xlsx`);
