@@ -8,6 +8,7 @@ import { ReservasHistoricoComponent } from './Paginas/reservas-historico/reserva
 import { AgendaReservasAdminComponent } from './Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component';
 import { SeguimientoClienteComponent } from './Paginas/dashboard/dashboard-instructor/seguimiento-cliente/seguimiento-cliente.component';
 import { DashboardClienteComponent } from './Paginas/dashboard/dashboard-cliente/dashboard-cliente/dashboard-cliente.component';
+import { ReportesEstadisticasComponent } from './Paginas/Administrador/reportes-estadisticas/reportes-estadisticas.component';
 
 export const routes: Routes = [
   {
@@ -26,7 +27,7 @@ export const routes: Routes = [
   },
 
   // 🧾 ADMINISTRADOR
-
+/*
  // 🧾 ADMINISTRADOR
 {
   path: 'dashboard-admin',
@@ -82,8 +83,13 @@ export const routes: Routes = [
         import('./Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component')
           .then((m) => m.AgendaReservasAdminComponent),
     },
+    {
+  path: 'dashboard-admin/reportes-estadisticas',   //roly ahora
+  component: ReportesEstadisticasComponent
+}
+
   ],
-},
+},*/
 
 
   // 🧾 ADMINISTRADOR
@@ -165,8 +171,50 @@ export const routes: Routes = [
        (m) => m.AsignacionMaterialesComponent
       ),
      },
+     {
+  path: 'reportes/reservas-clase',
+  loadComponent: () =>
+    import('./Paginas/Administrador/reportes-estadisticas/reportes-estadisticas.component')
+      .then(m => m.ReportesEstadisticasComponent)
+},
+{
+  path: 'reportes/clases-instructor',
+  loadComponent: () =>
+    import('./Paginas/Administrador/reportes-estadisticas/clases-estadisticas.component')
+      .then(m => m.ClasesEstadisticasComponent)
+},
+{
+  path: 'reportes/clases-reporte',
+  loadComponent: () =>
+    import('./Paginas/Administrador/reportes-estadisticas/disciplinas-estadisticas.component')
+      .then(m => m.DisciplinasEstadisticasComponent)
+},
+
+{
+  path: 'reportes/clases-activas',
+  loadComponent: () =>
+    import('./Paginas/Administrador/reportes-estadisticas/disciplinas-estadisticas.component')
+      .then(m => m.DisciplinasEstadisticasComponent)
+},
+{
+  path: 'reportes/asistencias-personal',
+  loadComponent: () =>
+    import('./Paginas/Administrador/reportes-estadisticas/asistencias-estadisticas.component')
+      .then(m => m.AsistenciasEstadisticasComponent)
+},
+{
+  path: 'reportes/pagos',
+  loadComponent: () =>
+    import('./Paginas/Administrador/reportes-estadisticas/pagos-estadisticas.component')
+      .then(m => m.PagosEstadisticasComponent)
+}
+
+
+
     ],
   },
+
+
 
   // 🧾 RECEPCIONISTA (corregido aquí)
   {
