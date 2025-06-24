@@ -156,6 +156,13 @@ export const routes: Routes = [
             './Paginas/dashboard/dashboard-admin/agenda-reservas-admin/agenda-reservas-admin.component'
           ).then((m) => m.AgendaReservasAdminComponent),
       },
+       {
+      path: 'gestionar-personal',
+      loadComponent: () =>
+        import('./Paginas/Administrador/gestion-personal/gestion-personal.component')
+        .then((m) => m.GestionPersonalComponent),
+    },
+
       {
         path: 'admin-inventario',
         loadComponent: () =>
