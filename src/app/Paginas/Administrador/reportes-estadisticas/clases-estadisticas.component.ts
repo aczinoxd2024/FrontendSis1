@@ -21,6 +21,7 @@ export class ClasesEstadisticasComponent implements OnInit {
   view: [number, number] = [window.innerWidth < 768 ? 300 : 700, 400];
   filtroInstructor: string = '';
    instructores: string[] = [];
+   tipoGrafico: string = 'barra';
 
   constructor(private http: HttpClient
   ) {}

@@ -25,43 +25,49 @@
   </div>
 
   <!-- Selector de cámara -->
-<div *ngIf="availableDevices.length > 1" class="mb-6 flex justify-center items-center gap-2">
-  <label for="deviceSelect" class="text-sm">Seleccionar cámara:</label>
-  <select
-    id="deviceSelect"
-    [(ngModel)]="selectedDeviceId"
-    class="bg-gray-900 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none max-w-xs overflow-hidden truncate"
-  >
-    <option
-      *ngFor="let device of availableDevices"
-      [value]="device.deviceId"
-      [selected]="device.deviceId === selectedDeviceId"
+  <div *ngIf="availableDevices.length > 1" class="mb-6 flex justify-center items-center gap-2">
+    <label for="deviceSelect" class="text-sm">Seleccionar cámara:</label>
+    <select
+      id="deviceSelect"
+      [(ngModel)]="selectedDeviceId"
+      class="bg-gray-900 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none max-w-xs overflow-hidden truncate"
     >
-      {{ device.label || 'Cámara ' + device.deviceId }}
-    </option>
-  </select>
-</div>
-
+      <option
+        *ngFor="let device of availableDevices"
+        [value]="device.deviceId"
+        [selected]="device.deviceId === selectedDeviceId"
+      >
+        {{ device.label || 'Cámara ' + device.deviceId }}
+      </option>
+    </select>
+  </div>
 
   <!-- Lector QR con altura forzada -->
   <div
     class="rounded-lg overflow-hidden border-2 border-blue-500 shadow-xl max-w-full"
     style="width: 100%; max-width: 500px; height: 320px; margin: 0 auto;"
   >
-   <zxing-scanner
-  [device]="selectedDeviceId"
-  (scanSuccess)="onCodeResult($event)"
-  (camerasFound)="onCamerasFound($event)"
-  (scanError)="onScanError($event)"
-  [formats]="['QR_CODE']"
-></zxing-scanner>
-
-
-
+    <zxing-scanner
+      [device]="selectedDeviceId"
+      (scanSuccess)="onCodeResult($event)"
+      (camerasFound)="onCamerasFound($event)"
+      (scanError)="onScanError($event)"
+      [formats]="['QR_CODE']"
+    ></zxing-scanner>
   </div>
 
   <!-- Resultado escaneado -->
   <div *ngIf="resultadoQR" class="mt-6 text-green-400 font-semibold">
     Último CI escaneado: {{ resultadoQR }}
+  </div>
+
+  <!-- Botón para ir a Enviar Promociones -->
+  <div class="mt-8">
+    <a
+      routerLink="/dashboard-recepcionista/enviar-promociones"
+      class="inline-block bg-rose-500 hover:bg-rose-600 text-white font-semibold px-6 py-2 rounded-lg shadow-lg transition-all hover:scale-105"
+    >
+      Enviar Promociones
+    </a>
   </div>
 </div>

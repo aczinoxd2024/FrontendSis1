@@ -308,6 +308,10 @@ export const routes: Routes = [
         './Paginas/dashboard/dashboard-recepcionista/vencimiento-membresias/vencimiento-membresias.component'
       ).then((m) => m.VencimientoMembresiasComponent),
   },
+{
+  path: 'promociones/enviar',
+  loadComponent: () => import('./Paginas/dashboard/dashboard-recepcionista/enviar-promociones/enviar-promociones.component').then(m => m.EnviarPromocionesComponent)
+},
 
       {
         path: 'agenda',

@@ -22,6 +22,7 @@ export class ReportesEstadisticasComponent implements OnInit {
   filtroEstado: string = 'Todas';
   fechaInicio: string = '';
   fechaFin: string = '';
+  tipoGrafico: string = 'barra';
 @ViewChild('graficoRef', { static: false }) graficoRef!: ElementRef;
 
 
